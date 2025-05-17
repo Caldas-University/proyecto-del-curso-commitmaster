@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj": {}
+    "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj": {
+    "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj",
         "projectName": "EventLogistics.Domain",
-        "projectPath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj",
+        "projectPath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics\\EventLogistics.Domain\\obj\\",
+        "outputPath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
