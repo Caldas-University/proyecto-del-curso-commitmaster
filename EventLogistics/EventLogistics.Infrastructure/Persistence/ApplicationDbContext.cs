@@ -32,36 +32,31 @@ namespace EventLogistics.Infrastructure.Persistence
             modelBuilder.Entity<Notification>()
                 .HasOne(n => n.Recipient)
                 .WithMany(u => u.Notifications)
-                .HasForeignKey(n => n.RecipientId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(n => n.RecipientId);
 
             // Notification - NotificationHistory relationship (one-to-many)
             modelBuilder.Entity<NotificationHistory>()
                 .HasOne(nh => nh.Notification)
                 .WithMany()
-                .HasForeignKey(nh => nh.NotificationId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(nh => nh.NotificationId);
 
             // Resource - ResourceAssignment relationship (one-to-many)
             modelBuilder.Entity<ResourceAssignment>()
                 .HasOne(ra => ra.Resource)
                 .WithMany(r => r.Assignments)
-                .HasForeignKey(ra => ra.ResourceId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(ra => ra.ResourceId);
 
             // Event - ResourceAssignment relationship (one-to-many)
             modelBuilder.Entity<ResourceAssignment>()
                 .HasOne(ra => ra.Event)
                 .WithMany(e => e.Resources)
-                .HasForeignKey(ra => ra.EventId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(ra => ra.EventId);
 
             // User - ResourceAssignment relationship (one-to-many, optional)
             modelBuilder.Entity<ResourceAssignment>()
                 .HasOne(ra => ra.AssignedTo)
                 .WithMany()
                 .HasForeignKey(ra => ra.AssignedToUserId)
-                .OnDelete(DeleteBehavior.SetNull)
                 .IsRequired(false);
 
             // Resource - ReassignmentRule relationship (optional)
@@ -69,7 +64,6 @@ namespace EventLogistics.Infrastructure.Persistence
                 .HasOne(rr => rr.ResourceType)
                 .WithMany(r => r.ReassignmentRules)
                 .HasForeignKey(rr => rr.ResourceTypeId)
-                .OnDelete(DeleteBehavior.SetNull)
                 .IsRequired(false);
         }
 
