@@ -33,6 +33,43 @@
             "related": ".pdb;.xml"
           }
         }
+      },
+      "EventLogistics.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "EventLogistics.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/EventLogistics.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EventLogistics.Application.dll": {}
+        }
+      },
+      "EventLogistics.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/EventLogistics.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EventLogistics.Domain.dll": {}
+        }
+      },
+      "EventLogistics.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "EventLogistics.Application": "1.0.0",
+          "EventLogistics.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/EventLogistics.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EventLogistics.Infrastructure.dll": {}
+        }
       }
     }
   },
@@ -67,10 +104,27 @@
         "microsoft.openapi.1.6.17.nupkg.sha512",
         "microsoft.openapi.nuspec"
       ]
+    },
+    "EventLogistics.Application/1.0.0": {
+      "type": "project",
+      "path": "../EventLogistics.Application/EventLogistics.Application.csproj",
+      "msbuildProject": "../EventLogistics.Application/EventLogistics.Application.csproj"
+    },
+    "EventLogistics.Domain/1.0.0": {
+      "type": "project",
+      "path": "../EventLogistics.Domain/EventLogistics.Domain.csproj",
+      "msbuildProject": "../EventLogistics.Domain/EventLogistics.Domain.csproj"
+    },
+    "EventLogistics.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../EventLogistics.Infrastructure/EventLogistics.Infrastructure.csproj",
+      "msbuildProject": "../EventLogistics.Infrastructure/EventLogistics.Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net9.0": [
+      "EventLogistics.Application >= 1.0.0",
+      "EventLogistics.Infrastructure >= 1.0.0",
       "Microsoft.AspNetCore.OpenApi >= 9.0.5"
     ]
   },
@@ -81,11 +135,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics\\EventLogistics.Api\\EventLogistics.Api.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Api\\EventLogistics.Api.csproj",
       "projectName": "EventLogistics.Api",
-      "projectPath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics\\EventLogistics.Api\\EventLogistics.Api.csproj",
+      "projectPath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Api\\EventLogistics.Api.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics\\EventLogistics.Api\\obj\\",
+      "outputPath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -106,7 +160,14 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Application\\EventLogistics.Application.csproj": {
+              "projectPath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Application\\EventLogistics.Application.csproj"
+            },
+            "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Infrastructure\\EventLogistics.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Infrastructure\\EventLogistics.Infrastructure.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
