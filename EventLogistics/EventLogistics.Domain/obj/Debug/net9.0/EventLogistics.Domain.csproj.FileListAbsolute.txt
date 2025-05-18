@@ -1,0 +1,12 @@
+C:\Users\Bienvenido\Documents\softwareII\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Domain\obj\Debug\net9.0\EventLogistics.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Bienvenido\Documents\softwareII\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Domain\obj\Debug\net9.0\EventLogistics.Domain.AssemblyInfoInputs.cache
+C:\Users\Bienvenido\Documents\softwareII\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Domain\obj\Debug\net9.0\EventLogistics.Domain.AssemblyInfo.cs
+C:\Users\Bienvenido\Documents\softwareII\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Domain\obj\Debug\net9.0\EventLogistics.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Bienvenido\Documents\softwareII\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Domain\obj\Debug\net9.0\EventLogistics.Domain.sourcelink.json
+C:\Users\Bienvenido\Documents\softwareII\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Domain\bin\Debug\net9.0\EventLogistics.Domain.deps.json
+C:\Users\Bienvenido\Documents\softwareII\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Domain\bin\Debug\net9.0\EventLogistics.Domain.dll
+C:\Users\Bienvenido\Documents\softwareII\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Domain\bin\Debug\net9.0\EventLogistics.Domain.pdb
+C:\Users\Bienvenido\Documents\softwareII\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Domain\obj\Debug\net9.0\EventLogistics.Domain.dll
+C:\Users\Bienvenido\Documents\softwareII\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Domain\obj\Debug\net9.0\refint\EventLogistics.Domain.dll
+C:\Users\Bienvenido\Documents\softwareII\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Domain\obj\Debug\net9.0\EventLogistics.Domain.pdb
+C:\Users\Bienvenido\Documents\softwareII\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Domain\obj\Debug\net9.0\ref\EventLogistics.Domain.dll
