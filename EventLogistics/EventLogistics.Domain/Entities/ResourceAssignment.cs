@@ -19,8 +19,9 @@ namespace EventLogistics.Domain.Entities
         [ForeignKey("AssignedToUserId")]
         public virtual User AssignedTo { get; set; }
         
-        public DateTime AssignmentStart { get; set; }
-        public DateTime AssignmentEnd { get; set; }
+        // Cambiar nombres de propiedades para que coincidan con el servicio
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
         public string Status { get; set; } // e.g., "Assigned", "Completed", "Cancelled"
     }
 }

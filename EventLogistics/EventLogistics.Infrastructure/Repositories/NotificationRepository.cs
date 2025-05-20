@@ -24,6 +24,16 @@ namespace EventLogistics.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        // Implementar el método faltante GetByRecipientIdAsync
+        public async Task<IEnumerable<Notification>> GetByRecipientIdAsync(int recipientId)
+        {
+            // Este método es similar a GetByRecipientAsync
+            return await _dbSet
+                .Where(n => n.RecipientId == recipientId)
+                .OrderByDescending(n => n.Timestamp)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Notification>> GetByStatusAsync(string status)
         {
             return await _dbSet
@@ -35,7 +45,16 @@ namespace EventLogistics.Infrastructure.Repositories
         public async Task<IEnumerable<Notification>> GetUnconfirmedNotificationsAsync()
         {
             return await _dbSet
-                .Where(n => !n.Confirmation)
+                .Where(n => n.Status == "Pending" || n.Status == "Sent")
+                .OrderByDescending(n => n.Timestamp)
+                .ToListAsync();
+        }
+
+        // Implementar el método faltante GetByDateRangeAsync
+        public async Task<IEnumerable<Notification>> GetByDateRangeAsync(DateTime startDate, DateTime endDate)
+        {
+            return await _dbSet
+                .Where(n => n.Timestamp >= startDate && n.Timestamp <= endDate)
                 .OrderByDescending(n => n.Timestamp)
                 .ToListAsync();
         }

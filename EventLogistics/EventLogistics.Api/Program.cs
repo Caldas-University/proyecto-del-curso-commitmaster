@@ -1,3 +1,4 @@
+using EventLogistics.Application.Services;
 using EventLogistics.Domain.Repositories;
 using EventLogistics.Infrastructure.Persistence;
 using EventLogistics.Infrastructure.Repositories;
@@ -20,8 +21,17 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationHistoryRepository, NotificationHistoryRepository>();
 builder.Services.AddScoped<IReassignmentRuleRepository, ReassignmentRuleRepository>();
 
+// Registrar servicios de aplicación
+builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<ReassignmentService>();
+
 // Agregar controladores
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Configurar opciones de serialización para manejar referencias circulares
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
 
 var app = builder.Build();
 

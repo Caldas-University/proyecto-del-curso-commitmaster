@@ -11,5 +11,9 @@ namespace EventLogistics.Domain.Repositories
         Task<IEnumerable<Notification>> GetByRecipientAsync(int userId);
         Task<IEnumerable<Notification>> GetByStatusAsync(string status);
         Task<IEnumerable<Notification>> GetUnconfirmedNotificationsAsync();
+
+        Task<IEnumerable<Notification>> GetByDateRangeAsync(DateTime startDate, DateTime endDate);
+
+        Task<IEnumerable<Notification>> GetByRecipientIdAsync(int recipientId);
     }
 }

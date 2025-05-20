@@ -1,3 +1,4 @@
+using EventLogistics.Application.Services;
 using EventLogistics.Domain.Entities;
 using EventLogistics.Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,14 @@ namespace EventLogistics.Api.Controllers
     public class ReasignacionController : ControllerBase
     {
         private readonly IReassignmentRuleRepository _ruleRepository;
+        private readonly ReassignmentService _reassignmentService;
 
-        public ReasignacionController(IReassignmentRuleRepository ruleRepository)
+        public ReasignacionController(
+            IReassignmentRuleRepository ruleRepository,
+            ReassignmentService reassignmentService)
         {
             _ruleRepository = ruleRepository;
+            _reassignmentService = reassignmentService;
         }
 
         [HttpGet]
@@ -45,6 +50,10 @@ namespace EventLogistics.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<ReassignmentRule>> Create(ReassignmentRule rule)
         {
+            // Establecer valores predeterminados
+            rule.CreatedBy = rule.CreatedBy ?? "System";
+            rule.UpdatedBy = rule.UpdatedBy ?? "System";
+            
             var result = await _ruleRepository.AddAsync(rule);
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
@@ -57,6 +66,7 @@ namespace EventLogistics.Api.Controllers
                 return BadRequest();
             }
 
+            rule.UpdatedBy = rule.UpdatedBy ?? "System";
             await _ruleRepository.UpdateAsync(rule);
             return NoContent();
         }
@@ -66,6 +76,24 @@ namespace EventLogistics.Api.Controllers
         {
             await _ruleRepository.DeleteAsync(id);
             return NoContent();
+        }
+
+        [HttpPost("process-change")]
+        public async Task<IActionResult> ProcessResourceChange(int resourceId, bool newAvailability)
+        {
+            var result = await _reassignmentService.ProcessResourceChange(resourceId, newAvailability);
+            if (result)
+            {
+                return Ok(new { message = "Resource change processed successfully" });
+            }
+            return BadRequest(new { message = "Failed to process resource change" });
+        }
+
+        [HttpGet("evaluate-impact")]
+        public async Task<IActionResult> EvaluateImpact(int eventId, int resourceId)
+        {
+            var impact = await _reassignmentService.EvaluateImpact(eventId, resourceId);
+            return Ok(impact);
         }
     }
 }
