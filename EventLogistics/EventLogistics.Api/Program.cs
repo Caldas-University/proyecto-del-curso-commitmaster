@@ -20,10 +20,12 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationHistoryRepository, NotificationHistoryRepository>();
 builder.Services.AddScoped<IReassignmentRuleRepository, ReassignmentRuleRepository>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
 
 // Registrar servicios de aplicación
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<ReassignmentService>();
+builder.Services.AddScoped<ReportService>();
 
 // Agregar controladores
 builder.Services.AddControllers()
