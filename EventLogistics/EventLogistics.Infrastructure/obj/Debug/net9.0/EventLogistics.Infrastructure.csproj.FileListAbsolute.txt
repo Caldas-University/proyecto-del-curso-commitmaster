@@ -18,3 +18,23 @@ C:\Users\User\Documents\CLASES\Ingenieria de Software 2\ProyectoCommitMasters\Ev
 C:\Users\User\Documents\CLASES\Ingenieria de Software 2\ProyectoCommitMasters\EventLogistics\EventLogistics.Infrastructure\obj\Debug\net9.0\EventLogistics.Infrastructure.pdb
 C:\Users\User\Documents\CLASES\Ingenieria de Software 2\ProyectoCommitMasters\EventLogistics\EventLogistics.Infrastructure\obj\Debug\net9.0\EventLogistics.Infrastructure.genruntimeconfig.cache
 C:\Users\User\Documents\CLASES\Ingenieria de Software 2\ProyectoCommitMasters\EventLogistics\EventLogistics.Infrastructure\obj\Debug\net9.0\ref\EventLogistics.Infrastructure.dll
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\bin\Debug\net9.0\EventLogistics.Infrastructure.deps.json
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\bin\Debug\net9.0\EventLogistics.Infrastructure.runtimeconfig.json
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\bin\Debug\net9.0\EventLogistics.Infrastructure.dll
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\bin\Debug\net9.0\EventLogistics.Infrastructure.pdb
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\bin\Debug\net9.0\EventLogistics.Application.dll
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\bin\Debug\net9.0\EventLogistics.Domain.dll
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\bin\Debug\net9.0\EventLogistics.Domain.pdb
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\bin\Debug\net9.0\EventLogistics.Application.pdb
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\obj\Debug\net9.0\EventLogistics.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\obj\Debug\net9.0\EventLogistics.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\obj\Debug\net9.0\EventLogistics.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\obj\Debug\net9.0\EventLogistics.Infrastructure.AssemblyInfo.cs
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\obj\Debug\net9.0\EventLogistics.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\obj\Debug\net9.0\EventLogistics.Infrastructure.sourcelink.json
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\obj\Debug\net9.0\EventLog.8C584807.Up2Date
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\obj\Debug\net9.0\EventLogistics.Infrastructure.dll
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\obj\Debug\net9.0\refint\EventLogistics.Infrastructure.dll
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\obj\Debug\net9.0\EventLogistics.Infrastructure.pdb
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\obj\Debug\net9.0\EventLogistics.Infrastructure.genruntimeconfig.cache
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Infrastructure\obj\Debug\net9.0\ref\EventLogistics.Infrastructure.dll
