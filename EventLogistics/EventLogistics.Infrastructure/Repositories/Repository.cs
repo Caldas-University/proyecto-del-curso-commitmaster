@@ -4,6 +4,7 @@ using EventLogistics.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EventLogistics.Infrastructure.Repositories
@@ -37,10 +38,11 @@ namespace EventLogistics.Infrastructure.Repositories
             return entity;
         }
 
-        public virtual async Task UpdateAsync(T entity)
+        public virtual async Task<T> UpdateAsync(T entity)
         {
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+            return entity;  // Ahora devuelve la entidad actualizada
         }
 
         public virtual async Task DeleteAsync(int id)
