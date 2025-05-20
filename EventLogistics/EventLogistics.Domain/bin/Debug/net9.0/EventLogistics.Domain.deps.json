@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "EventLogistics.Domain/1.0.0": {
+        "runtime": {
+          "EventLogistics.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "EventLogistics.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
