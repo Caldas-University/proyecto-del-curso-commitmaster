@@ -1,41 +1,23 @@
 {
   "format": 1,
   "restore": {
-<<<<<<< HEAD
-    "C:\\Users\\usuario\\Source\\Repos\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj": {}
+    "C:\\Users\\usuario\\source\\repos\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\usuario\\Source\\Repos\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj": {
+    "C:\\Users\\usuario\\source\\repos\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\usuario\\Source\\Repos\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\usuario\\source\\repos\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj",
         "projectName": "EventLogistics.Domain",
-        "projectPath": "C:\\Users\\usuario\\Source\\Repos\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj",
+        "projectPath": "C:\\Users\\usuario\\source\\repos\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj",
         "packagesPath": "C:\\Users\\usuario\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\usuario\\source\\repos\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Domain\\obj\\",
-=======
-    "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj": {}
-  },
-  "projects": {
-    "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj",
-        "projectName": "EventLogistics.Domain",
-        "projectPath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Domain\\obj\\",
->>>>>>> da16b0f581bc1de9550aad9ffdbeb2a08e893782
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-<<<<<<< HEAD
           "C:\\Users\\usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
-=======
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
->>>>>>> da16b0f581bc1de9550aad9ffdbeb2a08e893782
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -44,10 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-<<<<<<< HEAD
-=======
-          "C:\\Program Files\\dotnet\\library-packs": {},
->>>>>>> da16b0f581bc1de9550aad9ffdbeb2a08e893782
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -71,6 +49,12 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Abstractions": {
+              "target": "Package",
+              "version": "[9.0.5, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

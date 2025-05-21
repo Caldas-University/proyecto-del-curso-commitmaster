@@ -1,14 +1,10 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "dqIqov3qKPg=",
+  "dgSpecHash": "M2R+lpbEuVw=",
   "success": true,
-  "projectFilePath": "C:\\Users\\usuario\\Source\\Repos\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj",
-=======
-  "dgSpecHash": "ZrWhunKwfcQ=",
-  "success": true,
-  "projectFilePath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj",
->>>>>>> da16b0f581bc1de9550aad9ffdbeb2a08e893782
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\usuario\\source\\repos\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\usuario\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.5\\microsoft.entityframeworkcore.abstractions.9.0.5.nupkg.sha512"
+  ],
   "logs": []
 }

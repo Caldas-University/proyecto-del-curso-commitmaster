@@ -17,6 +17,29 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.5");
 
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Activity", b =>
+                {
+                    b.Property<int>("ActivityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("OrganizatorId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ActivityId");
+
+                    b.HasIndex("OrganizatorId");
+
+                    b.ToTable("Activities");
+                });
+
             modelBuilder.Entity("EventLogistics.Domain.Entities.Event", b =>
                 {
                     b.Property<int>("Id")
@@ -142,6 +165,33 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                     b.ToTable("NotificationHistories");
                 });
 
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Organizator", b =>
+                {
+                    b.Property<int>("OrganizatorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("OrganizatorId");
+
+                    b.ToTable("Organizators");
+                });
+
             modelBuilder.Entity("EventLogistics.Domain.Entities.ReassignmentRule", b =>
                 {
                     b.Property<int>("Id")
@@ -204,7 +254,8 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Capacity")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("Cantidad");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -213,9 +264,16 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("FechaFin")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("FechaInicio")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("TipoEquipo");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
@@ -316,6 +374,17 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Activity", b =>
+                {
+                    b.HasOne("EventLogistics.Domain.Entities.Organizator", "Organizator")
+                        .WithMany("Activities")
+                        .HasForeignKey("OrganizatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Organizator");
+                });
+
             modelBuilder.Entity("EventLogistics.Domain.Entities.Notification", b =>
                 {
                     b.HasOne("EventLogistics.Domain.Entities.User", "Recipient")
@@ -375,6 +444,11 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("EventLogistics.Domain.Entities.Event", b =>
                 {
                     b.Navigation("Resources");
+                });
+
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Organizator", b =>
+                {
+                    b.Navigation("Activities");
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.Resource", b =>

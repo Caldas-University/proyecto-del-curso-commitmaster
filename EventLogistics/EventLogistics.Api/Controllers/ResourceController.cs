@@ -1,8 +1,7 @@
+using EventLogistics.Application.Interfaces;
 using EventLogistics.Domain.Entities;
 using EventLogistics.Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace EventLogistics.Api.Controllers
 {
@@ -11,10 +10,11 @@ namespace EventLogistics.Api.Controllers
     public class ResourceController : ControllerBase
     {
         private readonly IRepository<Resource> _resourceRepository;
-
-        public ResourceController(IRepository<Resource> resourceRepository)
+        private readonly IEmailService _emailService;
+        public ResourceController(IRepository<Resource> resourceRepository, IEmailService emailService)
         {
             _resourceRepository = resourceRepository;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -40,7 +40,7 @@ namespace EventLogistics.Api.Controllers
         {
             resource.CreatedBy = resource.CreatedBy ?? "System";
             resource.UpdatedBy = resource.UpdatedBy ?? "System";
-            
+
             var result = await _resourceRepository.AddAsync(resource);
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
@@ -66,7 +66,7 @@ namespace EventLogistics.Api.Controllers
             {
                 return NotFound();
             }
-            
+
             resource.Availability = availability;
             resource.UpdatedBy = "System";
             await _resourceRepository.UpdateAsync(resource);
@@ -78,6 +78,34 @@ namespace EventLogistics.Api.Controllers
         {
             await _resourceRepository.DeleteAsync(id);
             return NoContent();
+        }
+        
+        // Revisar estado de disponibilidad
+        [HttpGet("disponibilidad")]
+        public async Task<IActionResult> CheckAvailability(string tipoEquipo, int cantidad, DateTime fecha)
+        {
+            var allResources = await _resourceRepository.GetAllAsync();
+            var availableResources = allResources
+                .Where(r => r.Type == tipoEquipo &&  
+                            r.FechaInicio <= fecha &&
+                            r.FechaFin >= fecha)
+                .ToList();
+            bool isAvailable = availableResources.Any(r => r.Capacity >= cantidad);
+            return Ok(new { Disponible = isAvailable });
+        }
+        
+        [HttpPost("reservar")]
+        public async Task<IActionResult> ReserveResource(int resourceId, int cantidad, string organizadorEmail)
+        {
+            var resource = await _resourceRepository.GetByIdAsync(resourceId);
+            if (resource == null || resource.Capacity < cantidad)
+                return BadRequest("Stock insuficiente");
+
+            resource.Capacity -= cantidad;
+            await _resourceRepository.UpdateAsync(resource);
+
+            await _emailService.SendNotificationAsync(organizadorEmail, "Recurso reservado");
+            return Ok();
         }
     }
 }

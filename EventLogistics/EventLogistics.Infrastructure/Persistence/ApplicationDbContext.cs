@@ -1,9 +1,5 @@
 using EventLogistics.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace EventLogistics.Infrastructure.Persistence
 {
@@ -17,6 +13,8 @@ namespace EventLogistics.Infrastructure.Persistence
         public DbSet<Resource> Resources { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<Organizator> Organizators { get; set; }
+        public DbSet<Activity> Activities { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<NotificationHistory> NotificationHistories { get; set; }
         public DbSet<ResourceAssignment> ResourceAssignments { get; set; }
@@ -59,12 +57,26 @@ namespace EventLogistics.Infrastructure.Persistence
                 .HasForeignKey(ra => ra.AssignedToUserId)
                 .IsRequired(false);
 
+            // Activity - ResourceAssingment relationship (one-to-many)
+            modelBuilder.Entity<Activity>()
+                .HasOne(a => a.Organizator)
+                .WithMany(o => o.Activities)
+                .HasForeignKey(a => a.OrganizatorId);
+
             // Resource - ReassignmentRule relationship (optional)
             modelBuilder.Entity<ReassignmentRule>()
                 .HasOne(rr => rr.ResourceType)
                 .WithMany(r => r.ReassignmentRules)
                 .HasForeignKey(rr => rr.ResourceTypeId)
                 .IsRequired(false);
+
+            modelBuilder.Entity<Resource>(entity =>
+            {
+                entity.Property(r => r.Type).HasColumnName("TipoEquipo"); 
+                entity.Property(r => r.Capacity).HasColumnName("Cantidad");
+                entity.Property(r => r.FechaInicio); 
+                entity.Property(r => r.FechaFin);    
+            });
         }
 
         public override int SaveChanges()

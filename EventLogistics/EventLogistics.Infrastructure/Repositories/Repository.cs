@@ -2,10 +2,6 @@ using EventLogistics.Domain.Entities;
 using EventLogistics.Domain.Repositories;
 using EventLogistics.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EventLogistics.Infrastructure.Repositories
 {
@@ -53,6 +49,11 @@ namespace EventLogistics.Infrastructure.Repositories
                 _dbSet.Remove(entity);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public Task<int> FindAsync(Func<object, bool> value)
+        {
+            throw new NotImplementedException();
         }
     }
 }

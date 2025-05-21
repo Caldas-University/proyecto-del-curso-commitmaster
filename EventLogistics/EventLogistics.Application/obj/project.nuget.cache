@@ -1,14 +1,13 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "zemt7lYb6C0=",
+  "dgSpecHash": "AIySHOhsq8o=",
   "success": true,
-  "projectFilePath": "C:\\Users\\usuario\\Source\\Repos\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Application\\EventLogistics.Application.csproj",
-=======
-  "dgSpecHash": "+2uIiA//CG4=",
-  "success": true,
-  "projectFilePath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Application\\EventLogistics.Application.csproj",
->>>>>>> da16b0f581bc1de9550aad9ffdbeb2a08e893782
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\usuario\\source\\repos\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Application\\EventLogistics.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\usuario\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.5\\microsoft.entityframeworkcore.abstractions.9.0.5.nupkg.sha512",
+    "C:\\Users\\usuario\\.nuget\\packages\\microsoft.extensions.configuration\\9.0.5\\microsoft.extensions.configuration.9.0.5.nupkg.sha512",
+    "C:\\Users\\usuario\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\9.0.5\\microsoft.extensions.configuration.abstractions.9.0.5.nupkg.sha512",
+    "C:\\Users\\usuario\\.nuget\\packages\\microsoft.extensions.primitives\\9.0.5\\microsoft.extensions.primitives.9.0.5.nupkg.sha512"
+  ],
   "logs": []
 }

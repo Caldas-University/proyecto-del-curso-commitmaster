@@ -1,9 +1,5 @@
 using EventLogistics.Domain.Entities;
 using EventLogistics.Domain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EventLogistics.Application.Services
 {
