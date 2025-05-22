@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "dotnet",
+			"task": "watch EventLogistics.Api",
+			"file": "C:\\Users\\garci\\OneDrive\\Desktop\\Uni\\6_semestre\\Software_II\\Proyecto\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Api\\EventLogistics.Api.csproj",
+			"problemMatcher": [],
+			"label": "dotnet: watch EventLogistics.Api",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}

@@ -3,3 +3,7 @@ FlightReservation.Application
 FlightReservation.Domain
 FlightReservation.Infrastructure
 FlightReservation.sln
+
+*.db-shm
+*.db-wal
+*.db

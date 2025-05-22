@@ -21,50 +21,81 @@ namespace EventLogistics.Infrastructure.Persistence
         public DbSet<NotificationHistory> NotificationHistories { get; set; }
         public DbSet<ResourceAssignment> ResourceAssignments { get; set; }
         public DbSet<ReassignmentRule> ReassignmentRules { get; set; }
+        public DbSet<Participant> Participants { get; set; }
+        public DbSet<Attendance> Attendances { get; set; }
+        public DbSet<Credential> Credentials { get; set; }
+        public DbSet<Activity> Activities { get; set; }
+        public DbSet<ParticipantActivity> ParticipantActivities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure entity relationships and constraints
-
-            // User - Notification relationship (one-to-many)
+            // User - Notification (1:N)
             modelBuilder.Entity<Notification>()
                 .HasOne(n => n.Recipient)
                 .WithMany(u => u.Notifications)
                 .HasForeignKey(n => n.RecipientId);
 
-            // Notification - NotificationHistory relationship (one-to-many)
+            // Notification - NotificationHistory (1:N)
             modelBuilder.Entity<NotificationHistory>()
                 .HasOne(nh => nh.Notification)
                 .WithMany()
                 .HasForeignKey(nh => nh.NotificationId);
 
-            // Resource - ResourceAssignment relationship (one-to-many)
+            // Resource - ResourceAssignment (1:N)
             modelBuilder.Entity<ResourceAssignment>()
                 .HasOne(ra => ra.Resource)
                 .WithMany(r => r.Assignments)
                 .HasForeignKey(ra => ra.ResourceId);
 
-            // Event - ResourceAssignment relationship (one-to-many)
+            // Event - ResourceAssignment (1:N)
             modelBuilder.Entity<ResourceAssignment>()
                 .HasOne(ra => ra.Event)
                 .WithMany(e => e.Resources)
                 .HasForeignKey(ra => ra.EventId);
 
-            // User - ResourceAssignment relationship (one-to-many, optional)
+            // User - ResourceAssignment (1:N, optional)
             modelBuilder.Entity<ResourceAssignment>()
                 .HasOne(ra => ra.AssignedTo)
                 .WithMany()
                 .HasForeignKey(ra => ra.AssignedToUserId)
                 .IsRequired(false);
 
-            // Resource - ReassignmentRule relationship (optional)
+            // Resource - ReassignmentRule (optional)
             modelBuilder.Entity<ReassignmentRule>()
                 .HasOne(rr => rr.ResourceType)
                 .WithMany(r => r.ReassignmentRules)
                 .HasForeignKey(rr => rr.ResourceTypeId)
                 .IsRequired(false);
+
+            // ParticipantActivity (N:N)
+            modelBuilder.Entity<ParticipantActivity>()
+                .HasKey(pa => new { pa.ParticipantId, pa.ActivityId });
+
+            modelBuilder.Entity<ParticipantActivity>()
+                .HasOne(pa => pa.Participant)
+                .WithMany(p => p.ParticipantActivities)
+                .HasForeignKey(pa => pa.ParticipantId);
+
+            modelBuilder.Entity<ParticipantActivity>()
+                .HasOne(pa => pa.Activity)
+                .WithMany(a => a.ParticipantActivities)
+                .HasForeignKey(pa => pa.ActivityId);
+
+            // Attendance
+            modelBuilder.Entity<Attendance>()
+                .HasOne(a => a.Participant)
+                .WithMany()
+                .HasForeignKey(a => a.ParticipantId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Credential
+            modelBuilder.Entity<Credential>()
+                .HasOne(c => c.Participant)
+                .WithMany()
+                .HasForeignKey(c => c.ParticipantId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public override int SaveChanges()
