@@ -21,6 +21,8 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationHistoryRepository, NotificationHistoryRepository>();
 builder.Services.AddScoped<IReassignmentRuleRepository, ReassignmentRuleRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 
 // Registrar servicios de aplicación
 builder.Services.AddScoped<NotificationService>();
