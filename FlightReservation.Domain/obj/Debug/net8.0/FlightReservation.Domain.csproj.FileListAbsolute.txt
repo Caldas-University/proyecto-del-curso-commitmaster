@@ -9,3 +9,15 @@ C:\src\FlightReservation\FlightReservation.Domain\obj\Debug\net8.0\FlightReserva
 C:\src\FlightReservation\FlightReservation.Domain\obj\Debug\net8.0\refint\FlightReservation.Domain.dll
 C:\src\FlightReservation\FlightReservation.Domain\obj\Debug\net8.0\FlightReservation.Domain.pdb
 C:\src\FlightReservation\FlightReservation.Domain\obj\Debug\net8.0\ref\FlightReservation.Domain.dll
+C:\Users\Carta\Documents\Clases\Ingenieria de Software II\proyecto-del-curso-commitmaster\FlightReservation.Domain\bin\Debug\net8.0\FlightReservation.Domain.deps.json
+C:\Users\Carta\Documents\Clases\Ingenieria de Software II\proyecto-del-curso-commitmaster\FlightReservation.Domain\bin\Debug\net8.0\FlightReservation.Domain.dll
+C:\Users\Carta\Documents\Clases\Ingenieria de Software II\proyecto-del-curso-commitmaster\FlightReservation.Domain\bin\Debug\net8.0\FlightReservation.Domain.pdb
+C:\Users\Carta\Documents\Clases\Ingenieria de Software II\proyecto-del-curso-commitmaster\FlightReservation.Domain\obj\Debug\net8.0\FlightReservation.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Carta\Documents\Clases\Ingenieria de Software II\proyecto-del-curso-commitmaster\FlightReservation.Domain\obj\Debug\net8.0\FlightReservation.Domain.AssemblyInfoInputs.cache
+C:\Users\Carta\Documents\Clases\Ingenieria de Software II\proyecto-del-curso-commitmaster\FlightReservation.Domain\obj\Debug\net8.0\FlightReservation.Domain.AssemblyInfo.cs
+C:\Users\Carta\Documents\Clases\Ingenieria de Software II\proyecto-del-curso-commitmaster\FlightReservation.Domain\obj\Debug\net8.0\FlightReservation.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Carta\Documents\Clases\Ingenieria de Software II\proyecto-del-curso-commitmaster\FlightReservation.Domain\obj\Debug\net8.0\FlightReservation.Domain.sourcelink.json
+C:\Users\Carta\Documents\Clases\Ingenieria de Software II\proyecto-del-curso-commitmaster\FlightReservation.Domain\obj\Debug\net8.0\FlightReservation.Domain.dll
+C:\Users\Carta\Documents\Clases\Ingenieria de Software II\proyecto-del-curso-commitmaster\FlightReservation.Domain\obj\Debug\net8.0\refint\FlightReservation.Domain.dll
+C:\Users\Carta\Documents\Clases\Ingenieria de Software II\proyecto-del-curso-commitmaster\FlightReservation.Domain\obj\Debug\net8.0\FlightReservation.Domain.pdb
+C:\Users\Carta\Documents\Clases\Ingenieria de Software II\proyecto-del-curso-commitmaster\FlightReservation.Domain\obj\Debug\net8.0\ref\FlightReservation.Domain.dll
