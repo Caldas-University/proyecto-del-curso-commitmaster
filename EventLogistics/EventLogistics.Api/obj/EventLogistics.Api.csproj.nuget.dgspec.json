@@ -67,6 +67,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.5, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.6.2, )"
             }
           },
           "imports": [
@@ -257,9 +261,6 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Application\\EventLogistics.Application.csproj": {
-                "projectPath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Application\\EventLogistics.Application.csproj"
-              },
               "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj": {
                 "projectPath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj"
               }

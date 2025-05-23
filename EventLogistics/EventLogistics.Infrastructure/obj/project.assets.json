@@ -1086,19 +1086,6 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
-      "EventLogistics.Application/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v9.0",
-        "dependencies": {
-          "EventLogistics.Domain": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/EventLogistics.Application.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/EventLogistics.Application.dll": {}
-        }
-      },
       "EventLogistics.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
@@ -3125,11 +3112,6 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "EventLogistics.Application/1.0.0": {
-      "type": "project",
-      "path": "../EventLogistics.Application/EventLogistics.Application.csproj",
-      "msbuildProject": "../EventLogistics.Application/EventLogistics.Application.csproj"
-    },
     "EventLogistics.Domain/1.0.0": {
       "type": "project",
       "path": "../EventLogistics.Domain/EventLogistics.Domain.csproj",
@@ -3138,7 +3120,6 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
-      "EventLogistics.Application >= 1.0.0",
       "EventLogistics.Domain >= 1.0.0",
       "Microsoft.EntityFrameworkCore.Sqlite >= 9.0.0",
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.0"
@@ -3177,9 +3158,6 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Application\\EventLogistics.Application.csproj": {
-              "projectPath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Application\\EventLogistics.Application.csproj"
-            },
             "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj": {
               "projectPath": "C:\\Users\\User\\Documents\\CLASES\\Ingenieria de Software 2\\ProyectoCommitMasters\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj"
             }
