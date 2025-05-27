@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Api\\EventLogistics.Api.csproj": {}
+    "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\eventLogistics.Api\\EventLogistics.Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Api\\EventLogistics.Api.csproj": {
+    "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\eventLogistics.Api\\EventLogistics.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Api\\EventLogistics.Api.csproj",
+        "projectUniqueName": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\eventLogistics.Api\\EventLogistics.Api.csproj",
         "projectName": "EventLogistics.Api",
-        "projectPath": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Api\\EventLogistics.Api.csproj",
+        "projectPath": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\eventLogistics.Api\\EventLogistics.Api.csproj",
         "packagesPath": "C:\\Users\\leon5\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Api\\obj\\",
+        "outputPath": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\eventLogistics.Api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\leon5\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -51,6 +51,10 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "ClosedXML": {
+              "target": "Package",
+              "version": "[0.105.0, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.5, )"
@@ -60,6 +64,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.5, )"
+            },
+            "QuestPDF": {
+              "target": "Package",
+              "version": "[2025.5.0, )"
             }
           },
           "imports": [
