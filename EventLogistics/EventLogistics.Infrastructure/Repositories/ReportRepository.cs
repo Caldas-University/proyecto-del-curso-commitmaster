@@ -17,7 +17,7 @@ namespace EventLogistics.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<ResourceAssignment>> GetAssignmentsByFiltersAsync(int? eventId, string resourceType, string status)
+        public async Task<IEnumerable<ResourceAssignment>> GetFilteredAssignments(int? eventId, string? resourceType, string? status)
         {
             var query = _context.Set<ResourceAssignment>().AsQueryable();
 
