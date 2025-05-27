@@ -1,4 +1,5 @@
 using EventLogistics.Application.Services;
+using EventLogistics.Domain.DTOs;
 using EventLogistics.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -31,6 +32,14 @@ namespace EventLogistics.Api.Controllers
 
             var report = await _reportService.GenerateReport(eventId, resourceType, status);
             return Ok(report);
+        }
+
+        // GET: api/report/metrics
+        [HttpGet("metrics")]
+        public async Task<ActionResult<IEnumerable<ResourceMetricsDto>>> GetResourceMetrics()
+        {
+            var metrics = await _reportService.GetResourceMetricsAsync();
+            return Ok(metrics);
         }
     }
 }

@@ -1,3 +1,4 @@
+using EventLogistics.Domain.DTOs;
 using EventLogistics.Domain.Entities;
 using EventLogistics.Domain.Repositories;
 using System.Collections.Generic;
@@ -18,6 +19,11 @@ namespace EventLogistics.Application.Services
         {
             // Llama al repositorio para obtener los datos filtrados
             return await _reportRepository.GetFilteredAssignments(eventId, resourceType, status);
+        }
+
+        public async Task<IEnumerable<ResourceMetricsDto>> GetResourceMetricsAsync()
+        {
+            return await _reportRepository.GetResourceMetricsAsync();
         }
     }
 }

@@ -1,3 +1,4 @@
+using EventLogistics.Domain.DTOs;
 using EventLogistics.Domain.Entities;
 using EventLogistics.Domain.Repositories;
 using EventLogistics.Infrastructure.Persistence;
@@ -34,6 +35,29 @@ namespace EventLogistics.Infrastructure.Repositories
                 .Include(a => a.Resource)
                 .Include(a => a.Event)
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<ResourceMetricsDto>> GetResourceMetricsAsync()
+        {
+            var resources = await _context.Resources
+                .Include(r => r.Assignments)
+                .ThenInclude(a => a.Event)
+                .ToListAsync();
+
+            var metrics = resources.Select(r => new ResourceMetricsDto
+            {
+                Name = r.Type, // No hay propiedad Name, así que usamos Type como identificador
+                Type = r.Type,
+                TotalCount = r.Capacity, // Usamos Capacity como cantidad total
+                UsedCount = r.Assignments.Count(a => a.Status == "Asignado"),
+                AvailableCount = r.Availability ? r.Capacity : 0,
+                EventsCount = r.Assignments.Select(a => a.EventId).Distinct().Count(),
+                ActivitiesCount = r.Assignments.Count,
+                TotalUsage = r.Assignments.Count,
+                Availability = r.Availability
+            }).ToList();
+
+            return metrics;
         }
     }
 }
