@@ -155,3 +155,6 @@ C:\Users\usuario\source\repos\proyecto-del-curso-commitmaster\EventLogistics\Eve
 C:\Users\usuario\source\repos\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Api\obj\Debug\net9.0\EventLogistics.Api.pdb
 C:\Users\usuario\source\repos\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Api\obj\Debug\net9.0\EventLogistics.Api.genruntimeconfig.cache
 C:\Users\usuario\source\repos\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Api\obj\Debug\net9.0\ref\EventLogistics.Api.dll
+C:\Users\usuario\source\repos\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Api\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\usuario\source\repos\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Api\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\usuario\source\repos\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.Api\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
