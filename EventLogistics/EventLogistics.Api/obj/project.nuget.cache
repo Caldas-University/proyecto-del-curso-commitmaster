@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/UUH0aB7mm0=",
+  "dgSpecHash": "/alvSj4mClw=",
   "success": true,
-  "projectFilePath": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\Eventlogistics\\Eventlogistics.Api\\EventLogistics.Api.csproj",
+  "projectFilePath": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Api\\EventLogistics.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\leon5\\.nuget\\packages\\closedxml\\0.105.0\\closedxml.0.105.0.nupkg.sha512",
     "C:\\Users\\leon5\\.nuget\\packages\\closedxml.parser\\2.0.0\\closedxml.parser.2.0.0.nupkg.sha512",

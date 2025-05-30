@@ -4103,11 +4103,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\Eventlogistics\\Eventlogistics.Api\\EventLogistics.Api.csproj",
+      "projectUniqueName": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Api\\EventLogistics.Api.csproj",
       "projectName": "EventLogistics.Api",
-      "projectPath": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\Eventlogistics\\Eventlogistics.Api\\EventLogistics.Api.csproj",
+      "projectPath": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Api\\EventLogistics.Api.csproj",
       "packagesPath": "C:\\Users\\leon5\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\Eventlogistics\\Eventlogistics.Api\\obj\\",
+      "outputPath": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\leon5\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -4122,11 +4122,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\Eventlogistics\\EventLogistics.Application\\EventLogistics.Application.csproj": {
-              "projectPath": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\Eventlogistics\\EventLogistics.Application\\EventLogistics.Application.csproj"
+            "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Application\\EventLogistics.Application.csproj": {
+              "projectPath": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Application\\EventLogistics.Application.csproj"
             },
-            "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\Eventlogistics\\EventLogistics.Infrastructure\\EventLogistics.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\Eventlogistics\\EventLogistics.Infrastructure\\EventLogistics.Infrastructure.csproj"
+            "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Infrastructure\\EventLogistics.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Infrastructure\\EventLogistics.Infrastructure.csproj"
             }
           }
         }

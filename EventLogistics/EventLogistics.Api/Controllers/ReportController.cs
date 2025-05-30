@@ -143,5 +143,13 @@ namespace EventLogistics.Api.Controllers
             var pdfBytes = document.GeneratePdf();
             return File(pdfBytes, "application/pdf", "metrics.pdf");
         }
+
+        // GET: api/report/metrics/critical
+        [HttpGet("metrics/critical")]
+        public async Task<ActionResult<IEnumerable<ResourceMetricsDto>>> GetCriticalResources()
+        {
+            var critical = await _reportService.GetCriticalResourcesAsync();
+            return Ok(critical);
+        }
     }
 }
