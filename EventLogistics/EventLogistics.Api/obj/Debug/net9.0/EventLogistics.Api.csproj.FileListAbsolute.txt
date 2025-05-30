@@ -349,6 +349,9 @@ C:\Users\garci\OneDrive\Desktop\Uni\6_semestre\Software_II\Proyecto\proyecto-del
 C:\Users\garci\OneDrive\Desktop\Uni\6_semestre\Software_II\Proyecto\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.api\bin\Debug\net9.0\SQLitePCLRaw.batteries_v2.dll
 C:\Users\garci\OneDrive\Desktop\Uni\6_semestre\Software_II\Proyecto\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.api\bin\Debug\net9.0\SQLitePCLRaw.core.dll
 C:\Users\garci\OneDrive\Desktop\Uni\6_semestre\Software_II\Proyecto\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.api\bin\Debug\net9.0\SQLitePCLRaw.provider.e_sqlite3.dll
+C:\Users\garci\OneDrive\Desktop\Uni\6_semestre\Software_II\Proyecto\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.api\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\garci\OneDrive\Desktop\Uni\6_semestre\Software_II\Proyecto\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.api\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\garci\OneDrive\Desktop\Uni\6_semestre\Software_II\Proyecto\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.api\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\garci\OneDrive\Desktop\Uni\6_semestre\Software_II\Proyecto\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.api\bin\Debug\net9.0\System.CodeDom.dll
 C:\Users\garci\OneDrive\Desktop\Uni\6_semestre\Software_II\Proyecto\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.api\bin\Debug\net9.0\System.Composition.AttributedModel.dll
 C:\Users\garci\OneDrive\Desktop\Uni\6_semestre\Software_II\Proyecto\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.api\bin\Debug\net9.0\System.Composition.Convention.dll
@@ -466,6 +469,3 @@ C:\Users\garci\OneDrive\Desktop\Uni\6_semestre\Software_II\Proyecto\proyecto-del
 C:\Users\garci\OneDrive\Desktop\Uni\6_semestre\Software_II\Proyecto\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.api\obj\Debug\net9.0\EventLogistics.Api.pdb
 C:\Users\garci\OneDrive\Desktop\Uni\6_semestre\Software_II\Proyecto\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.api\obj\Debug\net9.0\EventLogistics.Api.genruntimeconfig.cache
 C:\Users\garci\OneDrive\Desktop\Uni\6_semestre\Software_II\Proyecto\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.api\obj\Debug\net9.0\ref\EventLogistics.Api.dll
-C:\Users\garci\OneDrive\Desktop\Uni\6_semestre\Software_II\Proyecto\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.api\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
-C:\Users\garci\OneDrive\Desktop\Uni\6_semestre\Software_II\Proyecto\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.api\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
-C:\Users\garci\OneDrive\Desktop\Uni\6_semestre\Software_II\Proyecto\proyecto-del-curso-commitmaster\EventLogistics\EventLogistics.api\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll

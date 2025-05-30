@@ -1,8 +1,8 @@
-using EventLogistics.Domain.Entities;
-using EventLogistics.Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
+using EventLogistics.Application.DTOs;
+using EventLogistics.Application.DTOs.Attendance; // <-- Agrega este using
+using EventLogistics.Application.Services;
 
 namespace EventLogistics.Api.Controllers
 {
@@ -10,108 +10,97 @@ namespace EventLogistics.Api.Controllers
     [Route("api/[controller]")]
     public class AttendanceController : ControllerBase
     {
-        private readonly IAttendanceRepository _attendanceRepository;
-        private readonly IParticipantRepository _participantRepository;
+        private readonly IAttendanceService _attendanceService;
         private readonly ICredentialService _credentialService;
 
         public AttendanceController(
-            IAttendanceRepository attendanceRepository,
-            IParticipantRepository participantRepository,
+            IAttendanceService attendanceService,
             ICredentialService credentialService)
         {
-            _attendanceRepository = attendanceRepository;
-            _participantRepository = participantRepository;
+            _attendanceService = attendanceService;
             _credentialService = credentialService;
         }
 
-        // ✅ Registro por QR
-        [HttpPost("qr")]
-        public async Task<IActionResult> RegisterByQr([FromBody] string qrCodeData)
+        // POST: api/attendance/check-in
+        [HttpPost("check-in")]
+        public async Task<IActionResult> CheckIn([FromBody] AttendanceRegisterDto dto)
         {
-            var participant = await _participantRepository.GetByQrCodeAsync(qrCodeData);
-            if (participant == null)
-                return NotFound("Participante no encontrado");
+            var (success, message, participantId, participantName, accessType) =
+                await _attendanceService.RegisterAttendanceAsync(dto.QrCode, dto.Document);
 
-            var now = DateTime.UtcNow;
-            var asistencia = new Attendance
+            if (!success)
+                return BadRequest(new { message });
+
+            var badgeBytes = await _credentialService.GenerateCredentialAsync(participantId);
+            var schedule = await _credentialService.GetPersonalizedScheduleAsync(participantId);
+
+            var response = new CredentialResponseDto
             {
-                ParticipantId = participant.Id,
-                EventId = participant.EventId,
-                Timestamp = now,
-                CheckInTime = now,
-                Method = "QR"
-            };
-
-            await _attendanceRepository.AddAsync(asistencia);
-            return Ok("Asistencia registrada por QR");
-        }
-
-        // ✅ Registro manual
-        [HttpPost("manual")]
-        public async Task<IActionResult> RegisterManual([FromBody] string documentoIdentidad)
-        {
-            var participant = await _participantRepository.GetByDocumentAsync(documentoIdentidad);
-            if (participant == null)
-                return NotFound("Participante no encontrado");
-
-            var now = DateTime.UtcNow;
-            var asistencia = new Attendance
-            {
-                ParticipantId = participant.Id,
-                EventId = participant.EventId,
-                Timestamp = now,
-                CheckInTime = now,
-                Method = "Manual"
-            };
-
-            await _attendanceRepository.AddAsync(asistencia);
-            return Ok("Asistencia registrada manualmente");
-        }
-
-        // ✅ Endpoint unificado que valida, registra, genera PDF y cronograma
-        [HttpPost("check-in/{identifier}")]
-        public async Task<IActionResult> CheckIn(string identifier)
-        {
-            // 1. Buscar por documento o QR
-            var participant = await _participantRepository.GetByDocumentAsync(identifier)
-                            ?? await _participantRepository.GetByQrCodeAsync(identifier);
-
-            if (participant == null)
-                return NotFound("Participante no encontrado");
-
-            // 2. Validar inscripción completa
-            if (!participant.IsRegistrationComplete)
-                return BadRequest("Inscripción incompleta. Regularizar antes de continuar.");
-
-            // 3. Registrar asistencia
-            var now = DateTime.UtcNow;
-            var asistencia = new Attendance
-            {
-                ParticipantId = participant.Id,
-                EventId = participant.EventId,
-                Timestamp = now,
-                CheckInTime = now,
-                Method = "CheckIn"
-            };
-
-            await _attendanceRepository.AddAsync(asistencia);
-
-            // 4. Generar credencial (PDF) y cronograma
-            var badgeBytes = await _credentialService.GenerateCredentialAsync(participant.Id);
-            var schedule = await _credentialService.GetPersonalizedScheduleAsync(participant.Id);
-
-            // 5. Retornar todo junto
-            return Ok(new
-            {
-                Message = "Asistencia registrada con éxito",
-                Participant = new
-                {
-                    participant.FullName,
-                    participant.AccessType
-                },
-                BadgePdfBase64 = badgeBytes != null ? Convert.ToBase64String(badgeBytes) : null,
+                ParticipantName = participantName,
+                AccessType = accessType ?? string.Empty,
+                CredentialPdf = badgeBytes,
                 Schedule = schedule
-            });
+            };
+
+            return Ok(response);
+        }
+
+        // POST: api/attendance/manual-check-in
+        [HttpPost("manual-check-in")]
+        public async Task<IActionResult> ManualCheckIn([FromBody] AttendanceRegisterDto dto)
+        {
+            var (success, message, participantId, participantName, accessType) =
+                await _attendanceService.RegisterAttendanceManuallyAsync(dto.Document!, dto.Name!);
+
+            if (!success)
+                return BadRequest(new { message });
+
+            var badgeBytes = await _credentialService.GenerateCredentialAsync(participantId);
+            var schedule = await _credentialService.GetPersonalizedScheduleAsync(participantId);
+
+            var response = new CredentialResponseDto
+            {
+                ParticipantName = participantName,
+                AccessType = accessType ?? string.Empty,
+                CredentialPdf = badgeBytes,
+                Schedule = schedule,
+            };
+
+            return Ok(response);
+        }
+
+        // GET: api/attendance/check-in-status/{participantId}
+        [HttpGet("check-in-status/{participantId}")]
+        public async Task<IActionResult> CheckInStatus(int participantId)
+        {
+            var status = await _attendanceService.GetCheckInStatusAsync(participantId);
+            return Ok(new { checkedIn = status });
+        }
+
+        // GET: api/attendance/participant/{participantId}
+        [HttpGet("participant/{participantId}")]
+        public async Task<IActionResult> GetAttendanceByParticipant(int participantId)
+        {
+            var attendances = await _attendanceService.GetAttendanceByParticipantAsync(participantId);
+            return Ok(attendances);
+        }
+
+        // GET: api/attendance/event/{eventId}
+        [HttpGet("event/{eventId}")]
+        public async Task<IActionResult> GetAttendanceByEvent(int eventId)
+        {
+            var attendances = await _attendanceService.GetAttendanceByEventAsync(eventId);
+            return Ok(attendances);
+        }
+
+        // POST: api/attendance/regularize-access
+        [HttpPost("regularize-access")]
+        public async Task<IActionResult> RegularizeAccess([FromBody] RegularizeAccessDto dto)
+        {
+            var (success, message) = await _attendanceService.RegularizeAccessAsync(dto.ParticipantId, dto.DataToUpdate);
+            if (!success)
+                return BadRequest(new { message });
+            return Ok(new { message });
         }
     }
 }

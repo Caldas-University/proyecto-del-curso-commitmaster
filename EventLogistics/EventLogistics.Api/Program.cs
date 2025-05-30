@@ -20,9 +20,11 @@ builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IParticipantRepository, ParticipantRepository>();
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
-builder.Services.AddScoped<BadgeGenerator>();
+builder.Services.AddScoped<ICredentialRepository, CredentialRepository>();
+
 builder.Services.AddScoped<IBadgeGenerator, BadgeGenerator>();
 builder.Services.AddScoped<ICredentialService, CredentialService>();
+builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 
 // Registrar servicios de aplicación
 builder.Services.AddScoped<NotificationService>();

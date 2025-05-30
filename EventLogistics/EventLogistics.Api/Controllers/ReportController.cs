@@ -29,7 +29,9 @@ namespace EventLogistics.Api.Controllers
                 return BadRequest(new { message = "Debe seleccionar al menos un filtro" });
             }
 
-            var report = await _reportService.GenerateReport(eventId, resourceType, status);
+            var safeResourceType = resourceType ?? string.Empty;
+            var safeStatus = status ?? string.Empty;
+            var report = await _reportService.GenerateReport(eventId, safeResourceType, safeStatus);
             return Ok(report);
         }
     }
