@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ndVQlUastmk=",
+  "dgSpecHash": "fcOGWj+39yU=",
   "success": true,
-  "projectFilePath": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Infrastructure\\EventLogistics.Infrastructure.csproj",
+  "projectFilePath": "C:\\Users\\leon5\\Downloads\\ProyectoSoftware\\proyecto-del-curso-commitmaster\\Eventlogistics\\EventLogistics.Infrastructure\\EventLogistics.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\leon5\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\leon5\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\7.0.0\\microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",

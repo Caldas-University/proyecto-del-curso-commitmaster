@@ -368,3 +368,6 @@ C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventL
 C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\eventLogistics.Api\bin\Debug\net9.0\runtimes\win-x86\native\libstdc++-6.dll
 C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\eventLogistics.Api\bin\Debug\net9.0\runtimes\win-x86\native\libwinpthread-1.dll
 C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\EventLogistics\eventLogistics.Api\bin\Debug\net9.0\runtimes\win-x86\native\qpdf.dll
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\Eventlogistics\Eventlogistics.Api\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\Eventlogistics\Eventlogistics.Api\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\leon5\Downloads\ProyectoSoftware\proyecto-del-curso-commitmaster\Eventlogistics\Eventlogistics.Api\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
