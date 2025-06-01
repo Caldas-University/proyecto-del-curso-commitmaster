@@ -10,16 +10,16 @@ namespace EventLogistics.Domain.Entities
         public int ParticipantId { get; set; }
 
         [ForeignKey("ParticipantId")]
-        public virtual Participant Participant { get; set; }
+        public virtual Participant? Participant { get; set; }
 
         [Required]
-        public string AccessType { get; set; } // Ej: Asistente, Ponente, VIP
+        public required string AccessType { get; set; } // Ej: Asistente, Ponente, VIP
 
         [Required]
         public DateTime IssuedAt { get; set; }
 
         public bool Printed { get; set; } = false;
 
-        public string BadgeData { get; set; } // Datos extra para escarapela (QR, nombre, etc)
+        public string? BadgeData { get; set; } // Datos extra para escarapela (QR, nombre, etc)
     }
 }

@@ -21,7 +21,7 @@ namespace EventLogistics.Domain.Entities
             Event	    1 ----------- n	Participant
             Participant	n ----------- n	Activity
         */
-        public ICollection<Activity> Activities { get; set; }
-        public ICollection<Participant> Participants { get; set; }
+        public ICollection<Activity> Activities { get; set; } = new List<Activity>();
+        public ICollection<Participant> Participants { get; set; } = new List<Participant>();
     }
 }

@@ -2,9 +2,6 @@ using EventLogistics.Domain.Entities;
 using EventLogistics.Domain.Repositories;
 using EventLogistics.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EventLogistics.Infrastructure.Repositories
 {

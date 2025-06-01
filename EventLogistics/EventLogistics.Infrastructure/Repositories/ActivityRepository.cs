@@ -22,7 +22,7 @@ namespace EventLogistics.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Activity> GetByNameAsync(string name)
+        public async Task<Activity?> GetByNameAsync(string name)
         {
             return await _dbSet
                 .FirstOrDefaultAsync(a => a.Name == name);

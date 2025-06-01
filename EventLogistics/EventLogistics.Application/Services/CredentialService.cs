@@ -2,121 +2,135 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EventLogistics.Application.DTOs;
 using EventLogistics.Domain.Entities;
 using EventLogistics.Domain.Repositories;
 
 namespace EventLogistics.Application.Services
 {
+    public interface ICredentialService
+    {
+        Task<byte[]> GenerateCredentialAsync(int participantId);
+        Task<PersonalizedScheduleDto?> GetPersonalizedScheduleAsync(int participantId);
+        Task<BadgeDataDto> GenerateCredentialDataAsync(int participantId);
+        Task AddAsync(Credential credential);
+        Task UpdateAsync(Credential credential);
+        Task DeleteAsync(int id);
+        Task<Credential> GetByIdAsync(int id);
+        Task<Credential> GetByParticipantIdAsync(int participantId);
+        Task<IEnumerable<Credential>> GetAllAsync();
+        Task<CredentialResponseDto> GetCredentialResponseAsync(int participantId);
+    }
+
     public class CredentialService : ICredentialService
     {
-        private readonly IRepository<Participant> _participantRepository;
-        private readonly IActivityRepository _activityRepository;
-        private readonly IRepository<Event> _eventRepository;
-        private readonly IBadgeGenerator _badgeGenerator;
-        // private readonly IRepository<CredentialHistory> _credentialHistoryRepository;
+        private readonly ICredentialRepository _credentialRepository;
 
         public CredentialService(
-            IRepository<Participant> participantRepository,
-            IActivityRepository activityRepository,
-            IRepository<Event> eventRepository,
-            IBadgeGenerator badgeGenerator
-            // IRepository<CredentialHistory> credentialHistoryRepository
+            ICredentialRepository credentialRepository
         )
         {
-            _participantRepository = participantRepository;
-            _activityRepository = activityRepository;
-            _eventRepository = eventRepository;
-            _badgeGenerator = badgeGenerator;
-            // _credentialHistoryRepository = credentialHistoryRepository;
+            _credentialRepository = credentialRepository;
         }
 
         public async Task<byte[]> GenerateCredentialAsync(int participantId)
         {
-            var participant = await _participantRepository.GetByIdAsync(participantId)
-                ?? throw new ArgumentException($"Participante con ID {participantId} no encontrado");
+            var credential = await _credentialRepository.GetByParticipantIdAsync(participantId);
+            if (credential == null)
+                return Array.Empty<byte>();
 
-            var eventEntity = await _eventRepository.GetByIdAsync(participant.EventId)
-                ?? throw new ArgumentException($"Evento con ID {participant.EventId} no encontrado");
+            // Aquí deberías usar IBadgeGenerator o lógica propia para generar el PDF
+            // return await _badgeGenerator.GenerateAsync(new BadgeData { ... });
 
-            if (!participant.IsRegistrationComplete)
-                throw new InvalidOperationException("La inscripción del participante no está completa.");
+            // Por ahora, solo retorna un arreglo vacío para evitar la excepción
+            return Array.Empty<byte>();
+        }
 
-            var badgeData = new BadgeData
+        public async Task<PersonalizedScheduleDto?> GetPersonalizedScheduleAsync(int participantId)
+        {
+            var participant = await _credentialRepository.GetPersonalizedScheduleAsync(participantId);
+
+            if (participant == null || participant.ParticipantActivities == null || !participant.ParticipantActivities.Any())
+                return null;
+
+            var schedule = new PersonalizedScheduleDto
             {
                 ParticipantName = participant.FullName,
-                AccessType = participant.AccessType,
-                QRCodeContent = participant.QrCode
+                Activities = participant.ParticipantActivities
+                    .Where(pa => pa.Activity != null)
+                    .Select(pa => new ActivityScheduleDto
+                    {
+                        ActivityName = pa.Activity.Name,
+                        StartTime = pa.Activity.StartTime,
+                        EndTime = pa.Activity.EndTime,
+                        Location = pa.Activity.Location ?? "No disponible",
+                    }).ToList()
             };
 
-            try
-            {
-                return await _badgeGenerator.GenerateAsync(badgeData);
-
-                // Si decides volver a registrar historial, descomenta esto:
-                /*
-                await _credentialHistoryRepository.AddAsync(new CredentialHistory
-                {
-                    ParticipantId = participantId,
-                    Action = "CredentialGenerated",
-                    ActionTimestamp = DateTime.UtcNow,
-                    Details = $"Credencial generada para {participant.FullName}",
-                    Result = "Success",
-                    CreatedBy = "System",
-                    UpdatedBy = "System"
-                });
-                */
-            }
-            catch (Exception ex)
-            {
-                // Si decides guardar errores de historial:
-                /*
-                await _credentialHistoryRepository.AddAsync(new CredentialHistory
-                {
-                    ParticipantId = participantId,
-                    Action = "CredentialGenerationFailed",
-                    ActionTimestamp = DateTime.UtcNow,
-                    Details = ex.Message,
-                    Result = "Error",
-                    CreatedBy = "System",
-                    UpdatedBy = "System"
-                });
-                */
-                throw;
-            }
+            return schedule;
         }
 
-        public async Task<IEnumerable<Activity>> GetPersonalizedScheduleAsync(int participantId)
+        public Task AddAsync(Credential credential)
         {
-            var activities = await _activityRepository.GetByParticipantIdAsync(participantId);
-            return activities?.OrderBy(a => a.StartTime).ToList() ?? new List<Activity>();
+            return _credentialRepository.AddAsync(credential);
+        }
+
+        public Task UpdateAsync(Credential credential)
+        {
+            return _credentialRepository.UpdateAsync(credential);
+        }
+
+        public Task DeleteAsync(int id)
+        {
+            return _credentialRepository.DeleteAsync(id);
+        }
+
+        public Task<Credential> GetByIdAsync(int id)
+        {
+            return _credentialRepository.GetByIdAsync(id);
+        }
+
+        public async Task<Credential> GetByParticipantIdAsync(int participantId)
+        {
+            return await _credentialRepository.GetByParticipantIdAsync(participantId);
+        }
+
+        public Task<IEnumerable<Credential>> GetAllAsync()
+        {
+            return _credentialRepository.GetAllAsync();
+        }
+
+        public async Task<BadgeDataDto> GenerateCredentialDataAsync(int participantId)
+        {
+            var credential = await _credentialRepository.GetByParticipantIdAsync(participantId);
+            if (credential == null)
+                return null;
+
+            var participant = credential.Participant;
+            var eventInfo = participant?.Event;
+
+            return new BadgeDataDto
+            {
+                ParticipantName = participant?.FullName ?? "Desconocido",
+                AccessType = credential.AccessType,
+                EventName = eventInfo?.Place ?? "Evento no disponible",
+                QrCode = participant?.QrCode ?? "QR no disponible",
+                IssuedAt = credential.IssuedAt,
+                Printed = credential.Printed
+            };
+        }
+
+        public async Task<CredentialResponseDto> GetCredentialResponseAsync(int participantId)
+        {
+            var credential = await _credentialRepository.GetByParticipantIdAsync(participantId);
+            if (credential == null)
+                return null;
+
+            var participant = credential.Participant;
+            var schedule = await GetPersonalizedScheduleAsync(participantId);
+            var pdf = await GenerateCredentialAsync(participantId);
+
+            return CredentialMapper.ToResponseDto(participant, pdf, schedule);
         }
     }
-
-    public class BadgeData
-    {
-        public string ParticipantName { get; set; } = string.Empty;
-        public string AccessType { get; set; } = string.Empty;
-        public string EventName { get; set; } = string.Empty;
-        public DateTime EventDate { get; set; }
-        public string QRCodeContent { get; set; } = string.Empty;
-    }
-
-    public interface IBadgeGenerator
-    {
-        Task<byte[]> GenerateAsync(BadgeData badgeData);
-    }
-
-    // Solo descomenta esta clase si la vas a usar luego:
-    /*
-    public class CredentialHistory : BaseEntity
-    {
-        public int ParticipantId { get; set; }
-        public string Action { get; set; } = string.Empty;
-        public DateTime ActionTimestamp { get; set; }
-        public string Details { get; set; } = string.Empty;
-        public string Result { get; set; } = string.Empty;
-        public string CreatedBy { get; set; } = string.Empty;
-        public string UpdatedBy { get; set; } = string.Empty;
-    }
-    */
 }

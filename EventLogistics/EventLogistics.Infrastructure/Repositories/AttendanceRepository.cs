@@ -1,6 +1,7 @@
 using EventLogistics.Domain.Repositories;
 using EventLogistics.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using EventLogistics.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,13 @@ namespace EventLogistics.Infrastructure.Repositories
         {
             return await _dbSet
                 .Where(a => a.Timestamp.Date == date.Date)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Attendance>> GetByEventIdAsync(int eventId)
+        {
+            return await _dbSet
+                .Where(a => a.EventId == eventId)
                 .ToListAsync();
         }
     }

@@ -13,13 +13,13 @@ namespace EventLogistics.Domain.Entities;
         public int ParticipantId { get; set; }
 
         [ForeignKey("ParticipantId")]
-        public virtual Participant Participant { get; set; }
+        public virtual Participant? Participant { get; set; }
 
         [Required]
         public int ActivityId { get; set; }
 
         [ForeignKey("ActivityId")]
-        public virtual Activity Activity { get; set; }
+        public virtual Activity? Activity { get; set; }
 
-        public string Status { get; set; } // Ej: inscrito, cancelado
+        public string? Status { get; set; } // Ej: inscrito, cancelado
     }

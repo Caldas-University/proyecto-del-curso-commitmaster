@@ -80,7 +80,6 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("EndTime")
@@ -90,7 +89,6 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -125,7 +123,6 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("BadgeData")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
@@ -290,7 +287,6 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("AccessType")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
@@ -341,7 +337,6 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ParticipantId", "ActivityId");
