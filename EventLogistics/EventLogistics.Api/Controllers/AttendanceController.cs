@@ -26,7 +26,7 @@ namespace EventLogistics.Api.Controllers
         public async Task<IActionResult> CheckIn([FromBody] AttendanceRegisterDto dto)
         {
             var (success, message, participantId, participantName, accessType) =
-                await _attendanceService.RegisterAttendanceAsync(dto.QrCode, dto.Document);
+                await _attendanceService.RegisterAttendanceAsync(dto.QrCode);
 
             if (!success)
                 return BadRequest(new { message });
