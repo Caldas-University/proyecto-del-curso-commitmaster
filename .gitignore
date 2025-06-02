@@ -3,3 +3,6 @@ FlightReservation.Application
 FlightReservation.Domain
 FlightReservation.Infrastructure
 FlightReservation.sln
+
+obj
+bin
