@@ -1,39 +1,36 @@
 {
   "format": 1,
   "restore": {
-    "C:\\src\\FlightReservation\\FlightReservation.Api\\FlightReservation.Api.csproj": {}
+    "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Api\\FlightReservation.Api.csproj": {}
   },
   "projects": {
-    "C:\\src\\FlightReservation\\FlightReservation.Api\\FlightReservation.Api.csproj": {
+    "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Api\\FlightReservation.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\src\\FlightReservation\\FlightReservation.Api\\FlightReservation.Api.csproj",
+        "projectUniqueName": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Api\\FlightReservation.Api.csproj",
         "projectName": "FlightReservation.Api",
-        "projectPath": "C:\\src\\FlightReservation\\FlightReservation.Api\\FlightReservation.Api.csproj",
-        "packagesPath": "C:\\Users\\Oscar Franco-Bedoya\\.nuget\\packages\\",
-        "outputPath": "C:\\src\\FlightReservation\\FlightReservation.Api\\obj\\",
+        "projectPath": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Api\\FlightReservation.Api.csproj",
+        "packagesPath": "C:\\Users\\Carta\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Oscar Franco-Bedoya\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Carta\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\src\\FlightReservation\\FlightReservation.Application\\FlightReservation.Application.csproj": {
-                "projectPath": "C:\\src\\FlightReservation\\FlightReservation.Application\\FlightReservation.Application.csproj"
+              "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Application\\FlightReservation.Application.csproj": {
+                "projectPath": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Application\\FlightReservation.Application.csproj"
               },
-              "C:\\src\\FlightReservation\\FlightReservation.Infrastructure\\FlightReservation.Infrastructure.csproj": {
-                "projectPath": "C:\\src\\FlightReservation\\FlightReservation.Infrastructure\\FlightReservation.Infrastructure.csproj"
+              "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Infrastructure\\FlightReservation.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Infrastructure\\FlightReservation.Infrastructure.csproj"
               }
             }
           }
@@ -47,7 +44,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -79,6 +77,24 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.16, 8.0.16]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[8.0.16, 8.0.16]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.16, 8.0.16]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[8.0.16, 8.0.16]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -87,37 +103,34 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\src\\FlightReservation\\FlightReservation.Application\\FlightReservation.Application.csproj": {
+    "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Application\\FlightReservation.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\src\\FlightReservation\\FlightReservation.Application\\FlightReservation.Application.csproj",
+        "projectUniqueName": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Application\\FlightReservation.Application.csproj",
         "projectName": "FlightReservation.Application",
-        "projectPath": "C:\\src\\FlightReservation\\FlightReservation.Application\\FlightReservation.Application.csproj",
-        "packagesPath": "C:\\Users\\Oscar Franco-Bedoya\\.nuget\\packages\\",
-        "outputPath": "C:\\src\\FlightReservation\\FlightReservation.Application\\obj\\",
+        "projectPath": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Application\\FlightReservation.Application.csproj",
+        "packagesPath": "C:\\Users\\Carta\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Oscar Franco-Bedoya\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Carta\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\src\\FlightReservation\\FlightReservation.Domain\\FlightReservation.Domain.csproj": {
-                "projectPath": "C:\\src\\FlightReservation\\FlightReservation.Domain\\FlightReservation.Domain.csproj"
+              "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Domain\\FlightReservation.Domain.csproj": {
+                "projectPath": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Domain\\FlightReservation.Domain.csproj"
               }
             }
           }
@@ -131,7 +144,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -147,34 +161,45 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.16, 8.0.16]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.16, 8.0.16]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[8.0.16, 8.0.16]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\src\\FlightReservation\\FlightReservation.Domain\\FlightReservation.Domain.csproj": {
+    "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Domain\\FlightReservation.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\src\\FlightReservation\\FlightReservation.Domain\\FlightReservation.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Domain\\FlightReservation.Domain.csproj",
         "projectName": "FlightReservation.Domain",
-        "projectPath": "C:\\src\\FlightReservation\\FlightReservation.Domain\\FlightReservation.Domain.csproj",
-        "packagesPath": "C:\\Users\\Oscar Franco-Bedoya\\.nuget\\packages\\",
-        "outputPath": "C:\\src\\FlightReservation\\FlightReservation.Domain\\obj\\",
+        "projectPath": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Domain\\FlightReservation.Domain.csproj",
+        "packagesPath": "C:\\Users\\Carta\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Oscar Franco-Bedoya\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Carta\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -192,7 +217,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -208,45 +234,56 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.16, 8.0.16]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.16, 8.0.16]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[8.0.16, 8.0.16]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\src\\FlightReservation\\FlightReservation.Infrastructure\\FlightReservation.Infrastructure.csproj": {
+    "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Infrastructure\\FlightReservation.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\src\\FlightReservation\\FlightReservation.Infrastructure\\FlightReservation.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Infrastructure\\FlightReservation.Infrastructure.csproj",
         "projectName": "FlightReservation.Infrastructure",
-        "projectPath": "C:\\src\\FlightReservation\\FlightReservation.Infrastructure\\FlightReservation.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\Oscar Franco-Bedoya\\.nuget\\packages\\",
-        "outputPath": "C:\\src\\FlightReservation\\FlightReservation.Infrastructure\\obj\\",
+        "projectPath": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Infrastructure\\FlightReservation.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\Carta\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Oscar Franco-Bedoya\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Carta\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\src\\FlightReservation\\FlightReservation.Application\\FlightReservation.Application.csproj": {
-                "projectPath": "C:\\src\\FlightReservation\\FlightReservation.Application\\FlightReservation.Application.csproj"
+              "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Application\\FlightReservation.Application.csproj": {
+                "projectPath": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Application\\FlightReservation.Application.csproj"
               },
-              "C:\\src\\FlightReservation\\FlightReservation.Domain\\FlightReservation.Domain.csproj": {
-                "projectPath": "C:\\src\\FlightReservation\\FlightReservation.Domain\\FlightReservation.Domain.csproj"
+              "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Domain\\FlightReservation.Domain.csproj": {
+                "projectPath": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Domain\\FlightReservation.Domain.csproj"
               }
             }
           }
@@ -260,7 +297,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -292,12 +330,26 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.16, 8.0.16]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.16, 8.0.16]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[8.0.16, 8.0.16]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

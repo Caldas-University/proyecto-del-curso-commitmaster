@@ -1,18 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+namespace EventLogistics.Domain.Entities;
 
-namespace EventLogistics.Domain.Entities
+public class Resource
 {
-    // Resource entity as shown in the diagram
-    public class Resource : BaseEntity
+    public Guid Id { get; private set; }
+    public string Type { get; private set; }
+    public bool Availability { get; private set; }
+    public int Capacity { get; private set; }
+    public List<Guid> Assignments { get; private set; }
+
+    private Resource()
     {
-        public string Type { get; set; }
-        public bool Availability { get; set; }
-        public int Capacity { get; set; }
-        
-        // Navigation properties
-        public virtual ICollection<ResourceAssignment> Assignments { get; set; }
-        public virtual ICollection<ReassignmentRule> ReassignmentRules { get; set; }
+        Type = string.Empty;
+        Assignments = new List<Guid>();
+    }
+
+    public Resource(string type, int capacity, bool availability = true)
+    {
+        Id = Guid.NewGuid();
+        Type = type ?? throw new ArgumentNullException(nameof(type));
+        Capacity = capacity;
+        Availability = availability;
+        Assignments = new List<Guid>();
     }
 }

@@ -3,3 +3,89 @@ FlightReservation.Application
 FlightReservation.Domain
 FlightReservation.Infrastructure
 FlightReservation.sln
+
+## Compilación de .NET
+bin/
+obj/
+[Ll]og/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Archivos de configuración y dependencias
+project.lock.json
+project.fragment.lock.json
+artifacts/
+*.nuget.props
+*.nuget.targets
+
+## Paquetes NuGet
+*.nupkg
+*.snupkg
+*.nuspec
+packages/
+*.psmdcp
+
+## Archivos de configuración de Rider y VS Code
+.idea/
+.vscode/
+.vs/
+*.code-workspace
+
+## Archivos de publicación y temporales
+*.publish.xml
+*.dbmdl
+*.bak
+*.backup
+*.tmp
+*.temp
+
+## Archivos de usuario y configuración personal
+*.userprefs
+*.user
+*.userosscache
+*.suo
+*.sdf
+*.cache
+
+## Otros archivos y carpetas ignorados
+_TestResults/
+TestResults/
+*.testresults
+*.vspscc
+*.vssscc
+*.pdb
+*.mdb
+*.cache
+*.log
+
+## Archivos de Docker y contenedores
+docker-compose.*
+*.dockerfile
+
+## Archivos generados por herramientas de análisis
+*.sarif
+*.ruleset
+
+## Sistemas operativos
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Mac
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+
+## Archivos de configuración de entorno y secretos
+.env
+secrets.json
+
+## Otros
+*.swp

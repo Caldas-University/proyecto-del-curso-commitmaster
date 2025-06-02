@@ -1,65 +1,41 @@
 using EventLogistics.Application.Services;
-using EventLogistics.Domain.Repositories;
 using EventLogistics.Infrastructure.Persistence;
 using EventLogistics.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using EventLogistics.Domain.Repositories;
+using EventLogistics.Application.Interfaces;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddDbContext<EventLogisticsDbContext>(options =>
+    options.UseSqlite("Data Source=eventlogistics.db"));
 
-// Registrar el DbContext con SQLite
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IReasignacionRepository, ReasignacionRepository>();
+builder.Services.AddScoped<IReasignacionServiceApp, ReasignacionServiceApp>();
+builder.Services.AddScoped<INotificationServiceApp, NotificationServiceApp>();
 
-// Registrar repositorios
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
-builder.Services.AddScoped<INotificationHistoryRepository, NotificationHistoryRepository>();
-builder.Services.AddScoped<IReassignmentRuleRepository, ReassignmentRuleRepository>();
-builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
 
-// Registrar servicios de aplicación
-builder.Services.AddScoped<NotificationService>();
-builder.Services.AddScoped<ReassignmentService>();
-builder.Services.AddScoped<ReportService>();
-
-// Agregar controladores
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        // Configurar opciones de serialización para manejar referencias circulares
-        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
-    });
-
-// Configurar CORS
-builder.Services.AddCors(options =>
+// Configuración de Swagger
+builder.Services.AddSwaggerGen(c =>
 {
-    options.AddPolicy("AllowAll",
-        builder =>
-        {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "EventLogistics API", Version = "v1" });
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    app.MapOpenApi();
+    var dbContext = scope.ServiceProvider.GetRequiredService<EventLogisticsDbContext>();
+    SeedData.Initialize(dbContext);
 }
 
+// Middleware para Swagger
+app.UseSwagger();
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EventLogistics API v1"));
 
-app.UseRouting();
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
-
+app.MapControllers();
 app.Run();

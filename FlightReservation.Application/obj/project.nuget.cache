@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "K0VGlSOylKc=",
+  "dgSpecHash": "/8uGTiZa258=",
   "success": true,
-  "projectFilePath": "C:\\src\\FlightReservation\\FlightReservation.Application\\FlightReservation.Application.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\FlightReservation.Application\\FlightReservation.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Carta\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.16\\microsoft.netcore.app.ref.8.0.16.nupkg.sha512",
+    "C:\\Users\\Carta\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.16\\microsoft.windowsdesktop.app.ref.8.0.16.nupkg.sha512",
+    "C:\\Users\\Carta\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.16\\microsoft.aspnetcore.app.ref.8.0.16.nupkg.sha512"
+  ],
   "logs": []
 }
