@@ -72,10 +72,20 @@ namespace EventLogistics.Infrastructure.Persistence
 
             modelBuilder.Entity<Resource>(entity =>
             {
-                entity.Property(r => r.Type).HasColumnName("TipoEquipo"); 
+                entity.Property(r => r.Type).HasColumnName("TipoEquipo");
                 entity.Property(r => r.Capacity).HasColumnName("Cantidad");
-                entity.Property(r => r.FechaInicio); 
-                entity.Property(r => r.FechaFin);    
+                entity.Property(r => r.FechaInicio);
+                entity.Property(r => r.FechaFin);
+                entity.Property(r => r.Tags).HasConversion(
+                    v => string.Join(',', v),
+                    v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
+            });
+            
+            modelBuilder.Entity<ReassignmentRule>(entity =>
+            {
+                entity.Property(r => r.Priority).HasDefaultValue(1);
+                entity.Property(r => r.IsActive).HasDefaultValue(true);
+                entity.Property(r => r.SimilarityThreshold).HasDefaultValue(0.5);
             });
         }
 

@@ -1,3 +1,4 @@
+using EventLogistics.Application.Interfaces;
 using EventLogistics.Application.Services;
 using EventLogistics.Domain.Repositories;
 using EventLogistics.Infrastructure.Persistence;
@@ -9,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddOpenApi();
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
 // Agregar Swagger (para la interfaz UI)
 builder.Services.AddEndpointsApiExplorer();
@@ -35,7 +37,7 @@ builder.Services.AddScoped<IReassignmentRuleRepository, ReassignmentRuleReposito
 
 // Registrar servicios de aplicación
 builder.Services.AddScoped<NotificationService>();
-builder.Services.AddScoped<ReassignmentService>();
+builder.Services.AddScoped<IReassignmentService, ReassignmentService>();
 
 // Agregar controladores
 builder.Services.AddControllers()

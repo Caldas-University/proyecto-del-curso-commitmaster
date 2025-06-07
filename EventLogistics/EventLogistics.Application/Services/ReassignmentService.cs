@@ -1,25 +1,30 @@
+using EventLogistics.Application.Interfaces;
 using EventLogistics.Domain.Entities;
 using EventLogistics.Domain.Repositories;
+using Microsoft.Extensions.Configuration;
 
 namespace EventLogistics.Application.Services
 {
-    public class ReassignmentService
+    public class ReassignmentService : IReassignmentService
     {
         private readonly IReassignmentRuleRepository _ruleRepository;
         private readonly IRepository<ResourceAssignment> _assignmentRepository;
         private readonly IRepository<Resource> _resourceRepository;
         private readonly NotificationService _notificationService;
+        private readonly IConfiguration _configuration;
 
         public ReassignmentService(
             IReassignmentRuleRepository ruleRepository,
             IRepository<ResourceAssignment> assignmentRepository,
             IRepository<Resource> resourceRepository,
-            NotificationService notificationService)
+            NotificationService notificationService,
+            IConfiguration configuration)
         {
             _ruleRepository = ruleRepository;
             _assignmentRepository = assignmentRepository;
             _resourceRepository = resourceRepository;
             _notificationService = notificationService;
+            _configuration = configuration;
         }
 
         public async Task<bool> ProcessResourceChange(int resourceId, bool newAvailability)
@@ -38,20 +43,20 @@ namespace EventLogistics.Application.Services
 
                 // 2.2 Buscar asignaciones afectadas
                 var assignments = await GetAssignmentsForResource(resourceId);
-                
+
                 // 2.3 Para cada asignación afectada, encontrar un recurso alternativo
                 foreach (var assignment in assignments)
                 {
                     await ReassignResource(assignment);
                 }
-                
+
                 return true;
             }
-            
+
             // 3. Si el recurso está pasando a disponible, solo actualizar su estado
             resource.Availability = newAvailability;
             await _resourceRepository.UpdateAsync(resource);
-            
+
             return true;
         }
 
@@ -75,8 +80,8 @@ namespace EventLogistics.Application.Services
 
             // 1. Buscar reglas aplicables
             var rules = await _ruleRepository.GetActiveRulesAsync();
-            rules = rules.Where(r => r.ResourceTypeId == null || 
-                                    (currentAssignment.Resource != null && 
+            rules = rules.Where(r => r.ResourceTypeId == null ||
+                                    (currentAssignment.Resource != null &&
                                      r.ResourceTypeId == currentAssignment.Resource.Id))
                      .OrderBy(r => r.Priority)
                      .ToList();
@@ -84,31 +89,31 @@ namespace EventLogistics.Application.Services
             // 2. Buscar recursos alternativos disponibles
             string resourceType = currentAssignment.Resource?.Type ?? "Unknown";
             var alternativeResources = await FindAlternativeResources(resourceType);
-            
+
             // 3. Si hay recursos alternativos, seleccionar uno según las reglas
             if (alternativeResources.Any())
             {
                 var newResource = SelectBestResource(alternativeResources, rules);
-                
+
                 // 4. Crear nueva asignación
                 var newAssignment = new ResourceAssignment
                 {
                     EventId = currentAssignment.EventId,
                     ResourceId = newResource.Id,
-                    StartTime = currentAssignment.StartTime, // Asegúrate de que estas propiedades existan
-                    EndTime = currentAssignment.EndTime,     // en la clase ResourceAssignment
+                    StartTime = currentAssignment.StartTime,
+                    EndTime = currentAssignment.EndTime,
                     Status = "Reasignado",
                     AssignedToUserId = currentAssignment.AssignedToUserId,
                     CreatedBy = "System",
                     UpdatedBy = "System"
                 };
-                
+
                 await _assignmentRepository.AddAsync(newAssignment);
-                
+
                 // 5. Actualizar asignación anterior
                 currentAssignment.Status = "Cancelado";
                 await _assignmentRepository.UpdateAsync(currentAssignment);
-                
+
                 // 6. Enviar notificaciones
                 await SendReassignmentNotifications(currentAssignment, newAssignment);
             }
@@ -117,7 +122,7 @@ namespace EventLogistics.Application.Services
                 // No hay recursos alternativos, marcar como pendiente de resolución manual
                 currentAssignment.Status = "Pendiente de reasignación";
                 await _assignmentRepository.UpdateAsync(currentAssignment);
-                
+
                 // Notificar a organizadores sobre el problema
                 await SendFailureNotifications(currentAssignment);
             }
@@ -151,10 +156,10 @@ namespace EventLogistics.Application.Services
                     CreatedBy = "System",
                     UpdatedBy = "System"
                 };
-                
+
                 await _notificationService.SendNotification(notification);
             }
-            
+
             // 2. Notificar a otros involucrados (esto dependería de tu modelo de datos completo)
         }
 
@@ -172,22 +177,158 @@ namespace EventLogistics.Application.Services
                     CreatedBy = "System",
                     UpdatedBy = "System"
                 };
-                
+
                 await _notificationService.SendNotification(notification);
             }
         }
 
         // Método para evaluar el impacto de una reasignación
-        public async Task<Dictionary<string, object>> EvaluateImpact(int eventId, int resourceId)
+        public Dictionary<string, object> EvaluateImpact(int eventId, int resourceId)
         {
             var impact = new Dictionary<string, object>();
-            
+
             // Calcular tiempo de resolución, recursos afectados, etc.
             impact["affectedUsers"] = 3; // Ejemplo
             impact["alternativesAvailable"] = 2; // Ejemplo
             impact["estimatedTimeToResolve"] = "10 minutos"; // Ejemplo
-            
+
             return impact;
+        }
+
+        public async Task<List<ResourceSuggestion>> GetResourceSuggestions(int resourceId, DateTime desiredTime)
+        {
+            var originalResource = await _resourceRepository.GetByIdAsync(resourceId);
+            if (originalResource == null)
+                return new List<ResourceSuggestion>();
+
+            // Usar GetValue con valores por defecto para evitar errores
+            var maxTimeDiff = _configuration.GetValue<int>("SuggestionSettings:MaxTimeDifferenceMinutes", 60);
+            var maxSuggestions = _configuration.GetValue<int>("SuggestionSettings:MaxAlternativeSuggestions", 5);
+            var similarityThreshold = _configuration.GetValue<double>("SuggestionSettings:SimilarResourceThreshold", 0.5);
+
+            // Obtener todos los recursos del mismo tipo o similares
+            var allResources = await _resourceRepository.GetAllAsync();
+
+            // Filtrar recursos disponibles y compatibles
+            var suggestions = allResources
+                .Where(r => r.Id != resourceId &&
+                           r.Availability &&
+                           (r.Type == originalResource.Type ||
+                            CalculateResourceSimilarity(r, originalResource) >= similarityThreshold))
+                .Select(r => new ResourceSuggestion
+                {
+                    Resource = r,
+                    SimilarityScore = CalculateResourceSimilarity(r, originalResource),
+                    AvailableSlots = FindAvailableSlots(r, desiredTime, maxTimeDiff)
+                })
+                .Where(s => s.AvailableSlots.Any())
+                .OrderByDescending(s => s.SimilarityScore)
+                .ThenBy(s => s.AvailableSlots.Min(slot => Math.Abs((slot - desiredTime).TotalMinutes)))
+                .Take(maxSuggestions)
+                .ToList();
+
+            return suggestions;
+        }
+
+        public async Task<List<TimeSuggestion>> GetTimeSuggestions(int resourceId, DateTime desiredTime)
+        {
+            var resource = await _resourceRepository.GetByIdAsync(resourceId);
+            if (resource == null)
+                return new List<TimeSuggestion>();
+
+            // Usar GetValue con valores por defecto
+            var maxTimeDiff = _configuration.GetValue<int>("SuggestionSettings:MaxTimeDifferenceMinutes", 60);
+            var lookaheadDays = _configuration.GetValue<int>("SuggestionSettings:DefaultLookaheadDays", 1);
+
+            var availableSlots = FindAvailableSlots(resource, desiredTime, maxTimeDiff, lookaheadDays);
+
+            return availableSlots
+                .Select(slot => new TimeSuggestion
+                {
+                    SuggestedTime = slot,
+                    TimeDifference = (slot - desiredTime).TotalMinutes
+                })
+                .OrderBy(s => Math.Abs(s.TimeDifference))
+                .ToList();
+        }
+
+        private List<DateTime> FindAvailableSlots(Resource resource, DateTime desiredTime, int maxTimeDifferenceMinutes, int lookaheadDays = 1)
+        {
+            // Lógica para encontrar slots disponibles cerca del tiempo deseado
+            // Esto debería consultar las asignaciones existentes para el recurso
+            // y encontrar huecos disponibles
+
+            // Implementación simplificada para ejemplo:
+            var availableSlots = new List<DateTime>();
+
+            // Agregar el tiempo deseado si está disponible
+            if (IsTimeAvailable(resource, desiredTime))
+            {
+                availableSlots.Add(desiredTime);
+            }
+
+            // Buscar slots alternativos dentro del rango permitido
+            for (int minutes = 15; minutes <= maxTimeDifferenceMinutes; minutes += 15)
+            {
+                var earlierTime = desiredTime.AddMinutes(-minutes);
+                if (IsTimeAvailable(resource, earlierTime))
+                {
+                    availableSlots.Add(earlierTime);
+                }
+
+                var laterTime = desiredTime.AddMinutes(minutes);
+                if (IsTimeAvailable(resource, laterTime))
+                {
+                    availableSlots.Add(laterTime);
+                }
+
+                if (availableSlots.Count >= 3) break;
+            }
+
+            return availableSlots;
+        }
+
+        private bool IsTimeAvailable(Resource resource, DateTime time)
+        {
+            // Lógica para verificar si el recurso está disponible en el tiempo especificado
+            // Deberías consultar las asignaciones existentes para este recurso
+
+            // Implementación simplificada para ejemplo:
+            return time >= resource.FechaInicio && time <= resource.FechaFin;
+        }
+
+        private double CalculateResourceSimilarity(Resource a, Resource b)
+        {
+            // Lógica para calcular qué tan similares son dos recursos
+            // Basado en tipo, características, tags, etc.
+
+            double similarity = 0;
+
+            if (a.Type == b.Type) similarity += 0.5;
+
+            // Comparar otras características...
+
+            return similarity;
+        }
+
+        // Implementación corregida del método de la interfaz
+        Task<Dictionary<string, object>> IReassignmentService.EvaluateImpact(int eventId, int resourceId)
+        {
+            var result = EvaluateImpact(eventId, resourceId);
+            return Task.FromResult(result);
+        }
+
+        public class ResourceSuggestion
+        {
+            public Resource Resource { get; set; }
+            public double SimilarityScore { get; set; }
+            public List<DateTime> AvailableSlots { get; set; } = new List<DateTime>();
+        }
+
+        public class TimeSuggestion
+        {
+            public DateTime SuggestedTime { get; set; }
+            public double TimeDifference { get; set; } // en minutos
         }
     }
 }

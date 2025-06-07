@@ -92,7 +92,7 @@ namespace EventLogistics.Api.Controllers
         [HttpGet("evaluate-impact")]
         public async Task<IActionResult> EvaluateImpact(int eventId, int resourceId)
         {
-            var impact = await _reassignmentService.EvaluateImpact(eventId, resourceId);
+            var impact = _reassignmentService.EvaluateImpact(eventId, resourceId);
             return Ok(impact);
         }
     }

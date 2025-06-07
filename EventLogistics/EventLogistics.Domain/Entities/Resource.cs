@@ -13,6 +13,7 @@ namespace EventLogistics.Domain.Entities
         public bool Availability { get; set; } = true;
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
+        public List<string> Tags { get; set; } = new List<string>();
 
         // Mantener relaciones existentes
         public virtual required ICollection<ResourceAssignment> Assignments { get; set; }

@@ -11,10 +11,15 @@ namespace EventLogistics.Api.Controllers
     {
         private readonly IRepository<Resource> _resourceRepository;
         private readonly IEmailService _emailService;
-        public ResourceController(IRepository<Resource> resourceRepository, IEmailService emailService)
+        private readonly IReassignmentService _reassignmentService;
+        public ResourceController(
+            IRepository<Resource> resourceRepository,
+            IEmailService emailService,
+            IReassignmentService reassignmentService)
         {
             _resourceRepository = resourceRepository;
             _emailService = emailService;
+            _reassignmentService = reassignmentService;
         }
 
         [HttpGet]
@@ -79,21 +84,21 @@ namespace EventLogistics.Api.Controllers
             await _resourceRepository.DeleteAsync(id);
             return NoContent();
         }
-        
+
         // Revisar estado de disponibilidad
         [HttpGet("disponibilidad")]
         public async Task<IActionResult> CheckAvailability(string tipoEquipo, int cantidad, DateTime fecha)
         {
             var allResources = await _resourceRepository.GetAllAsync();
             var availableResources = allResources
-                .Where(r => r.Type == tipoEquipo &&  
+                .Where(r => r.Type == tipoEquipo &&
                             r.FechaInicio <= fecha &&
                             r.FechaFin >= fecha)
                 .ToList();
             bool isAvailable = availableResources.Any(r => r.Capacity >= cantidad);
             return Ok(new { Disponible = isAvailable });
         }
-        
+
         [HttpPost("reservar")]
         public async Task<IActionResult> ReserveResource(int resourceId, int cantidad, string organizadorEmail)
         {
@@ -106,6 +111,73 @@ namespace EventLogistics.Api.Controllers
 
             await _emailService.SendNotificationAsync(organizadorEmail, "Recurso reservado");
             return Ok();
+        }
+        [HttpGet("{id}/suggestions")]
+        public async Task<IActionResult> GetSuggestions(int id, DateTime desiredTime)
+        {
+            var resource = await _resourceRepository.GetByIdAsync(id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            var resourceSuggestions = await _reassignmentService.GetResourceSuggestions(id, desiredTime);
+            var timeSuggestions = await _reassignmentService.GetTimeSuggestions(id, desiredTime);
+
+            return Ok(new
+            {
+                OriginalResource = resource,
+                ResourceSuggestions = resourceSuggestions,
+                TimeSuggestions = timeSuggestions
+            });
+        }
+
+        [HttpGet("availability-with-suggestions")]
+        public async Task<IActionResult> CheckAvailabilityWithSuggestions(string tipoEquipo, int cantidad, DateTime fecha)
+        {
+            // Verificar disponibilidad como antes
+            var allResources = await _resourceRepository.GetAllAsync();
+            var availableResources = allResources
+                .Where(r => r.Type == tipoEquipo &&  
+                            r.FechaInicio <= fecha &&
+                            r.FechaFin >= fecha &&
+                            r.Capacity >= cantidad)
+                .ToList();
+
+            if (availableResources.Any())
+            {
+                return Ok(new 
+                {
+                    Available = true,
+                    Resources = availableResources
+                });
+            }
+
+            // Si no hay disponibles, buscar sugerencias
+            var potentialResources = allResources
+                .Where(r => r.Type == tipoEquipo)
+                .ToList();
+
+            var suggestions = new List<object>();
+
+            foreach (var resource in potentialResources)
+            {
+                var timeSuggestions = await _reassignmentService.GetTimeSuggestions(resource.Id, fecha);
+                if (timeSuggestions.Any())
+                {
+                    suggestions.Add(new
+                    {
+                        Resource = resource,
+                        AvailableTimes = timeSuggestions
+                    });
+                }
+            }
+
+            return Ok(new
+            {
+                Available = false,
+                Suggestions = suggestions
+            });
         }
     }
 }
