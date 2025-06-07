@@ -22,4 +22,16 @@ public class Resource
         Availability = availability;
         Assignments = new List<Guid>();
     }
+
+    public void UpdateAvailability(bool isAvailable)
+    {
+        // Aquí puedes incluir la lógica de validación necesaria antes de cambiar la disponibilidad
+        // También puedes generar eventos de dominio si es necesario
+
+        // Si tienes un campo privado _availability, podrías actualizarlo así:
+        // _availability = isAvailable;
+
+        // Si estás usando un enfoque de propiedad de solo lectura con un campo respaldado:
+        this.Availability = isAvailable; // (si tienes un modificador de acceso private set)
+    }
 }
