@@ -50,4 +50,25 @@ public class ResourceController : ControllerBase
         }
         return Ok(result);
     }
+
+    // Nuevo método para reasignar recursos (basado en el diagrama)
+    [HttpPost("reassign")]
+    public async Task<ActionResult<bool>> ReassignResources([FromBody] ReassignResourcesRequest request)
+    {
+        var result = await _resourceService.ReassignResourcesAsync(request.ResourceIds, request.NewEventIds);
+        return Ok(result);
+    }
+
+    [HttpGet("available")]
+    public async Task<ActionResult<List<ResourceDto>>> GetAvailableResources()
+    {
+        var resources = await _resourceService.GetAvailableResourcesAsync();
+        return Ok(resources);
+    }
+
+    public class ReassignResourcesRequest
+    {
+        public List<Guid> ResourceIds { get; set; } = new();
+        public List<Guid> NewEventIds { get; set; } = new();
+    }
 }

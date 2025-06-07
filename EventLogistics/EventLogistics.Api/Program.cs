@@ -15,6 +15,10 @@ builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IReasignacionRepository, ReasignacionRepository>();
 builder.Services.AddScoped<IReasignacionServiceApp, ReasignacionServiceApp>();
 builder.Services.AddScoped<INotificationServiceApp, NotificationServiceApp>();
+builder.Services.AddScoped<IResourceRepository, ResourceRepository>();
+builder.Services.AddScoped<IResourceServiceApp, ResourceServiceApp>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<ReportService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

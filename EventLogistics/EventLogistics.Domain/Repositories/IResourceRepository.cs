@@ -1,12 +1,14 @@
-namespace EventLogistics.Domain.Repositories;
-
 using EventLogistics.Domain.Entities;
+
+namespace EventLogistics.Domain.Repositories;
 
 public interface IResourceRepository
 {
-    Task<Resource> GetByIdAsync(Guid resourceId);
+    Task<Resource?> GetByIdAsync(Guid id);
+    Task<IEnumerable<Resource>> GetAllAsync();
+    Task<IEnumerable<Resource>> GetAvailableResourcesAsync();
+    Task<Resource> AddAsync(Resource resource);
     Task UpdateAsync(Resource resource);
+    Task DeleteAsync(Guid id);
     Task<bool> AssignResourceAsync(Guid resourceId, Guid eventId);
-    Task AddAsync(Resource resource);
-    Task<List<Resource>> GetAvailableResourcesAsync();
 }

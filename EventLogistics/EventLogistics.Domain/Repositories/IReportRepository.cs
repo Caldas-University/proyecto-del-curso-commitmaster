@@ -7,6 +7,6 @@ namespace EventLogistics.Domain.Repositories
 {
     public interface IReportRepository
     {
-        Task<IEnumerable<ResourceAssignment>> GetAssignmentsByFiltersAsync(int? eventId, string resourceType, string status);
+        Task<IEnumerable<Resource>> GenerateReportAsync(int? eventId, string? resourceType, string? status);
     }
 }

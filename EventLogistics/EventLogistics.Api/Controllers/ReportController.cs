@@ -19,7 +19,7 @@ namespace EventLogistics.Api.Controllers
 
         // GET: api/report?eventId=1&resourceType=Audio&status=Asignado
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ResourceAssignment>>> GetReport(
+        public async Task<ActionResult<IEnumerable<Resource>>> GetReport(
             [FromQuery] int? eventId,
             [FromQuery] string? resourceType,
             [FromQuery] string? status)

@@ -14,9 +14,9 @@ namespace EventLogistics.Application.Services
             _reportRepository = reportRepository;
         }
 
-        public async Task<IEnumerable<ResourceAssignment>> GenerateReport(int? eventId, string resourceType, string status)
+        public async Task<IEnumerable<Resource>> GenerateReport(int? eventId, string? resourceType, string? status)
         {
-            return await _reportRepository.GetAssignmentsByFiltersAsync(eventId, resourceType, status);
+            return await _reportRepository.GenerateReportAsync(eventId, resourceType, status);
         }
     }
 }
