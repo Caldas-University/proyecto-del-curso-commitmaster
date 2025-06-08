@@ -2,10 +2,12 @@ using EventLogistics.Domain.Entities;
 using EventLogistics.Domain.Repositories;
 using EventLogistics.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace EventLogistics.Infrastructure.Repositories
 {
-    // Generic Repository Implementation
     public class Repository<T> : IRepository<T> where T : BaseEntity
     {
         protected readonly ApplicationDbContext _context;
@@ -38,7 +40,7 @@ namespace EventLogistics.Infrastructure.Repositories
         {
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return entity;  // Ahora devuelve la entidad actualizada
+            return entity;
         }
 
         public virtual async Task DeleteAsync(int id)
@@ -51,7 +53,17 @@ namespace EventLogistics.Infrastructure.Repositories
             }
         }
 
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
         public Task<int> FindAsync(Func<object, bool> value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task GetById(int eventId)
         {
             throw new NotImplementedException();
         }

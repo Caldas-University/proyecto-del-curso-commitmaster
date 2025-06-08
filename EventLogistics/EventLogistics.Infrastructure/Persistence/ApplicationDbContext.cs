@@ -87,6 +87,16 @@ namespace EventLogistics.Infrastructure.Persistence
                 entity.Property(r => r.IsActive).HasDefaultValue(true);
                 entity.Property(r => r.SimilarityThreshold).HasDefaultValue(0.5);
             });
+            modelBuilder.Entity<Activity>()
+                .HasOne(a => a.Event)
+                .WithMany(e => e.Activities)
+                .HasForeignKey(a => a.EventId);
+            
+            modelBuilder.Entity<ResourceAssignment>()
+                .HasOne(ra => ra.Activity)
+                .WithMany(a => a.ResourceAssignments)
+                .HasForeignKey(ra => ra.ActivityId)
+                .IsRequired(false);
         }
 
         public override int SaveChanges()

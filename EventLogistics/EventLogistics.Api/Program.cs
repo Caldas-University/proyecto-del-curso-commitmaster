@@ -38,6 +38,10 @@ builder.Services.AddScoped<IReassignmentRuleRepository, ReassignmentRuleReposito
 // Registrar servicios de aplicación
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<IReassignmentService, ReassignmentService>();
+// Registrar los nuevos repositorios y servicios
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+builder.Services.AddScoped<IResourceAssignmentRepository, ResourceAssignmentRepository>();
+builder.Services.AddScoped<IConflictValidationService, ConflictValidationService>();
 
 // Agregar controladores
 builder.Services.AddControllers()

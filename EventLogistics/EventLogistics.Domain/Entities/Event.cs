@@ -13,5 +13,6 @@ namespace EventLogistics.Domain.Entities
         
         // Navigation properties
         public virtual ICollection<ResourceAssignment> Resources { get; set; }
+        public virtual ICollection<Activity> Activities { get; set; }
     }
 }
