@@ -53,7 +53,7 @@ namespace EventLogistics.Api.Controllers
             // Establecer valores predeterminados
             rule.CreatedBy = rule.CreatedBy ?? "System";
             rule.UpdatedBy = rule.UpdatedBy ?? "System";
-            
+
             var result = await _ruleRepository.AddAsync(rule);
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
@@ -94,6 +94,36 @@ namespace EventLogistics.Api.Controllers
         {
             var impact = _reassignmentService.EvaluateImpact(eventId, resourceId);
             return Ok(impact);
+        }
+
+        [HttpPut("modify/{id}")]
+        public async Task<IActionResult> ModifyAssignment(
+            int id, 
+            [FromBody] ModifyAssignmentRequest request)
+        {
+            var result = await _reassignmentService.ModifyAssignment(
+                id, 
+                request.NewQuantity, 
+                request.NewStartTime
+            );
+
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
+
+        [HttpPost("auto-reassign/{id}")]
+        public async Task<IActionResult> ReassignAutomatically(
+            int id, 
+            [FromQuery] string reason)
+        {
+            var result = await _reassignmentService.ReassignAutomatically(id, reason);
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
+
+        // DTO para modificación
+        public class ModifyAssignmentRequest
+        {
+            public int NewQuantity { get; set; }
+            public DateTime? NewStartTime { get; set; }
         }
     }
 }

@@ -80,7 +80,7 @@ namespace EventLogistics.Infrastructure.Persistence
                     v => string.Join(',', v),
                     v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
             });
-            
+
             modelBuilder.Entity<ReassignmentRule>(entity =>
             {
                 entity.Property(r => r.Priority).HasDefaultValue(1);
@@ -118,6 +118,14 @@ namespace EventLogistics.Infrastructure.Persistence
                 {
                     entity.UpdatedAt = DateTime.UtcNow;
                 }
+            }
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                // Configuración para tiempo de diseño (migrations)
+                optionsBuilder.UseSqlite("Data Source=EventLogistics.db");
             }
         }
     }

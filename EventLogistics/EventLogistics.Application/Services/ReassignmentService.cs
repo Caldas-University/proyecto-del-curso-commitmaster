@@ -318,6 +318,69 @@ namespace EventLogistics.Application.Services
             return Task.FromResult(result);
         }
 
+        public async Task<ReassignmentResult> ModifyAssignment(int assignmentId, int newQuantity, DateTime? newStartTime)
+        {
+            var assignment = await _assignmentRepository.GetByIdAsync(assignmentId);
+            if (assignment == null)
+                return ReassignmentResult.FailedResult("Asignación no encontrada"); // Cambiado a FailedResult
+        
+            // Validar stock si cambia la cantidad
+            if (newQuantity != 0)
+            {
+                var resource = await _resourceRepository.GetByIdAsync(assignment.ResourceId);
+                if (resource.Capacity < newQuantity)
+                    return ReassignmentResult.FailedResult("Stock insuficiente"); // Cambiado a FailedResult
+            }
+        
+            // Actualizar propiedades
+            assignment.IsModified = true;
+            if (newQuantity > 0) assignment.Resource.Capacity -= newQuantity;
+            if (newStartTime.HasValue) assignment.StartTime = newStartTime.Value;
+        
+            await _assignmentRepository.UpdateAsync(assignment);
+        
+            // Notificar
+            await _notificationService.SendNotification(new Notification
+            {
+                RecipientId = assignment.AssignedToUserId.Value,
+                Content = $"Su reserva fue modificada. Nueva cantidad: {newQuantity}",
+                Status = "Delivered"
+            });
+        
+            return ReassignmentResult.SuccessResult(assignment); // Cambiado a SuccessResult
+        }
+
+        public async Task<ReassignmentResult> ReassignAutomatically(int assignmentId, string reason)
+        {
+            var assignment = await _assignmentRepository.GetByIdAsync(assignmentId);
+            if (assignment == null)
+                return ReassignmentResult.FailedResult("Asignación no encontrada");
+
+            // Lógica de reasignación automática (similar a ProcessResourceChange)
+            var suggestions = await GetResourceSuggestions(assignment.ResourceId, assignment.StartTime);
+            if (suggestions.Count == 0)
+                return ReassignmentResult.FailedResult("No hay recursos alternativos");
+
+            var newResource = suggestions.First().Resource;
+            var newAssignment = new ResourceAssignment
+            {
+                // Copiar propiedades de la asignación original
+                EventId = assignment.EventId,
+                ResourceId = newResource.Id,
+                StartTime = assignment.StartTime,
+                EndTime = assignment.EndTime,
+                Status = "Reasignado",
+                OriginalAssignmentId = assignment.Id,
+                ModificationReason = reason
+            };
+
+            await _assignmentRepository.AddAsync(newAssignment);
+            assignment.Status = "Cancelado";
+            await _assignmentRepository.UpdateAsync(assignment);
+
+            return ReassignmentResult.SuccessResult(newAssignment);
+        }
+
         public class ResourceSuggestion
         {
             public Resource Resource { get; set; }
