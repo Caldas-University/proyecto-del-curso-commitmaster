@@ -10,6 +10,7 @@ namespace EventLogistics.Domain.Entities
 
         [Column("Cantidad")]
         public int Capacity { get; set; }
+        public required string Name { get; set; }
         public bool Availability { get; set; } = true;
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }

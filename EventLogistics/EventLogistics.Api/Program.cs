@@ -42,6 +42,8 @@ builder.Services.AddScoped<IReassignmentService, ReassignmentService>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IResourceAssignmentRepository, ResourceAssignmentRepository>();
 builder.Services.AddScoped<IConflictValidationService, ConflictValidationService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<ISmsService, SmsService>();
 
 // Agregar controladores
 builder.Services.AddControllers()

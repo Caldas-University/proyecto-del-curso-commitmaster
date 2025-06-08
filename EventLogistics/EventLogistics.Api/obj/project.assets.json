@@ -1232,7 +1232,8 @@
           "EventLogistics.Domain": "1.0.0",
           "Microsoft.Extensions.Configuration": "9.0.5",
           "Microsoft.Extensions.Configuration.Abstractions": "9.0.5",
-          "Microsoft.Extensions.Configuration.Binder": "9.0.5"
+          "Microsoft.Extensions.Configuration.Binder": "9.0.5",
+          "Microsoft.Extensions.Options": "9.0.5"
         },
         "compile": {
           "bin/placeholder/EventLogistics.Application.dll": {}
@@ -3701,6 +3702,7 @@
       "EventLogistics.Infrastructure >= 1.0.0",
       "Microsoft.AspNetCore.OpenApi >= 9.0.5",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.5",
+      "Microsoft.Extensions.Options >= 9.0.5",
       "Swashbuckle.AspNetCore >= 6.5.0"
     ]
   },
@@ -3768,6 +3770,10 @@
           "Microsoft.EntityFrameworkCore.Design": {
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
             "suppressParent": "All",
+            "target": "Package",
+            "version": "[9.0.5, )"
+          },
+          "Microsoft.Extensions.Options": {
             "target": "Package",
             "version": "[9.0.5, )"
           },

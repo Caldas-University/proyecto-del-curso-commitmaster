@@ -11,5 +11,7 @@ namespace EventLogistics.Domain.Repositories
         Task<IEnumerable<NotificationHistory>> GetByNotificationIdAsync(int notificationId);
         Task<IEnumerable<NotificationHistory>> GetByActionAsync(string action);
         Task<IEnumerable<NotificationHistory>> GetByDateRangeAsync(DateTime start, DateTime end);
+        Task<IEnumerable<NotificationHistory>> GetByAssignmentIdAsync(int assignmentId);
+        Task<IEnumerable<NotificationHistory>> GetByNotificationTypeAsync(string type);
     }
 }

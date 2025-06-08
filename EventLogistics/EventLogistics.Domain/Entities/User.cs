@@ -15,8 +15,9 @@ namespace EventLogistics.Domain.Entities
 
         public string Role { get; set; }
         public string Contact { get; set; }
+        public string Email { get; set; }
         public string Preferences { get; set; } // JSON for preferences
-        
+        public string PhoneNumber { get; set; }
         // Navigation properties
         public virtual ICollection<Notification> Notifications { get; set; }
     }

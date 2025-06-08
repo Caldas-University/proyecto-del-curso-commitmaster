@@ -59,7 +59,7 @@ namespace EventLogistics.Api.Controllers
             notification.UpdatedBy = notification.UpdatedBy ?? "System";
             notification.Timestamp = DateTime.UtcNow;
             notification.Status = notification.Status ?? "Pending";
-            
+
             var result = await _notificationService.SendNotification(notification);
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
@@ -88,6 +88,20 @@ namespace EventLogistics.Api.Controllers
             var notifications = await _notificationRepository.GetByRecipientIdAsync(userId);
             var pendingNotifications = notifications.Where(n => n.Status == "Pending" || n.Status == "Sent").ToList();
             return Ok(pendingNotifications);
+        }        
+
+        [HttpGet("assignment/{assignmentId}")]
+        public async Task<IActionResult> GetAssignmentNotifications(int assignmentId)
+        {
+            var histories = await _notificationService.GetNotificationHistoryForAssignment(assignmentId);
+            return Ok(histories);
+        }
+        
+        [HttpPost("resend/{notificationId}")]
+        public async Task<IActionResult> ResendNotification(int notificationId)
+        {
+            var result = await _notificationService.ResendNotification(notificationId);
+            return result ? Ok() : BadRequest();
         }
     }
 }

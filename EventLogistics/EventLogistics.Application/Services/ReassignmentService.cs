@@ -141,26 +141,53 @@ namespace EventLogistics.Application.Services
             // En una implementación completa, aplicaríamos las reglas de forma más sofisticada
             return resources.FirstOrDefault();
         }
+        
+        private string BuildAdvancedNotificationContent(ResourceAssignment oldAssignment, ResourceAssignment newAssignment)
+        {
+            return $"La asignación de recurso ha cambiado de {oldAssignment.Resource?.Type} " +
+                   $"a {newAssignment.Resource?.Name} para el evento {oldAssignment.Event?.Place}";
+        }
+        
+        private string BuildNewAssignmentContent(ResourceAssignment assignment)
+        {
+            return $"Se te ha asignado el recurso {assignment.Resource?.Type} " +
+                   $"para el evento {assignment.Event?.Place}";
+        }
 
         private async Task SendReassignmentNotifications(ResourceAssignment oldAssignment, ResourceAssignment newAssignment)
         {
-            // 1. Notificar al organizador
-            if (oldAssignment.AssignedToUserId.HasValue)
+            // Notificación para el organizador
+            var organizerNotification = new Notification
             {
-                var notification = new Notification
+                RecipientId = oldAssignment.AssignedToUserId.Value,
+                Content = BuildAdvancedNotificationContent(oldAssignment, newAssignment),
+                Status = "Pending",
+                Channel = "Email", // o configurar según preferencias del usuario
+                NotificationType = "ResourceReassigned"
+            };
+
+            await _notificationService.SendAdvancedNotification(
+                organizerNotification,
+                oldAssignment,
+                "ResourceReassigned");
+
+            // Notificación para el nuevo asignado (si es diferente)
+            if (newAssignment.AssignedToUserId != oldAssignment.AssignedToUserId)
+            {
+                var newUserNotification = new Notification
                 {
-                    RecipientId = oldAssignment.AssignedToUserId.Value,
-                    Content = $"El recurso {oldAssignment.Resource.Type} ha sido reemplazado por {newAssignment.Resource.Type} para el evento programado.",
+                    RecipientId = newAssignment.AssignedToUserId.Value,
+                    Content = BuildNewAssignmentContent(newAssignment),
                     Status = "Pending",
-                    Timestamp = DateTime.UtcNow,
-                    CreatedBy = "System",
-                    UpdatedBy = "System"
+                    Channel = "Email",
+                    NotificationType = "NewAssignment"
                 };
 
-                await _notificationService.SendNotification(notification);
+                await _notificationService.SendAdvancedNotification(
+                    newUserNotification,
+                    newAssignment,
+                    "NewAssignment");
             }
-
-            // 2. Notificar a otros involucrados (esto dependería de tu modelo de datos completo)
         }
 
         private async Task SendFailureNotifications(ResourceAssignment assignment)
