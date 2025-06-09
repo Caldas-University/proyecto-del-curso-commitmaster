@@ -40,6 +40,10 @@ packages/
 *.backup
 *.tmp
 *.temp
+*.dll
+*.pdb
+*.exe
+*.db
 
 ## Archivos de usuario y configuración personal
 *.userprefs
