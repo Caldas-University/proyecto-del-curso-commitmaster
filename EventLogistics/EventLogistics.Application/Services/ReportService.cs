@@ -41,5 +41,23 @@ namespace EventLogistics.Application.Services
 
             return metrics;
         }
+
+        public async Task<IEnumerable<CriticalResourceAlertDto>> GetCriticalResources(int minAvailable = 1)
+        {
+            var resources = await _reportRepository.GenerateReportAsync(null, null, null);
+
+            var critical = resources
+                .Where(r => r.Availability && r.Capacity <= minAvailable)
+                .Select(r => new CriticalResourceAlertDto
+                {
+                    Id = r.Id,
+                    Type = r.Type,
+                    Available = r.Capacity,
+                    Total = r.Capacity,
+                    Message = $"El recurso '{r.Type}' está en nivel crítico de disponibilidad ({r.Capacity})"
+                });
+
+            return critical;
+        }
     }
 }

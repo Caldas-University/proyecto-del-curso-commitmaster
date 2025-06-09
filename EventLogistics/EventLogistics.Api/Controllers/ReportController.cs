@@ -164,5 +164,17 @@ namespace EventLogistics.Api.Controllers
             var pdfBytes = document.GeneratePdf();
             return File(pdfBytes, "application/pdf", "reporte.pdf");
         }
+
+        // GET: api/report/alerts/critical?minAvailable=1
+        [HttpGet("alerts/critical")]
+        public async Task<ActionResult<IEnumerable<CriticalResourceAlertDto>>> GetCriticalResources([FromQuery] int minAvailable = 1)
+        {
+            var alerts = await _reportService.GetCriticalResources(minAvailable);
+
+            if (alerts == null || !alerts.Any())
+                return Ok(new List<CriticalResourceAlertDto>()); // Sin alertas
+
+            return Ok(alerts);
+        }
     }
 }
