@@ -12,6 +12,9 @@ public class EventLogisticsDbContext : DbContext
     public DbSet<Reasignacion> Reasignaciones { get; set; } = null!;
     public DbSet<Resource> Resources { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Participant> Participants { get; set; } = null!;
+    public DbSet<Attendance> Attendances { get; set; } = null!;
+    public DbSet<ParticipantActivity> ParticipantActivities { get; set; } = null!;
 
     public EventLogisticsDbContext(DbContextOptions<EventLogisticsDbContext> options)
         : base(options)

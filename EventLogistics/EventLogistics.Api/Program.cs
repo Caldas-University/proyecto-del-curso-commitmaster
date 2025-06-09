@@ -19,6 +19,10 @@ builder.Services.AddScoped<IResourceRepository, ResourceRepository>();
 builder.Services.AddScoped<IResourceServiceApp, ResourceServiceApp>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<ReportService>();
+builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
+builder.Services.AddScoped<IAttendanceServiceApp, AttendanceServiceApp>();
+builder.Services.AddScoped<IParticipantRepository, ParticipantRepository>();
+builder.Services.AddScoped<IParticipantActivityRepository, ParticipantActivityRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -39,7 +43,11 @@ using (var scope = app.Services.CreateScope())
 
 // Middleware para Swagger
 app.UseSwagger();
-app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EventLogistics API v1"));
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "EventLogistics API v1");
+    c.RoutePrefix = string.Empty; // Esto pone Swagger en la raíz
+});
 
 app.MapControllers();
 app.Run();

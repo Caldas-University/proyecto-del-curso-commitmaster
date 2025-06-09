@@ -20,4 +20,9 @@ public class EventRepository : IEventRepository
     {
         return await _dbContext.Events.FindAsync(id);
     }
+
+    public async Task<List<Event>> GetAllAsync()
+    {
+        return await _dbContext.Events.ToListAsync();
+    }
 }

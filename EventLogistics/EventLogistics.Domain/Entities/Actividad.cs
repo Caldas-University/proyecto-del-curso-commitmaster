@@ -4,7 +4,10 @@ public class Activity
 {
     public Guid Id { get; private set; }
     public string Lugar { get; private set; }
+    public string Name { get; set; }
     public DateTime Horario { get; private set; }
+    public DateTime StartTime { get; set; }
+    public DateTime EndTime { get; set; }
     public string Estado { get; private set; }
     public Guid EventId { get; private set; }
 
