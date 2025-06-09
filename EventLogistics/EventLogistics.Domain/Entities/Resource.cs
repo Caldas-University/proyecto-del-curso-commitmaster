@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 namespace EventLogistics.Domain.Entities;
+=======
+using System.ComponentModel.DataAnnotations.Schema;
+>>>>>>> sebas
 
 public class Resource
 {
@@ -10,8 +14,25 @@ public class Resource
 
     private Resource()
     {
+<<<<<<< HEAD
         Type = string.Empty;
         Assignments = new List<Guid>();
+=======
+        [Column("TipoEquipo")]  // Mapear a la BD
+        public required string Type { get; set; }
+
+        [Column("Cantidad")]
+        public int Capacity { get; set; }
+        public required string Name { get; set; }
+        public bool Availability { get; set; } = true;
+        public DateTime FechaInicio { get; set; }
+        public DateTime FechaFin { get; set; }
+        public List<string> Tags { get; set; } = new List<string>();
+
+        // Mantener relaciones existentes
+        public virtual required ICollection<ResourceAssignment> Assignments { get; set; }
+        public virtual required ICollection<ReassignmentRule> ReassignmentRules { get; set; }
+>>>>>>> sebas
     }
 
     public Resource(string type, int capacity, bool availability = true)

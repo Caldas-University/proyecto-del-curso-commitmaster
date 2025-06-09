@@ -10,9 +10,20 @@ public class Event
 
     private Event()
     {
+<<<<<<< HEAD
         Place = string.Empty;
         Resources = new List<Guid>();
         Status = string.Empty;
+=======
+        public required string Name { get; set; }
+        public string Place { get; set; }
+        public DateTime Schedule { get; set; }
+        public string Status { get; set; }
+        
+        // Navigation properties
+        public virtual ICollection<ResourceAssignment> Resources { get; set; }
+        public virtual ICollection<Activity> Activities { get; set; }
+>>>>>>> sebas
     }
 
     public Event(string place, DateTime schedule, string status = "Activo")
