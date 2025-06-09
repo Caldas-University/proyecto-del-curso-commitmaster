@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using EventLogistics.Domain.Repositories;
 using EventLogistics.Application.Interfaces;
 using Microsoft.OpenApi.Models;
+using QuestPDF.Infrastructure; // Agrega este using al inicio si no está
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +49,9 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "EventLogistics API v1");
     c.RoutePrefix = string.Empty; // Esto pone Swagger en la raíz
 });
+
+// Configura la licencia de QuestPDF
+QuestPDF.Settings.License = LicenseType.Community;
 
 app.MapControllers();
 app.Run();
