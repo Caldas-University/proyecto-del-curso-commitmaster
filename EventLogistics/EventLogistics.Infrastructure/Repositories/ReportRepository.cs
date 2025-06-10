@@ -10,30 +10,36 @@ namespace EventLogistics.Infrastructure.Repositories
 {
     public class ReportRepository : IReportRepository
     {
-        private readonly ApplicationDbContext _context;
+        private readonly EventLogisticsDbContext _context;
 
-        public ReportRepository(ApplicationDbContext context)
+        public ReportRepository(EventLogisticsDbContext context)
         {
             _context = context;
         }
 
-        public async Task<IEnumerable<ResourceAssignment>> GetAssignmentsByFiltersAsync(int? eventId, string resourceType, string status)
+        public async Task<IEnumerable<Resource>> GenerateReportAsync(int? eventId, string? resourceType, string? status)
         {
-            var query = _context.Set<ResourceAssignment>().AsQueryable();
-
-            if (eventId.HasValue)
-                query = query.Where(a => a.EventId == eventId.Value);
+            var query = _context.Resources.AsQueryable();
 
             if (!string.IsNullOrEmpty(resourceType))
-                query = query.Where(a => a.Resource.Type == resourceType);
+            {
+                query = query.Where(r => r.Type == resourceType);
+            }
 
             if (!string.IsNullOrEmpty(status))
-                query = query.Where(a => a.Status == status);
+            {
+                // Asumiendo que status se relaciona con disponibilidad
+                bool isAvailable = status.ToLower() == "disponible";
+                query = query.Where(r => r.Availability == isAvailable);
+            }
 
-            return await query
-                .Include(a => a.Resource)
-                .Include(a => a.Event)
-                .ToListAsync();
+            if (eventId.HasValue)
+            {
+                // Filtrar por recursos asignados a un evento específico
+                query = query.Where(r => r.Assignments.Contains(new Guid(eventId.Value.ToString())));
+            }
+
+            return await query.ToListAsync();
         }
     }
 }

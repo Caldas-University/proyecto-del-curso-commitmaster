@@ -17,6 +17,54 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.5");
 
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Activity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ActivityId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("OrganizatorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("OrganizatorId");
+
+                    b.ToTable("Activities");
+                });
+
             modelBuilder.Entity("EventLogistics.Domain.Entities.Event", b =>
                 {
                     b.Property<int>("Id")
@@ -142,6 +190,33 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                     b.ToTable("NotificationHistories");
                 });
 
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Organizator", b =>
+                {
+                    b.Property<int>("OrganizatorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("OrganizatorId");
+
+                    b.ToTable("Organizators");
+                });
+
             modelBuilder.Entity("EventLogistics.Domain.Entities.ReassignmentRule", b =>
                 {
                     b.Property<int>("Id")
@@ -168,17 +243,26 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("INTEGER");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(1);
 
                     b.Property<int?>("ResourceTypeId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<double>("SimilarityThreshold")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("REAL")
+                        .HasDefaultValue(0.5);
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
@@ -204,7 +288,8 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Capacity")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("Cantidad");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -213,9 +298,20 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Type")
+                    b.Property<DateTime>("FechaFin")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("FechaInicio")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Tags")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("TipoEquipo");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
@@ -235,8 +331,14 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("ActivityId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("AssignedToUserId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("AssignmentDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -249,6 +351,22 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("EventId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsModified")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("IsModified");
+
+                    b.Property<string>("ModificationReason")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ModificationReason");
+
+                    b.Property<int?>("OriginalAssignmentId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("OriginalAssignmentId");
+
+                    b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ResourceId")
@@ -269,6 +387,8 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
 
                     b.HasIndex("AssignedToUserId");
 
@@ -316,6 +436,25 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Activity", b =>
+                {
+                    b.HasOne("EventLogistics.Domain.Entities.Event", "Event")
+                        .WithMany("Activities")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EventLogistics.Domain.Entities.Organizator", "Organizator")
+                        .WithMany("Activities")
+                        .HasForeignKey("OrganizatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Organizator");
+                });
+
             modelBuilder.Entity("EventLogistics.Domain.Entities.Notification", b =>
                 {
                     b.HasOne("EventLogistics.Domain.Entities.User", "Recipient")
@@ -349,6 +488,10 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.ResourceAssignment", b =>
                 {
+                    b.HasOne("EventLogistics.Domain.Entities.Activity", "Activity")
+                        .WithMany("ResourceAssignments")
+                        .HasForeignKey("ActivityId");
+
                     b.HasOne("EventLogistics.Domain.Entities.User", "AssignedTo")
                         .WithMany()
                         .HasForeignKey("AssignedToUserId");
@@ -365,6 +508,8 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Activity");
+
                     b.Navigation("AssignedTo");
 
                     b.Navigation("Event");
@@ -372,9 +517,21 @@ namespace EventLogistics.Infrastructure.Persistence.Migrations
                     b.Navigation("Resource");
                 });
 
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Activity", b =>
+                {
+                    b.Navigation("ResourceAssignments");
+                });
+
             modelBuilder.Entity("EventLogistics.Domain.Entities.Event", b =>
                 {
+                    b.Navigation("Activities");
+
                     b.Navigation("Resources");
+                });
+
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Organizator", b =>
+                {
+                    b.Navigation("Activities");
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.Resource", b =>

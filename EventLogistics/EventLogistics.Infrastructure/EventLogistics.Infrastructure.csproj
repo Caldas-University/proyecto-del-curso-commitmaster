@@ -2,12 +2,22 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EventLogistics.Domain\EventLogistics.Domain.csproj" />
+    <!-- Elimina esta línea:
     <ProjectReference Include="..\EventLogistics.Application\EventLogistics.Application.csproj" />
+    -->
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Cambiar de SQL Server a SQLite -->
+<<<<<<< HEAD
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
+=======
+    <!-- Cambiar de SQL Server a SQLite -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.5" />
+>>>>>>> sebas
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
