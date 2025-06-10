@@ -1,17 +1,38 @@
+# Proyectos antiguos ignorados
 FlightReservation.Api
 FlightReservation.Application
 FlightReservation.Domain
 FlightReservation.Infrastructure
 FlightReservation.sln
 
-## Compilación de .NET
-bin/
-obj/
+## Compilación de .NET (MÁS ESPECÍFICO)
+**/bin/
+**/obj/
+**/**/bin/
+**/**/obj/
 [Ll]og/
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
+
+## Bases de datos SQLite
+*.db
+*.db-shm
+*.db-wal
+eventlogistics.db
+EventLogistics.db
+
+## Archivos generados automáticamente por .NET
+**/*.AssemblyInfo.cs
+**/*.AssemblyInfoInputs.cache
+**/*.csproj.AssemblyReference.cache
+**/*.GeneratedMSBuildEditorConfig.editorconfig
+**/*.GlobalUsings.g.cs
+**/*.assets.json
+**/*.csproj.nuget.dgspec.json
+**/*.csproj.nuget.g.props
+**/*.csproj.nuget.g.targets
 
 ## Archivos de configuración y dependencias
 project.lock.json
@@ -35,61 +56,4 @@ packages/
 
 ## Archivos de publicación y temporales
 *.publish.xml
-*.dbmdl
-*.bak
-*.backup
-*.tmp
-*.temp
-*.dll
-*.pdb
-*.exe
-*.db
-
-## Archivos de usuario y configuración personal
-*.userprefs
-*.user
-*.userosscache
-*.suo
-*.sdf
-*.cache
-
-## Otros archivos y carpetas ignorados
-_TestResults/
-TestResults/
-*.testresults
-*.vspscc
-*.vssscc
-*.pdb
-*.mdb
-*.cache
-*.log
-
-## Archivos de Docker y contenedores
-docker-compose.*
-*.dockerfile
-
-## Archivos generados por herramientas de análisis
-*.sarif
-*.ruleset
-
-## Sistemas operativos
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-
-# Mac
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Linux
-*~
-
-## Archivos de configuración de entorno y secretos
-.env
-secrets.json
-
-## Otros
 *.swp
