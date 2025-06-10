@@ -39,5 +39,21 @@ namespace EventLogistics.Infrastructure.Repositories
                 .OrderByDescending(nh => nh.ActionTimestamp)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<NotificationHistory>> GetByAssignmentIdAsync(int assignmentId)
+        {
+            return await _dbSet
+                .Where(nh => nh.RelatedAssignmentId == assignmentId)
+                .OrderByDescending(nh => nh.ActionTimestamp)
+                .ToListAsync();
+        }
+        
+        public async Task<IEnumerable<NotificationHistory>> GetByNotificationTypeAsync(string type)
+        {
+            return await _dbSet
+                .Where(nh => nh.NotificationType == type)
+                .OrderByDescending(nh => nh.ActionTimestamp)
+                .ToListAsync();
+        }
     }
 }

@@ -1,12 +1,9 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
+namespace EventLogistics.Domain.Repositories;
+
 using EventLogistics.Domain.Entities;
 
-namespace EventLogistics.Domain.Repositories
+public interface IEventRepository
 {
-    public interface IEventRepository : IRepository<Event>
-    {
-        Task<IEnumerable<Event>> GetEventsByLocationAsync(int locationId);
-        Task<Event> GetEventWithDetailsAsync(int id);
-    }
+    Task<Event?> GetEventAsync(Guid id);
+    Task<List<Event>> GetAllAsync();
 }
