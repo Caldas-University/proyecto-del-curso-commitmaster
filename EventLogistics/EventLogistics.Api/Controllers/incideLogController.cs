@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+
+using EventLogistics.Application.Contracts.Services;
+using EventLogistics.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
-using EventLogistics.EventLogistics.Domain.Entities;
-using EventLogistics.Infrastructure.Persistence;
+using System;
 
 namespace EventLogistics.Api.Controllers
 {
@@ -12,77 +12,65 @@ namespace EventLogistics.Api.Controllers
     [Route("api/[controller]")]
     public class IncidentLogController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IIncidentServiceApp _incidentService;
 
-        public IncidentLogController(ApplicationDbContext context)
+        public IncidentLogController(IIncidentServiceApp incidentService)
         {
-            _context = context;
+            _incidentService = incidentService;
         }
 
-        // GET: api/IncidentLog
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Incident>>> GetIncidents()
-        {
-            return await _context.Incidents.ToListAsync();
-        }
-
-        // GET: api/IncidentLog/5
+        // GET: api/IncidentLog/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Incident>> GetIncident(int id)
+        public async Task<ActionResult<Incident>> GetIncident(Guid id)
         {
-            var incident = await _context.Incidents.FindAsync(id);
-
+            var incident = await _incidentService.GetIncidentByIdAsync(id);
             if (incident == null)
             {
                 return NotFound();
             }
 
-            return incident;
+            return Ok(incident);
         }
 
-        // POST: api/IncidentLog       
-        [HttpPost]
-        public async Task<ActionResult<Incident>> PostIncident(Incident incident)
+        // GET: api/IncidentLog/event/{eventId}
+        [HttpGet("event/{eventId}")]
+        public async Task<ActionResult<IEnumerable<Incident>>> GetIncidentsByEvent(Guid eventId)
         {
-            _context.Incidents.Add(incident);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetIncident), new { id = incident.Id }, incident);
+            var incidents = await _incidentService.GetIncidentsByEventIdAsync(eventId);
+            return Ok(incidents);
         }
 
-        // PUT: api/IncidentLog/5
+        // POST: api/IncidentLog
+        [HttpPost]
+        public async Task<ActionResult<Guid>> CreateIncident([FromBody] Incident incident)
+        {
+            var id = await _incidentService.CreateIncidentAsync(
+                incident.EventId,
+                incident.Description,
+                incident.Location,
+                incident.IncidentDate
+            );
+
+            return CreatedAtAction(nameof(GetIncident), new { id = id }, id);
+        }
+
+        // PUT: api/IncidentLog/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutIncident(int id, Incident incident)
+        public async Task<IActionResult> UpdateIncident(Guid id, [FromBody] Incident incident)
         {
             if (id != incident.Id)
-            {
                 return BadRequest();
-            }
 
-            _context.Entry(incident).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!IncidentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            await _incidentService.UpdateIncidentAsync(id, incident.Description, incident.Location, incident.IncidentDate);
             return NoContent();
         }
 
-        private bool IncidentExists(int id)
+        // DELETE: api/IncidentLog/{id}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteIncident(Guid id)
         {
-            return _context.Incidents.Any(e => e.Id == id);
+            await _incidentService.DeleteIncidentAsync(id);
+            return NoContent();
         }
     }
 }

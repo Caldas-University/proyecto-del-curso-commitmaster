@@ -1,29 +1,21 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EventLogistics.EventLogistics.Domain.Entities
-
+namespace EventLogistics.Domain.Entities
 {
-
     public class Incident
     {
-        public int Id { get; set; }
-        public string Tipo { get; set; }
-        public string Descripcion { get; set; }
-        public string Severidad { get; set; }
-        public DateTime FechaHora { get; set; }
-        public string Ubicacion { get; set; }
+        public Guid Id { get; set; }
+        public Guid EventId { get; set; }
+        public string Description { get; set; }
+        public DateTime IncidentDate { get; set; }
+        public string Location { get; set; }
 
-        // Relaciones (opcionalmente nulas, porque puede estar asociado solo a una)
-        public int? ActivityId { get; set; }
-        public Activity? Activity { get; set; }
+        public string Status { get; set; } = "Open"; // Default status is Open
 
-        public int? SpaceId { get; set; }
-        public Space? Space { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public Event? Event { get; set; } // Navigation property to the Event entity
 
-        public int? EquipmentId { get; set; }
-        public Equipment? Equipment { get; set; }
-
-        public int? SupplierId { get; set; }
-        public Supplier? Supplier { get; set; }
     }
-
 }

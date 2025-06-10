@@ -17,218 +17,102 @@ namespace EventLogistics.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.5");
 
-            modelBuilder.Entity("EventLogistics.EventLogistics.Domain.Entities.Activity", b =>
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Event", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Nombre")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Activities");
+                    b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("EventLogistics.EventLogistics.Domain.Entities.Equipment", b =>
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Incident", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int?>("ActivityId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Estado")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Nombre")
+                    b.Property<DateTime>("IncidentDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Ubicacion")
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ActivityId");
-
-                    b.ToTable("Equipments");
-                });
-
-            modelBuilder.Entity("EventLogistics.EventLogistics.Domain.Entities.Incident", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("ActivityId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("EquipmentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("FechaHora")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Severidad")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("SpaceId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("SupplierId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Tipo")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Ubicacion")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActivityId");
-
-                    b.HasIndex("EquipmentId");
-
-                    b.HasIndex("SpaceId");
-
-                    b.HasIndex("SupplierId");
+                    b.HasIndex("EventId");
 
                     b.ToTable("Incidents");
                 });
 
-            modelBuilder.Entity("EventLogistics.EventLogistics.Domain.Entities.Space", b =>
+            modelBuilder.Entity("EventLogistics.Domain.Entities.IncidentSolution", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Nombre")
+                    b.Property<string>("ActionTaken")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AppliedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateApplied")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("IncidentId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Spaces");
+                    b.HasIndex("IncidentId");
+
+                    b.ToTable("IncidentSolutions");
                 });
 
-            modelBuilder.Entity("EventLogistics.EventLogistics.Domain.Entities.Supplier", b =>
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Incident", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.HasOne("EventLogistics.Domain.Entities.Event", "Event")
+                        .WithMany("Incidents")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int?>("ActivityId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Contacto")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Telefono")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActivityId");
-
-                    b.ToTable("Suppliers");
+                    b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("EventLogistics.EventLogistics.Domain.Entities.Equipment", b =>
+            modelBuilder.Entity("EventLogistics.Domain.Entities.IncidentSolution", b =>
                 {
-                    b.HasOne("EventLogistics.EventLogistics.Domain.Entities.Activity", "Activity")
+                    b.HasOne("EventLogistics.Domain.Entities.Incident", "Incident")
                         .WithMany()
-                        .HasForeignKey("ActivityId");
+                        .HasForeignKey("IncidentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Activity");
+                    b.Navigation("Incident");
                 });
 
-            modelBuilder.Entity("EventLogistics.EventLogistics.Domain.Entities.Incident", b =>
-                {
-                    b.HasOne("EventLogistics.EventLogistics.Domain.Entities.Activity", "Activity")
-                        .WithMany("Incidents")
-                        .HasForeignKey("ActivityId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("EventLogistics.EventLogistics.Domain.Entities.Equipment", "Equipment")
-                        .WithMany("Incidents")
-                        .HasForeignKey("EquipmentId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("EventLogistics.EventLogistics.Domain.Entities.Space", "Space")
-                        .WithMany("Incidents")
-                        .HasForeignKey("SpaceId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("EventLogistics.EventLogistics.Domain.Entities.Supplier", "Supplier")
-                        .WithMany("Incidents")
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Activity");
-
-                    b.Navigation("Equipment");
-
-                    b.Navigation("Space");
-
-                    b.Navigation("Supplier");
-                });
-
-            modelBuilder.Entity("EventLogistics.EventLogistics.Domain.Entities.Supplier", b =>
-                {
-                    b.HasOne("EventLogistics.EventLogistics.Domain.Entities.Activity", "Activity")
-                        .WithMany()
-                        .HasForeignKey("ActivityId");
-
-                    b.Navigation("Activity");
-                });
-
-            modelBuilder.Entity("EventLogistics.EventLogistics.Domain.Entities.Activity", b =>
-                {
-                    b.Navigation("Incidents");
-                });
-
-            modelBuilder.Entity("EventLogistics.EventLogistics.Domain.Entities.Equipment", b =>
-                {
-                    b.Navigation("Incidents");
-                });
-
-            modelBuilder.Entity("EventLogistics.EventLogistics.Domain.Entities.Space", b =>
-                {
-                    b.Navigation("Incidents");
-                });
-
-            modelBuilder.Entity("EventLogistics.EventLogistics.Domain.Entities.Supplier", b =>
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Event", b =>
                 {
                     b.Navigation("Incidents");
                 });

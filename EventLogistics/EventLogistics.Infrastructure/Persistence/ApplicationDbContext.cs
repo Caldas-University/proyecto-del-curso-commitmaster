@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using EventLogistics.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Design;
+
 
 namespace EventLogistics.Infrastructure.Persistence
 {
