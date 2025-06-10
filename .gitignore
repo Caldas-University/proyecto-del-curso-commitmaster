@@ -5,16 +5,31 @@ FlightReservation.Domain
 FlightReservation.Infrastructure
 FlightReservation.sln
 
-## Compilación de .NET (MÁS ESPECÍFICO)
+## Compilación de .NET - PATRONES CORREGIDOS
+bin/
+obj/
+*/bin/
+*/obj/
 **/bin/
 **/obj/
-**/**/bin/
-**/**/obj/
-[Ll]og/
-*.user
-*.suo
-*.userosscache
-*.sln.docstates
+EventLogistics/*/bin/
+EventLogistics/*/obj/
+EventLogistics.Api/bin/
+EventLogistics.Api/obj/
+EventLogistics.Application/bin/
+EventLogistics.Application/obj/
+EventLogistics.Domain/bin/
+EventLogistics.Domain/obj/
+EventLogistics.Infrastructure/bin/
+EventLogistics.Infrastructure/obj/
+
+## Archivos específicos de compilación
+*.dll
+*.pdb
+*.exe
+*.cache
+*.deps.json
+*.runtimeconfig.json
 
 ## Bases de datos SQLite
 *.db
