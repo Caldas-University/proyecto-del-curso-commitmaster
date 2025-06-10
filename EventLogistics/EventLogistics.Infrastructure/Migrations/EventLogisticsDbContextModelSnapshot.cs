@@ -67,7 +67,7 @@ namespace EventLogistics.Infrastructure.Migrations
 
                     b.HasIndex("OrganizatorId");
 
-                    b.ToTable("Activities");
+                    b.ToTable("Activities", (string)null);
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.Attendance", b =>
@@ -94,7 +94,7 @@ namespace EventLogistics.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Attendances");
+                    b.ToTable("Attendances", (string)null);
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.Event", b =>
@@ -134,7 +134,7 @@ namespace EventLogistics.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.Incident", b =>
@@ -165,7 +165,7 @@ namespace EventLogistics.Infrastructure.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("Incidents");
+                    b.ToTable("Incidents", (string)null);
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.IncidentSolution", b =>
@@ -192,7 +192,7 @@ namespace EventLogistics.Infrastructure.Migrations
 
                     b.HasIndex("IncidentId");
 
-                    b.ToTable("IncidentSolutions");
+                    b.ToTable("IncidentSolutions", (string)null);
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.Notification", b =>
@@ -249,7 +249,7 @@ namespace EventLogistics.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.NotificationHistory", b =>
@@ -311,7 +311,7 @@ namespace EventLogistics.Infrastructure.Migrations
 
                     b.HasIndex("RelatedAssignmentId");
 
-                    b.ToTable("NotificationHistories");
+                    b.ToTable("NotificationHistories", (string)null);
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.Organizator", b =>
@@ -352,7 +352,7 @@ namespace EventLogistics.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Organizators");
+                    b.ToTable("Organizators", (string)null);
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.Participant", b =>
@@ -379,7 +379,7 @@ namespace EventLogistics.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Participants");
+                    b.ToTable("Participants", (string)null);
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.ParticipantActivity", b =>
@@ -403,7 +403,7 @@ namespace EventLogistics.Infrastructure.Migrations
 
                     b.HasIndex("ParticipantId");
 
-                    b.ToTable("ParticipantActivities");
+                    b.ToTable("ParticipantActivities", (string)null);
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.Reasignacion", b =>
@@ -433,7 +433,7 @@ namespace EventLogistics.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Reasignaciones");
+                    b.ToTable("Reasignaciones", (string)null);
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.ReassignmentRule", b =>
@@ -488,7 +488,7 @@ namespace EventLogistics.Infrastructure.Migrations
 
                     b.HasIndex("ResourceTypeId");
 
-                    b.ToTable("ReassignmentRules");
+                    b.ToTable("ReassignmentRules", (string)null);
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.Resource", b =>
@@ -541,7 +541,7 @@ namespace EventLogistics.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Resources");
+                    b.ToTable("Resources", (string)null);
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.ResourceAssignment", b =>
@@ -615,7 +615,7 @@ namespace EventLogistics.Infrastructure.Migrations
 
                     b.HasIndex("ResourceId");
 
-                    b.ToTable("ResourceAssignments");
+                    b.ToTable("ResourceAssignments", (string)null);
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.User", b =>
@@ -660,7 +660,7 @@ namespace EventLogistics.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.Activity", b =>
