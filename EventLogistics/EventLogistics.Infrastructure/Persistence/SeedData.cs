@@ -27,8 +27,9 @@ public static class SeedData
         var equipo = new Resource("Equipo", 3, true);
         context.Resources.AddRange(sala, equipo);
 
-        // Crea un evento de ejemplo con nombre
-        var evento = new Event("Evento de Prueba", "Sala Principal", DateTime.Now.AddDays(7));
+        // Crea un evento de ejemplo
+        var evento = new Event("Sala Principal", DateTime.Now.AddDays(7));
+        evento.Name = "Evento de Prueba";
         context.Events.Add(evento);
 
         // Crea actividades de ejemplo
@@ -69,6 +70,7 @@ public static class SeedData
             EventId = evento.Id,
             Description = "Falta de sillas",
             Location = "Sala B",
+            IncidentDate = DateTime.Now.AddDays(7).AddHours(10),
             Status = "Pendiente"
         };
         context.Incidents.AddRange(incident1, incident2);
