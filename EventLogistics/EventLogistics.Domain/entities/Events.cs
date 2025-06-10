@@ -3,7 +3,7 @@ namespace EventLogistics.Domain.Entities;
 public class Event
 {
     public Guid Id { get; private set; }
-    public String Name { get; set; }
+    public string Name { get; private set; }
     public string Place { get; private set; }
     public DateTime Schedule { get; private set; }
     public List<Guid> Resources { get; private set; }
@@ -11,14 +11,16 @@ public class Event
 
     private Event()
     {
+        Name = string.Empty;
         Place = string.Empty;
         Resources = new List<Guid>();
         Status = string.Empty;
     }
 
-    public Event(string place, DateTime schedule, string status = "Activo")
+    public Event(string name, string place, DateTime schedule, string status = "Activo")
     {
         Id = Guid.NewGuid();
+        Name = name ?? throw new ArgumentNullException(nameof(name));
         Place = place ?? throw new ArgumentNullException(nameof(place));
         Schedule = schedule;
         Resources = new List<Guid>();

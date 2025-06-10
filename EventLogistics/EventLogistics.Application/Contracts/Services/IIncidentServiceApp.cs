@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using EventLogistics.Application.DTOs;
 using EventLogistics.Domain.Entities;
 
 namespace EventLogistics.Application.Contracts.Services
@@ -13,13 +14,20 @@ namespace EventLogistics.Application.Contracts.Services
             string location,
             DateTime incidentDate);
 
-        Task<Incident?> GetIncidentByIdAsync(Guid id);
-        Task<IEnumerable<Incident>> GetIncidentsByEventIdAsync(Guid eventId);
+        Task<IncidentDto?> GetIncidentByIdAsync(Guid id);
+        Task<IEnumerable<IncidentDto>> GetIncidentsByEventIdAsync(Guid eventId);
         Task UpdateIncidentAsync(
             Guid id,
             string description,
             string location,
             DateTime incidentDate);
         Task DeleteIncidentAsync(Guid id);
+        
+        // Métodos para soluciones
+        Task<Guid> ApplyIncidentSolutionAsync(Guid incidentId, string actionTaken, string appliedBy);
+        Task<IncidentSolution?> GetIncidentSolutionByIdAsync(Guid id);
+        Task<IEnumerable<IncidentSolution>> GetSolutionsByIncidentIdAsync(Guid incidentId);
+        Task UpdateIncidentSolutionAsync(Guid id, IncidentSolution solution);
+        Task DeleteIncidentSolutionAsync(Guid id);
     }
 }

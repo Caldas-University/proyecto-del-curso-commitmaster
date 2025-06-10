@@ -20,9 +20,7 @@ public class AttendanceServiceApp : IAttendanceServiceApp
         _attendanceRepository = attendanceRepository;
         _participantRepository = participantRepository;
         _participantActivityRepository = participantActivityRepository;
-    }
-
-    public async Task<AttendanceDto> RegisterAttendanceAsync(Guid participantId, Guid eventId, string method)
+    }    public async Task<AttendanceDto> RegisterAttendanceAsync(Guid participantId, Guid eventId, string method)
     {
         // 1. Validar que el participante exista
         var participant = await _participantRepository.GetByIdAsync(participantId);
@@ -52,6 +50,17 @@ public class AttendanceServiceApp : IAttendanceServiceApp
         await _attendanceRepository.AddAsync(attendance);
 
         return AttendanceMapper.ToDto(attendance);
+    }
+
+    public async Task<AttendanceDto> RegisterAttendanceByDocumentAsync(string document, Guid eventId, string method)
+    {
+        // Buscar participante por documento
+        var participant = await _participantRepository.GetByDocumentAsync(document);
+        if (participant == null)
+            throw new InvalidOperationException("Participante no encontrado.");
+        
+        // Delegar al método principal
+        return await RegisterAttendanceAsync(participant.Id, eventId, method);
     }
 
     public async Task<CredentialDto> GenerateCredentialAsync(Guid participantId, Guid eventId)

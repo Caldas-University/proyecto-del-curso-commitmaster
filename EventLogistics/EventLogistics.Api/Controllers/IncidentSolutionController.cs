@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using EventLogistics.Application.Contracts.Services;
 using EventLogistics.Domain.Entities;
-using EventLogistics.Domain.Repositories;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
@@ -11,18 +11,16 @@ namespace EventLogistics.Api.Controllers
     [Route("api/[controller]")]
     public class IncidentSolutionController : ControllerBase
     {
-        private readonly IIncidentSolutionRepository _incidentSolutionRepository;
+        private readonly IIncidentServiceApp _incidentService;
 
-        public IncidentSolutionController(IIncidentSolutionRepository incidentSolutionRepository)
+        public IncidentSolutionController(IIncidentServiceApp incidentService)
         {
-            _incidentSolutionRepository = incidentSolutionRepository;
-        }
-
-        // GET: api/IncidentSolution/{id}
+            _incidentService = incidentService;
+        }        // GET: api/IncidentSolution/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<IncidentSolution>> GetIncidentSolution(Guid id)
         {
-            var solution = await _incidentSolutionRepository.GetByIdAsync(id);
+            var solution = await _incidentService.GetIncidentSolutionByIdAsync(id);
             if (solution == null)
             {
                 return NotFound();
@@ -34,38 +32,50 @@ namespace EventLogistics.Api.Controllers
         [HttpGet("incident/{incidentId}")]
         public async Task<ActionResult<IEnumerable<IncidentSolution>>> GetSolutionsByIncident(Guid incidentId)
         {
-            var solutions = await _incidentSolutionRepository.GetByIncidentIdAsync(incidentId);
+            var solutions = await _incidentService.GetSolutionsByIncidentIdAsync(incidentId);
             return Ok(solutions);
         }
 
         // POST: api/IncidentSolution
         [HttpPost]
-        public async Task<ActionResult<Guid>> CreateIncidentSolution([FromBody] IncidentSolution solution)
+        public async Task<ActionResult<Guid>> CreateIncidentSolution([FromBody] CreateIncidentSolutionRequest request)
         {
-            solution.Id = Guid.NewGuid();
-            solution.DateApplied = DateTime.UtcNow;
-            await _incidentSolutionRepository.AddAsync(solution);
-            return CreatedAtAction(nameof(GetIncidentSolution), new { id = solution.Id }, solution.Id);
+            var solutionId = await _incidentService.ApplyIncidentSolutionAsync(
+                request.IncidentId, 
+                request.ActionTaken, 
+                request.AppliedBy);
+            return CreatedAtAction(nameof(GetIncidentSolution), new { id = solutionId }, solutionId);
         }
 
         // PUT: api/IncidentSolution/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateIncidentSolution(Guid id, [FromBody] IncidentSolution solution)
         {
-            if (id != solution.Id)
+            try
+            {
+                await _incidentService.UpdateIncidentSolutionAsync(id, solution);
+                return NoContent();
+            }
+            catch (ArgumentException)
             {
                 return BadRequest();
             }
-            await _incidentSolutionRepository.UpdateAsync(solution);
-            return NoContent();
         }
 
         // DELETE: api/IncidentSolution/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteIncidentSolution(Guid id)
         {
-            await _incidentSolutionRepository.DeleteAsync(id);
+            await _incidentService.DeleteIncidentSolutionAsync(id);
             return NoContent();
         }
+    }
+
+    // Request DTOs
+    public class CreateIncidentSolutionRequest
+    {
+        public Guid IncidentId { get; set; }
+        public string ActionTaken { get; set; } = string.Empty;
+        public string AppliedBy { get; set; } = string.Empty;
     }
 }

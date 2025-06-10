@@ -1,6 +1,5 @@
 using EventLogistics.Application.DTOs;
 using EventLogistics.Application.Interfaces;
-using EventLogistics.Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventLogistics.Api.Controllers;
@@ -10,14 +9,10 @@ namespace EventLogistics.Api.Controllers;
 public class AttendanceController : ControllerBase
 {
     private readonly IAttendanceServiceApp _attendanceService;
-    private readonly IParticipantRepository _participantRepository;
-    private readonly IParticipantActivityRepository _participantActivityRepository;
 
-    public AttendanceController(IAttendanceServiceApp attendanceService, IParticipantRepository participantRepository, IParticipantActivityRepository participantActivityRepository)
+    public AttendanceController(IAttendanceServiceApp attendanceService)
     {
         _attendanceService = attendanceService;
-        _participantRepository = participantRepository;
-        _participantActivityRepository = participantActivityRepository;
     }
 
     /// <summary>
@@ -33,35 +28,37 @@ public class AttendanceController : ControllerBase
         {
             var attendance = await _attendanceService.RegisterAttendanceAsync(request.ParticipantId, request.EventId, request.Method);
             return Ok(attendance);
-        }
-        catch (InvalidOperationException ex)
+        }        catch (InvalidOperationException ex)
         {
             if (ex.Message.Contains("no existe"))
                 return NotFound(new { error = ex.Message });
             if (ex.Message.Contains("no está inscrito"))
-            {
-                // Aquí podrías consultar y devolver actividades disponibles
-                var activities = await _participantActivityRepository.GetAvailableActivitiesForEventAsync(request.ParticipantId, request.EventId);
-                return Conflict(new { error = ex.Message, regularizar = true, actividadesDisponibles = activities });
-            }
+                return Conflict(new { error = ex.Message, regularizar = true });
             if (ex.Message.Contains("ya fue registrada"))
                 return Conflict(new { error = ex.Message });
             return BadRequest(new { error = ex.Message });
         }
-    }
-
-    /// <summary>
+    }    /// <summary>
     /// Registrar asistencia manual por documento y eventId
     /// </summary>
     [HttpPost("register-manual")]
     public async Task<ActionResult<AttendanceDto>> RegisterManual([FromBody] RegisterManualRequest request)
     {
-        var participant = await _participantRepository.GetByDocumentAsync(request.Document);
-        if (participant == null)
-            return NotFound("Participante no encontrado.");
-
-        var attendance = await _attendanceService.RegisterAttendanceAsync(participant.Id, request.EventId, "Manual");
-        return Ok(attendance);
+        try
+        {
+            var attendance = await _attendanceService.RegisterAttendanceByDocumentAsync(request.Document, request.EventId, "Manual");
+            return Ok(attendance);
+        }
+        catch (InvalidOperationException ex)
+        {
+            if (ex.Message.Contains("no encontrado"))
+                return NotFound(new { error = ex.Message });
+            if (ex.Message.Contains("no está inscrito"))
+                return Conflict(new { error = ex.Message });
+            if (ex.Message.Contains("ya fue registrada"))
+                return Conflict(new { error = ex.Message });
+            return BadRequest(new { error = ex.Message });
+        }
     }
 
     /// <summary>

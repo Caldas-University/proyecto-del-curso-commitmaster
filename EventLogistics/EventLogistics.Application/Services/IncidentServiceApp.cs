@@ -1,4 +1,6 @@
 using EventLogistics.Application.Contracts.Services;
+using EventLogistics.Application.DTOs;
+using EventLogistics.Application.Mappers;
 using EventLogistics.Domain.Entities;
 using EventLogistics.Domain.Repositories;
 
@@ -24,7 +26,8 @@ namespace EventLogistics.Application.Services
                 EventId = eventId,
                 Description = description,
                 Location = location,
-                IncidentDate = incidentDate
+                IncidentDate = incidentDate,
+                Status = "Open"
             };
 
             await _incidentRepository.AddAsync(incident);
@@ -48,14 +51,16 @@ namespace EventLogistics.Application.Services
             await _incidentRepository.DeleteAsync(incidentId);
         }
 
-        public async Task<Incident?> GetIncidentByIdAsync(Guid incidentId)
+        public async Task<IncidentDto?> GetIncidentByIdAsync(Guid incidentId)
         {
-            return await _incidentRepository.GetByIdAsync(incidentId);
+            var incident = await _incidentRepository.GetByIdAsync(incidentId);
+            return incident != null ? IncidentMapper.ToDto(incident) : null;
         }
 
-        public async Task<IEnumerable<Incident>> GetIncidentsByEventIdAsync(Guid eventId)
+        public async Task<IEnumerable<IncidentDto>> GetIncidentsByEventIdAsync(Guid eventId)
         {
-            return await _incidentRepository.GetByEventIdAsync(eventId);
+            var incidents = await _incidentRepository.GetByEventIdAsync(eventId);
+            return incidents.Select(IncidentMapper.ToDto);
         }
 
         public async Task<Guid> ApplyIncidentSolutionAsync(Guid incidentId, string actionTaken, string appliedBy)
@@ -79,6 +84,29 @@ namespace EventLogistics.Application.Services
             }
 
             return solution.Id;
+        }
+
+        public async Task<IncidentSolution?> GetIncidentSolutionByIdAsync(Guid id)
+        {
+            return await _incidentSolutionRepository.GetByIdAsync(id);
+        }
+
+        public async Task<IEnumerable<IncidentSolution>> GetSolutionsByIncidentIdAsync(Guid incidentId)
+        {
+            return await _incidentSolutionRepository.GetByIncidentIdAsync(incidentId);
+        }
+
+        public async Task UpdateIncidentSolutionAsync(Guid id, IncidentSolution solution)
+        {
+            if (id != solution.Id)
+                throw new ArgumentException("ID mismatch");
+                
+            await _incidentSolutionRepository.UpdateAsync(solution);
+        }
+
+        public async Task DeleteIncidentSolutionAsync(Guid id)
+        {
+            await _incidentSolutionRepository.DeleteAsync(id);
         }
     }
 }

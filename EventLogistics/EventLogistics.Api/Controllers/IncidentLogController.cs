@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-
 using EventLogistics.Application.Contracts.Services;
-using EventLogistics.Domain.Entities;
+using EventLogistics.Application.DTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
@@ -21,7 +20,7 @@ namespace EventLogistics.Api.Controllers
 
         // GET: api/IncidentLog/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Incident>> GetIncident(Guid id)
+        public async Task<ActionResult<IncidentDto>> GetIncident(Guid id)
         {
             var incident = await _incidentService.GetIncidentByIdAsync(id);
             if (incident == null)
@@ -34,7 +33,7 @@ namespace EventLogistics.Api.Controllers
 
         // GET: api/IncidentLog/event/{eventId}
         [HttpGet("event/{eventId}")]
-        public async Task<ActionResult<IEnumerable<Incident>>> GetIncidentsByEvent(Guid eventId)
+        public async Task<ActionResult<IEnumerable<IncidentDto>>> GetIncidentsByEvent(Guid eventId)
         {
             var incidents = await _incidentService.GetIncidentsByEventIdAsync(eventId);
             return Ok(incidents);
@@ -42,13 +41,13 @@ namespace EventLogistics.Api.Controllers
 
         // POST: api/IncidentLog
         [HttpPost]
-        public async Task<ActionResult<Guid>> CreateIncident([FromBody] Incident incident)
+        public async Task<ActionResult<Guid>> CreateIncident([FromBody] CreateIncidentRequest request)
         {
             var id = await _incidentService.CreateIncidentAsync(
-                incident.EventId,
-                incident.Description,
-                incident.Location,
-                incident.IncidentDate
+                request.EventId,
+                request.Description,
+                request.Location,
+                request.IncidentDate
             );
 
             return CreatedAtAction(nameof(GetIncident), new { id = id }, id);
@@ -56,12 +55,15 @@ namespace EventLogistics.Api.Controllers
 
         // PUT: api/IncidentLog/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateIncident(Guid id, [FromBody] Incident incident)
+        public async Task<IActionResult> UpdateIncident(Guid id, [FromBody] UpdateIncidentRequest request)
         {
-            if (id != incident.Id)
-                return BadRequest();
+            await _incidentService.UpdateIncidentAsync(
+                id,
+                request.Description,
+                request.Location,
+                request.IncidentDate
+            );
 
-            await _incidentService.UpdateIncidentAsync(id, incident.Description, incident.Location, incident.IncidentDate);
             return NoContent();
         }
 

@@ -1,14 +1,14 @@
-using EventLogistics.Domain.Entities;
+using EventLogistics.Application.DTOs;
 
 namespace EventLogistics.Application.Interfaces;
+
 public interface IEventService
 {
-    Task<Event?> GetByIdAsync(Guid eventId);
-    // Puedes agregar más métodos según tus necesidades
-    Task<List<Event>> GetAllAsync();
-    Task<Event> CreateAsync(Event newEvent);
-    Task<Event> UpdateAsync(Event updatedEvent);
+    Task<EventDto?> GetEventByIdAsync(Guid eventId);
+    Task<List<EventDto>> GetAllAsync();
+    Task<EventDto> CreateAsync(EventDto newEvent);
+    Task<EventDto> UpdateAsync(EventDto updatedEvent);
     Task<bool> DeleteAsync(Guid eventId);
-    Task<List<Event>> GetEventsByStatusAsync(string status);
-    Task<List<Event>> GetEventsByPlaceAsync(string place);
+    Task<List<EventDto>> GetEventsByStatusAsync(string status);
+    Task<List<EventDto>> GetEventsByPlaceAsync(string place);
 }

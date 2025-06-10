@@ -25,11 +25,8 @@ public static class SeedData
         // Crea recursos de ejemplo
         var sala = new Resource("Sala", 1, true);
         var equipo = new Resource("Equipo", 3, true);
-        context.Resources.AddRange(sala, equipo);
-
-        // Crea un evento de ejemplo
-        var evento = new Event("Sala Principal", DateTime.Now.AddDays(7));
-        evento.Name = "Evento de Prueba";
+        context.Resources.AddRange(sala, equipo);        // Crea un evento de ejemplo
+        var evento = new Event("Evento de Prueba", "Sala Principal", DateTime.Now.AddDays(7), "Activo");
         context.Events.Add(evento);
 
         // Crea actividades de ejemplo

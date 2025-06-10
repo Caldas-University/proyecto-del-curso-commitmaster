@@ -1,6 +1,5 @@
 using EventLogistics.Application.DTOs;
-using EventLogistics.Domain.Entities;
-using EventLogistics.Domain.Repositories;
+using EventLogistics.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventLogistics.Api.Controllers;
@@ -9,43 +8,25 @@ namespace EventLogistics.Api.Controllers;
 [Route("api/[controller]")]
 public class EventController : ControllerBase
 {
-    private readonly IEventRepository _eventRepository;
-
-    public EventController(IEventRepository eventRepository)
+    private readonly IEventService _eventService;    public EventController(IEventService eventService)
     {
-        _eventRepository = eventRepository;
+        _eventService = eventService;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<EventDto>>> GetAll()
     {
-        var events = await _eventRepository.GetAllAsync();
-        var dtos = events.Select(ev => new EventDto
-        {
-            Id = ev.Id,
-            Place = ev.Place,
-            Schedule = ev.Schedule,
-            Resources = ev.Resources,
-            Status = ev.Status
-        }).ToList();
-        return Ok(dtos);
+        var events = await _eventService.GetAllAsync();
+        return Ok(events);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<EventDto>> GetById(Guid id)
     {
-        var ev = await _eventRepository.GetByIdAsync(id);
-        if (ev == null)
+        var eventDto = await _eventService.GetEventByIdAsync(id);
+        if (eventDto == null)
             return NotFound();
 
-        var dto = new EventDto
-        {
-            Id = ev.Id,
-            Place = ev.Place,
-            Schedule = ev.Schedule,
-            Resources = ev.Resources,
-            Status = ev.Status
-        };
-        return Ok(dto);
+        return Ok(eventDto);
     }
 }

@@ -4,6 +4,7 @@ using EventLogistics.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using EventLogistics.Domain.Repositories;
 using EventLogistics.Application.Interfaces;
+using EventLogistics.Application.Contracts.Services;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,21 +12,26 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<EventLogisticsDbContext>(options =>
     options.UseSqlite("Data Source=eventlogistics.db"));
 
+// Registrar repositorios
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IReasignacionRepository, ReasignacionRepository>();
-builder.Services.AddScoped<IReasignacionServiceApp, ReasignacionServiceApp>();
-builder.Services.AddScoped<INotificationServiceApp, NotificationServiceApp>();
 builder.Services.AddScoped<IResourceRepository, ResourceRepository>();
-builder.Services.AddScoped<IResourceServiceApp, ResourceServiceApp>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
-builder.Services.AddScoped<ReportService>();
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
-builder.Services.AddScoped<IAttendanceServiceApp, AttendanceServiceApp>();
 builder.Services.AddScoped<IParticipantRepository, ParticipantRepository>();
 builder.Services.AddScoped<IParticipantActivityRepository, ParticipantActivityRepository>();
 builder.Services.AddScoped<IIncidentRepository, IncidentRepository>();
 builder.Services.AddScoped<IIncidentSolutionRepository, IncidentSolutionRepository>();
-builder.Services.AddScoped<IncidentServiceApp, IncidentServiceApp>();
+
+// Registrar servicios de aplicación
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IReasignacionServiceApp, ReasignacionServiceApp>();
+builder.Services.AddScoped<INotificationServiceApp, NotificationServiceApp>();
+builder.Services.AddScoped<IResourceServiceApp, ResourceServiceApp>();
+builder.Services.AddScoped<IReportServiceApp, ReportServiceApp>();
+builder.Services.AddScoped<IAttendanceServiceApp, AttendanceServiceApp>();
+builder.Services.AddScoped<IIncidentServiceApp, IncidentServiceApp>();
+builder.Services.AddScoped<IParticipantServiceApp, ParticipantServiceApp>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

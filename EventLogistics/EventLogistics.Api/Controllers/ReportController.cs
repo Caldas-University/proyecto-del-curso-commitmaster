@@ -1,8 +1,6 @@
-using EventLogistics.Application.Services;
-using EventLogistics.Domain.Entities;
+using EventLogistics.Application.DTOs;
+using EventLogistics.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace EventLogistics.Api.Controllers
 {
@@ -10,16 +8,16 @@ namespace EventLogistics.Api.Controllers
     [Route("api/[controller]")]
     public class ReportController : ControllerBase
     {
-        private readonly ReportService _reportService;
+        private readonly IReportServiceApp _reportService;
 
-        public ReportController(ReportService reportService)
+        public ReportController(IReportServiceApp reportService)
         {
             _reportService = reportService;
         }
 
         // GET: api/report?eventId=1&resourceType=Audio&status=Asignado
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Resource>>> GetReport(
+        public async Task<ActionResult<List<ResourceDto>>> GetReport(
             [FromQuery] int? eventId,
             [FromQuery] string? resourceType,
             [FromQuery] string? status)
@@ -29,7 +27,7 @@ namespace EventLogistics.Api.Controllers
                 return BadRequest(new { message = "Debe seleccionar al menos un filtro" });
             }
 
-            var report = await _reportService.GenerateReport(eventId, resourceType, status);
+            var report = await _reportService.GenerateReportAsync(eventId, resourceType, status);
             return Ok(report);
         }
     }

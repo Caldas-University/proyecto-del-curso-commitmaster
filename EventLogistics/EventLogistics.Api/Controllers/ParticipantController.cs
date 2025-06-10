@@ -1,6 +1,5 @@
 using EventLogistics.Application.DTOs;
-using EventLogistics.Domain.Entities;
-using EventLogistics.Domain.Repositories;
+using EventLogistics.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventLogistics.Api.Controllers;
@@ -9,90 +8,54 @@ namespace EventLogistics.Api.Controllers;
 [Route("api/[controller]")]
 public class ParticipantController : ControllerBase
 {
-    private readonly IParticipantRepository _participantRepository;
+    private readonly IParticipantServiceApp _participantService;
 
-    public ParticipantController(IParticipantRepository participantRepository)
+    public ParticipantController(IParticipantServiceApp participantService)
     {
-        _participantRepository = participantRepository;
+        _participantService = participantService;
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<ParticipantDto>> GetById(Guid id)
     {
-        var participant = await _participantRepository.GetByIdAsync(id);
-        if (participant == null)
+        var participantDto = await _participantService.GetByIdAsync(id);
+        if (participantDto == null)
             return NotFound();
 
-        // Puedes mapear a DTO si lo prefieres
-        var dto = new ParticipantDto
-        {
-            Id = participant.Id,
-            Name = participant.Name,
-            Document = participant.Document,
-            Email = participant.Email,
-            AccessType = participant.AccessType
-        };
-        return Ok(dto);
+        return Ok(participantDto);
     }
 
     [HttpGet("by-document/{document}")]
     public async Task<ActionResult<ParticipantDto>> GetByDocument(string document)
     {
-        var participant = await _participantRepository.GetByDocumentAsync(document);
-        if (participant == null)
+        var participantDto = await _participantService.GetByDocumentAsync(document);
+        if (participantDto == null)
             return NotFound();
 
-        var dto = new ParticipantDto
-        {
-            Id = participant.Id,
-            Name = participant.Name,
-            Document = participant.Document,
-            Email = participant.Email,
-            AccessType = participant.AccessType
-        };
-        return Ok(dto);
+        return Ok(participantDto);
     }
 
     [HttpGet("by-email/{email}")]
     public async Task<ActionResult<ParticipantDto>> GetByEmail(string email)
     {
-        var participant = await _participantRepository.GetByEmailAsync(email);
-        if (participant == null)
+        var participantDto = await _participantService.GetByEmailAsync(email);
+        if (participantDto == null)
             return NotFound();
 
-        var dto = new ParticipantDto
-        {
-            Id = participant.Id,
-            Name = participant.Name,
-            Document = participant.Document,
-            Email = participant.Email,
-            AccessType = participant.AccessType
-        };
-        return Ok(dto);
+        return Ok(participantDto);
     }
 
     [HttpGet]
     public async Task<ActionResult<List<ParticipantDto>>> GetAll()
     {
-        var participants = await _participantRepository.GetAllAsync();
-        // Si tienes un mapper, úsalo aquí
-        var dtos = participants.Select(p => new ParticipantDto
-        {
-            Id = p.Id,
-            Name = p.Name,
-            Document = p.Document,
-            Email = p.Email,
-            AccessType = p.AccessType
-        }).ToList();
-        return Ok(dtos);
+        var participants = await _participantService.GetAllAsync();
+        return Ok(participants);
     }
 
     [HttpPost]
     public async Task<ActionResult<ParticipantDto>> Create([FromBody] ParticipantDto dto)
     {
-        var participant = new Participant(dto.Name, dto.Document, dto.Email, dto.AccessType);
-        await _participantRepository.AddAsync(participant);
-        dto.Id = participant.Id;
-        return CreatedAtAction(nameof(GetAll), new { id = dto.Id }, dto);
+        var createdParticipant = await _participantService.CreateAsync(dto);
+        return CreatedAtAction(nameof(GetById), new { id = createdParticipant.Id }, createdParticipant);
     }
 }
