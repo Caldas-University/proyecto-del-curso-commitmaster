@@ -9,7 +9,7 @@ namespace EventLogistics.Domain.Repositories
     public interface IReassignmentRuleRepository : IRepository<ReassignmentRule>
     {
         Task<IEnumerable<ReassignmentRule>> GetActiveRulesAsync();
-        Task<IEnumerable<ReassignmentRule>> GetRulesByResourceTypeAsync(int resourceTypeId);
+        Task<IEnumerable<ReassignmentRule>> GetRulesByResourceTypeAsync(Guid resourceTypeId);
         Task<IEnumerable<ReassignmentRule>> GetRulesByPriorityAsync(int minimumPriority);
     }
 }

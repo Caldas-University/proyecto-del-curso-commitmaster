@@ -22,10 +22,8 @@ namespace EventLogistics.Api.Controllers
         {
             var users = await _userRepository.GetAllAsync();
             return Ok(users);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetById(int id)
+        }        [HttpGet("{id}")]
+        public async Task<ActionResult<User>> GetById(Guid id)
         {
             var user = await _userRepository.GetByIdAsync(id);
             if (user == null)
@@ -44,10 +42,8 @@ namespace EventLogistics.Api.Controllers
             
             var result = await _userRepository.AddAsync(user);
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, User user)
+        }        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, User user)
         {
             if (id != user.Id)
             {
@@ -60,7 +56,7 @@ namespace EventLogistics.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             await _userRepository.DeleteAsync(id);
             return NoContent();

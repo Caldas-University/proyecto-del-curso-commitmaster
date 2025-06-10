@@ -10,11 +10,11 @@ namespace EventLogistics.Domain.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public string Condition { get; set; } // Could be a JSON representation of conditions
-        public int Priority { get; set; } // Higher priority rules take precedence
-        public bool IsActive { get; set; }
-        
-        // Optional resource type specification
-        public int? ResourceTypeId { get; set; }
+        public int Priority { get; set; } = 1;
+        public bool IsActive { get; set; } = true;
+        public double SimilarityThreshold { get; set; } = 0.5;
+          // Optional resource type specification
+        public Guid? ResourceTypeId { get; set; }
         [ForeignKey("ResourceTypeId")]
         public virtual Resource ResourceType { get; set; }
         

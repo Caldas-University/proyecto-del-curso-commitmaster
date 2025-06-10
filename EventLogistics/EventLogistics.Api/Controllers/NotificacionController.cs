@@ -32,10 +32,8 @@ namespace EventLogistics.Api.Controllers
         {
             var notifications = await _notificationRepository.GetAllAsync();
             return Ok(notifications);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Notification>> GetById(int id)
+        }        [HttpGet("{id}")]
+        public async Task<ActionResult<Notification>> GetById(Guid id)
         {
             var notification = await _notificationRepository.GetByIdAsync(id);
             if (notification == null)
@@ -43,10 +41,8 @@ namespace EventLogistics.Api.Controllers
                 return NotFound();
             }
             return Ok(notification);
-        }
-
-        [HttpGet("history/{notificationId}")]
-        public async Task<ActionResult<IEnumerable<NotificationHistory>>> GetHistory(int notificationId)
+        }[HttpGet("history/{notificationId}")]
+        public async Task<ActionResult<IEnumerable<NotificationHistory>>> GetHistory(Guid notificationId)
         {
             var history = await _historyRepository.GetByNotificationIdAsync(notificationId);
             return Ok(history);
@@ -59,13 +55,11 @@ namespace EventLogistics.Api.Controllers
             notification.UpdatedBy = notification.UpdatedBy ?? "System";
             notification.Timestamp = DateTime.UtcNow;
             notification.Status = notification.Status ?? "Pending";
-            
+
             var result = await _notificationService.SendNotification(notification);
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
-        }
-
-        [HttpPost("confirm/{id}")]
-        public async Task<IActionResult> ConfirmNotification(int id)
+        }        [HttpPost("confirm/{id}")]
+        public async Task<IActionResult> ConfirmNotification(Guid id)
         {
             var success = await _notificationService.ConfirmNotification(id);
             if (success)
@@ -80,14 +74,26 @@ namespace EventLogistics.Api.Controllers
         {
             var metrics = await _notificationService.CalculateMetrics(startDate, endDate);
             return Ok(metrics);
-        }
-
-        [HttpGet("pending/{userId}")]
-        public async Task<ActionResult<IEnumerable<Notification>>> GetPendingNotifications(int userId)
+        }        [HttpGet("pending/{userId}")]
+        public async Task<ActionResult<IEnumerable<Notification>>> GetPendingNotifications(Guid userId)
         {
             var notifications = await _notificationRepository.GetByRecipientIdAsync(userId);
             var pendingNotifications = notifications.Where(n => n.Status == "Pending" || n.Status == "Sent").ToList();
             return Ok(pendingNotifications);
+        }        
+
+        [HttpGet("assignment/{assignmentId}")]
+        public async Task<IActionResult> GetAssignmentNotifications(Guid assignmentId)
+        {
+            var histories = await _notificationService.GetNotificationHistoryForAssignment(assignmentId);
+            return Ok(histories);
+        }
+        
+        [HttpPost("resend/{notificationId}")]
+        public async Task<IActionResult> ResendNotification(Guid notificationId)
+        {
+            var result = await _notificationService.ResendNotification(notificationId);
+            return result ? Ok() : BadRequest();
         }
     }
 }

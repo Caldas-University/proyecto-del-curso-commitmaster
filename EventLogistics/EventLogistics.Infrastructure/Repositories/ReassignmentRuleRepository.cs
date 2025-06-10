@@ -12,7 +12,7 @@ namespace EventLogistics.Infrastructure.Repositories
     // Reassignment Rule Repository Implementation
     public class ReassignmentRuleRepository : Repository<ReassignmentRule>, IReassignmentRuleRepository
     {
-        public ReassignmentRuleRepository(ApplicationDbContext context) : base(context)
+        public ReassignmentRuleRepository(EventLogisticsDbContext context) : base(context)
         {
         }
 
@@ -22,9 +22,7 @@ namespace EventLogistics.Infrastructure.Repositories
                 .Where(r => r.IsActive)
                 .OrderByDescending(r => r.Priority)
                 .ToListAsync();
-        }
-
-        public async Task<IEnumerable<ReassignmentRule>> GetRulesByResourceTypeAsync(int resourceTypeId)
+        }        public async Task<IEnumerable<ReassignmentRule>> GetRulesByResourceTypeAsync(Guid resourceTypeId)
         {
             return await _dbSet
                 .Where(r => r.ResourceTypeId == resourceTypeId && r.IsActive)
