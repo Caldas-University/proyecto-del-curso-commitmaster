@@ -90,4 +90,33 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
+// Imprimir URLs importantes en la consola
+if (app.Environment.IsDevelopment())
+{
+    app.Lifetime.ApplicationStarted.Register(() =>
+    {
+        var addresses = app.Services.GetRequiredService<Microsoft.AspNetCore.Hosting.Server.IServer>()
+            .Features.Get<Microsoft.AspNetCore.Hosting.Server.Features.IServerAddressesFeature>()?.Addresses;
+        
+        if (addresses != null && addresses.Any())
+        {
+            foreach (var address in addresses)
+            {
+                Console.WriteLine($"🌐 API ejecutándose en: {address}");
+                Console.WriteLine($"📚 Documentación Swagger: {address}/swagger");
+                Console.WriteLine($"📖 OpenAPI JSON: {address}/swagger/v1/swagger.json");
+                Console.WriteLine();
+            }
+        }
+        else
+        {
+            // Fallback a las URLs configuradas en launchSettings.json
+            Console.WriteLine($"🌐 API ejecutándose en: http://localhost:5158");
+            Console.WriteLine($"📚 Documentación Swagger: http://localhost:5158/swagger");
+            Console.WriteLine($"📖 OpenAPI JSON: http://localhost:5158/swagger/v1/swagger.json");
+            Console.WriteLine();
+        }
+    });
+}
+
 app.Run();

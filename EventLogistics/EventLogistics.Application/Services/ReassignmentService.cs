@@ -1,4 +1,5 @@
 using EventLogistics.Application.Interfaces;
+using EventLogistics.Application.DTOs;
 using EventLogistics.Domain.Entities;
 using EventLogistics.Domain.Repositories;
 using Microsoft.Extensions.Configuration;
@@ -222,11 +223,11 @@ namespace EventLogistics.Application.Services
             return impact;
         }
 
-        public async Task<List<ResourceSuggestion>> GetResourceSuggestions(int resourceId, DateTime desiredTime)
+        public async Task<List<ResourceSuggestionDto>> GetResourceSuggestions(int resourceId, DateTime desiredTime)
         {
             var originalResource = await _resourceRepository.GetByIdAsync(resourceId);
             if (originalResource == null)
-                return new List<ResourceSuggestion>();
+                return new List<ResourceSuggestionDto>();
 
             // Usar GetValue con valores por defecto para evitar errores
             var maxTimeDiff = _configuration.GetValue<int>("SuggestionSettings:MaxTimeDifferenceMinutes", 60);
@@ -242,26 +243,28 @@ namespace EventLogistics.Application.Services
                            r.Availability &&
                            (r.Type == originalResource.Type ||
                             CalculateResourceSimilarity(r, originalResource) >= similarityThreshold))
-                .Select(r => new ResourceSuggestion
+                .Select(r => new ResourceSuggestionDto
                 {
-                    Resource = r,
-                    SimilarityScore = CalculateResourceSimilarity(r, originalResource),
-                    AvailableSlots = FindAvailableSlots(r, desiredTime, maxTimeDiff)
+                    ResourceId = r.Id,
+                    ResourceType = r.Type,
+                    ResourceName = r.Name,
+                    AvailableQuantity = r.Capacity,
+                    CompatibilityScore = CalculateResourceSimilarity(r, originalResource),
+                    Reason = $"Recurso similar disponible con {CalculateResourceSimilarity(r, originalResource):P0} de compatibilidad"
                 })
-                .Where(s => s.AvailableSlots.Any())
-                .OrderByDescending(s => s.SimilarityScore)
-                .ThenBy(s => s.AvailableSlots.Min(slot => Math.Abs((slot - desiredTime).TotalMinutes)))
+                .Where(s => s.AvailableQuantity > 0)
+                .OrderByDescending(s => s.CompatibilityScore)
                 .Take(maxSuggestions)
                 .ToList();
 
             return suggestions;
         }
 
-        public async Task<List<TimeSuggestion>> GetTimeSuggestions(int resourceId, DateTime desiredTime)
+        public async Task<List<TimeSuggestionDto>> GetTimeSuggestions(int resourceId, DateTime desiredTime)
         {
             var resource = await _resourceRepository.GetByIdAsync(resourceId);
             if (resource == null)
-                return new List<TimeSuggestion>();
+                return new List<TimeSuggestionDto>();
 
             // Usar GetValue con valores por defecto
             var maxTimeDiff = _configuration.GetValue<int>("SuggestionSettings:MaxTimeDifferenceMinutes", 60);
@@ -270,12 +273,16 @@ namespace EventLogistics.Application.Services
             var availableSlots = FindAvailableSlots(resource, desiredTime, maxTimeDiff, lookaheadDays);
 
             return availableSlots
-                .Select(slot => new TimeSuggestion
+                .Select(slot => new TimeSuggestionDto
                 {
-                    SuggestedTime = slot,
-                    TimeDifference = (slot - desiredTime).TotalMinutes
+                    SuggestedStartTime = slot,
+                    SuggestedEndTime = slot.AddHours(1), // Asumiendo 1 hora de duración por defecto
+                    Reason = $"Horario disponible con {Math.Abs((slot - desiredTime).TotalMinutes)} minutos de diferencia",
+                    CompatibilityScore = 1.0 - (Math.Abs((slot - desiredTime).TotalMinutes) / maxTimeDiff),
+                    IsOptimal = slot == desiredTime,
+                    AvailableResourceIds = new List<int> { resourceId }
                 })
-                .OrderBy(s => Math.Abs(s.TimeDifference))
+                .OrderBy(s => Math.Abs((s.SuggestedStartTime - desiredTime).TotalMinutes))
                 .ToList();
         }
 
@@ -388,7 +395,8 @@ namespace EventLogistics.Application.Services
             if (suggestions.Count == 0)
                 return ReassignmentResult.FailedResult("No hay recursos alternativos");
 
-            var newResource = suggestions.First().Resource;
+            var firstSuggestion = suggestions.First();
+            var newResource = await _resourceRepository.GetByIdAsync(firstSuggestion.ResourceId);
             var newAssignment = new ResourceAssignment
             {
                 // Copiar propiedades de la asignación original
@@ -406,19 +414,6 @@ namespace EventLogistics.Application.Services
             await _assignmentRepository.UpdateAsync(assignment);
 
             return ReassignmentResult.SuccessResult(newAssignment);
-        }
-
-        public class ResourceSuggestion
-        {
-            public Resource Resource { get; set; }
-            public double SimilarityScore { get; set; }
-            public List<DateTime> AvailableSlots { get; set; } = new List<DateTime>();
-        }
-
-        public class TimeSuggestion
-        {
-            public DateTime SuggestedTime { get; set; }
-            public double TimeDifference { get; set; } // en minutos
         }
     }
 }

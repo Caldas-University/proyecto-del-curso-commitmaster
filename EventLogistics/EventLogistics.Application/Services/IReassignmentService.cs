@@ -1,4 +1,5 @@
 using EventLogistics.Domain.Entities;
+using EventLogistics.Application.DTOs;
 using static EventLogistics.Application.Services.ReassignmentService;
 
 namespace EventLogistics.Application.Interfaces
@@ -7,8 +8,8 @@ namespace EventLogistics.Application.Interfaces
     {
         Task<bool> ProcessResourceChange(int resourceId, bool newAvailability);
         Task<Dictionary<string, object>> EvaluateImpact(int eventId, int resourceId);
-        Task<List<ResourceSuggestion>> GetResourceSuggestions(int resourceId, DateTime desiredTime);
-        Task<List<TimeSuggestion>> GetTimeSuggestions(int resourceId, DateTime desiredTime);
+        Task<List<ResourceSuggestionDto>> GetResourceSuggestions(int resourceId, DateTime desiredTime);
+        Task<List<TimeSuggestionDto>> GetTimeSuggestions(int resourceId, DateTime desiredTime);
         
         // Nuevos métodos
         Task<ReassignmentResult> ModifyAssignment(int assignmentId, int newQuantity, DateTime? newStartTime);
