@@ -10,9 +10,9 @@ namespace EventLogistics.Infrastructure.Repositories
 {
     public class IncidentSolutionRepository : IIncidentSolutionRepository
     {
-        private readonly ApplicationDbContext _context;
+        private readonly EventLogisticsDbContext _context;
 
-        public IncidentSolutionRepository(ApplicationDbContext context)
+        public IncidentSolutionRepository(EventLogisticsDbContext context)
         {
             _context = context;
         }

@@ -1,38 +1,51 @@
-using Microsoft.AspNetCore.Mvc;
+using EventLogistics.Application.DTOs;
 using EventLogistics.Domain.Entities;
-using EventLogistics.Infrastructure.Persistence;
-using System;
-using System.Threading.Tasks;
+using EventLogistics.Domain.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
-namespace EventLogistics.Api.Controllers
+namespace EventLogistics.Api.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class EventController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class EventController : ControllerBase
+    private readonly IEventRepository _eventRepository;
+
+    public EventController(IEventRepository eventRepository)
     {
-        private readonly ApplicationDbContext _context;
+        _eventRepository = eventRepository;
+    }
 
-        public EventController(ApplicationDbContext context)
+    [HttpGet]
+    public async Task<ActionResult<List<EventDto>>> GetAll()
+    {
+        var events = await _eventRepository.GetAllAsync();
+        var dtos = events.Select(ev => new EventDto
         {
-            _context = context;
-        }
+            Id = ev.Id,
+            Place = ev.Place,
+            Schedule = ev.Schedule,
+            Resources = ev.Resources,
+            Status = ev.Status
+        }).ToList();
+        return Ok(dtos);
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Event ev)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<EventDto>> GetById(Guid id)
+    {
+        var ev = await _eventRepository.GetByIdAsync(id);
+        if (ev == null)
+            return NotFound();
+
+        var dto = new EventDto
         {
-            _context.Events.Add(ev);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetById), new { id = ev.Id }, ev);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
-        {
-            var ev = await _context.Events.FindAsync(id);
-            if (ev == null) return NotFound();
-            return Ok(ev);
-        }
-
-        
+            Id = ev.Id,
+            Place = ev.Place,
+            Schedule = ev.Schedule,
+            Resources = ev.Resources,
+            Status = ev.Status
+        };
+        return Ok(dto);
     }
 }
