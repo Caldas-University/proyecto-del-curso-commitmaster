@@ -3583,19 +3583,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\garci\\.nuget\\packages\\": {}
+    "C:\\Users\\Bienvenido\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\garci\\OneDrive\\Desktop\\Uni\\6_semestre\\Software_II\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.api\\EventLogistics.Api.csproj",
+      "projectUniqueName": "C:\\Users\\Bienvenido\\Documents\\softwareII\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Api\\EventLogistics.Api.csproj",
       "projectName": "EventLogistics.Api",
-      "projectPath": "C:\\Users\\garci\\OneDrive\\Desktop\\Uni\\6_semestre\\Software_II\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.api\\EventLogistics.Api.csproj",
-      "packagesPath": "C:\\Users\\garci\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\garci\\OneDrive\\Desktop\\Uni\\6_semestre\\Software_II\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.api\\obj\\",
+      "projectPath": "C:\\Users\\Bienvenido\\Documents\\softwareII\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Api\\EventLogistics.Api.csproj",
+      "packagesPath": "C:\\Users\\Bienvenido\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Bienvenido\\Documents\\softwareII\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\garci\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Bienvenido\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -3607,11 +3607,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\garci\\OneDrive\\Desktop\\Uni\\6_semestre\\Software_II\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Application\\EventLogistics.Application.csproj": {
-              "projectPath": "C:\\Users\\garci\\OneDrive\\Desktop\\Uni\\6_semestre\\Software_II\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Application\\EventLogistics.Application.csproj"
+            "C:\\Users\\Bienvenido\\Documents\\softwareII\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Application\\EventLogistics.Application.csproj": {
+              "projectPath": "C:\\Users\\Bienvenido\\Documents\\softwareII\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Application\\EventLogistics.Application.csproj"
             },
-            "C:\\Users\\garci\\OneDrive\\Desktop\\Uni\\6_semestre\\Software_II\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Infrastructure\\EventLogistics.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\garci\\OneDrive\\Desktop\\Uni\\6_semestre\\Software_II\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Infrastructure\\EventLogistics.Infrastructure.csproj"
+            "C:\\Users\\Bienvenido\\Documents\\softwareII\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Infrastructure\\EventLogistics.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\Bienvenido\\Documents\\softwareII\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Infrastructure\\EventLogistics.Infrastructure.csproj"
             }
           }
         }
@@ -3666,7 +3666,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\Nueva carpeta\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
