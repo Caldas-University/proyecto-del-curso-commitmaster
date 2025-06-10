@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "ZvvKUh3ZerA=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Carta\\Documents\\Clases\\Ingenieria de Software II\\proyecto-del-curso-commitmaster\\EventLogistics\\EventLogistics.Domain\\EventLogistics.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Carta\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.5\\microsoft.entityframeworkcore.abstractions.9.0.5.nupkg.sha512"
+  ],
+  "logs": []
+}
