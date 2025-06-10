@@ -1,24 +1,33 @@
 namespace EventLogistics.Domain.Entities;
 
-public class User
+public class User : BaseEntity
 {
-    public Guid Id { get; private set; }
-    public string Role { get; private set; }
-    public string Contact { get; private set; }
-    public Dictionary<string, string> Preferences { get; private set; }
+    public string Role { get; set; } = string.Empty;
+    public string Contact { get; set; } = string.Empty;
+    public string Preferences { get; set; } = string.Empty; // Serialized JSON
+    
+    // Propiedades adicionales que necesitan algunos servicios
+    public string Email { get; set; } = string.Empty;
+    public string PhoneNumber { get; set; } = string.Empty;
+    
+    // Navigation properties
+    public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
-    private User()
+    public User()
     {
         Role = string.Empty;
         Contact = string.Empty;
-        Preferences = new Dictionary<string, string>();
+        Preferences = string.Empty;
+        Email = string.Empty;
+        PhoneNumber = string.Empty;
     }
 
-    public User(string role, string contact)
+    public User(string role, string contact, string email = "", string phoneNumber = "")
     {
-        Id = Guid.NewGuid();
         Role = role ?? throw new ArgumentNullException(nameof(role));
         Contact = contact ?? throw new ArgumentNullException(nameof(contact));
-        Preferences = new Dictionary<string, string>();
+        Preferences = string.Empty;
+        Email = email ?? string.Empty;
+        PhoneNumber = phoneNumber ?? string.Empty;
     }
 }

@@ -5,9 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 public class ResourceAssignmentRepository : Repository<ResourceAssignment>, IResourceAssignmentRepository
 {
-    public ResourceAssignmentRepository(ApplicationDbContext context) : base(context) { }
-
-    public async Task<IEnumerable<ResourceAssignment>> GetByResourceId(int resourceId)
+    public ResourceAssignmentRepository(EventLogisticsDbContext context) : base(context) { }    public async Task<IEnumerable<ResourceAssignment>> GetByResourceId(Guid resourceId)
     {
         return await _context.ResourceAssignments
             .Include(ra => ra.Activity)
@@ -15,12 +13,12 @@ public class ResourceAssignmentRepository : Repository<ResourceAssignment>, IRes
             .ToListAsync();
     }
 
-    public Task<IEnumerable<ResourceAssignment>> GetByResourceIdAsync(int resourceId)
+    public Task<IEnumerable<ResourceAssignment>> GetByResourceIdAsync(Guid resourceId)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<ResourceAssignment>> GetConflictingAssignments(int resourceId, DateTime startTime, DateTime endTime)
+    public async Task<IEnumerable<ResourceAssignment>> GetConflictingAssignments(Guid resourceId, DateTime startTime, DateTime endTime)
     {
         return await _context.ResourceAssignments
             .Include(ra => ra.Activity)
@@ -32,7 +30,7 @@ public class ResourceAssignmentRepository : Repository<ResourceAssignment>, IRes
             .ToListAsync();
     }
 
-    public Task<IEnumerable<ResourceAssignment>> GetConflictingAssignmentsAsync(int resourceId, DateTime startTime, DateTime endTime)
+    public Task<IEnumerable<ResourceAssignment>> GetConflictingAssignmentsAsync(Guid resourceId, DateTime startTime, DateTime endTime)
     {
         throw new NotImplementedException();
     }

@@ -6,6 +6,9 @@ using EventLogistics.Infrastructure.Persistence;
 using EventLogistics.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,15 +16,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
-// Registrar el DbContext con SQLite (combinando ambas configuraciones)
+// Registrar ÚNICAMENTE EventLogisticsDbContext con SQLite
 builder.Services.AddDbContext<EventLogisticsDbContext>(options =>
     options.UseSqlite("Data Source=eventlogistics.db"));
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Registrar repositorios de HEAD (rama camilo)
+// Registrar repositorios unificados
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IReasignacionRepository, ReasignacionRepository>();
 builder.Services.AddScoped<IResourceRepository, ResourceRepository>();
@@ -31,9 +31,6 @@ builder.Services.AddScoped<IParticipantRepository, ParticipantRepository>();
 builder.Services.AddScoped<IParticipantActivityRepository, ParticipantActivityRepository>();
 builder.Services.AddScoped<IIncidentRepository, IncidentRepository>();
 builder.Services.AddScoped<IIncidentSolutionRepository, IncidentSolutionRepository>();
-
-// Registrar repositorios de origin/dev
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationHistoryRepository, NotificationHistoryRepository>();
 builder.Services.AddScoped<IReassignmentRuleRepository, ReassignmentRuleRepository>();
@@ -41,7 +38,7 @@ builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IResourceAssignmentRepository, ResourceAssignmentRepository>();
 
-// Registrar servicios de aplicación de HEAD (rama camilo)
+// Registrar servicios de aplicación
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IReasignacionServiceApp, ReasignacionServiceApp>();
 builder.Services.AddScoped<INotificationServiceApp, NotificationServiceApp>();
@@ -51,7 +48,7 @@ builder.Services.AddScoped<IAttendanceServiceApp, AttendanceServiceApp>();
 builder.Services.AddScoped<IIncidentServiceApp, IncidentServiceApp>();
 builder.Services.AddScoped<IParticipantServiceApp, ParticipantServiceApp>();
 
-// Registrar servicios de aplicación de origin/dev
+// Registrar servicios adicionales
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<IReassignmentService, ReassignmentService>();
 builder.Services.AddScoped<IConflictValidationService, ConflictValidationService>();
@@ -115,11 +112,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "EventLogistics API V1");
-        c.RoutePrefix = "swagger"; // Accesible en /swagger
-        c.DisplayRequestDuration();
-        c.EnableDeepLinking();
-        c.EnableFilter();
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "EventLogistics API v1");
+        c.RoutePrefix = string.Empty; // Swagger UI en la raíz
     });
 }
 
@@ -128,33 +122,22 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
-// Imprimir URLs importantes en la consola
-if (app.Environment.IsDevelopment())
+// Mostrar enlaces útiles en la consola
+app.Lifetime.ApplicationStarted.Register(() =>
 {
-    app.Lifetime.ApplicationStarted.Register(() =>
+    var addresses = app.Services.GetRequiredService<IServer>().Features
+        .Get<IServerAddressesFeature>()?.Addresses;
+    
+    if (addresses != null && addresses.Any())
     {
-        var addresses = app.Services.GetRequiredService<Microsoft.AspNetCore.Hosting.Server.IServer>()
-            .Features.Get<Microsoft.AspNetCore.Hosting.Server.Features.IServerAddressesFeature>()?.Addresses;
-        
-        if (addresses != null && addresses.Any())
-        {
-            foreach (var address in addresses)
-            {
-                Console.WriteLine($"🌐 API ejecutándose en: {address}");
-                Console.WriteLine($"📚 Documentación Swagger: {address}/swagger");
-                Console.WriteLine($"📖 OpenAPI JSON: {address}/swagger/v1/swagger.json");
-                Console.WriteLine();
-            }
-        }
-        else
-        {
-            // Fallback a las URLs configuradas en launchSettings.json
-            Console.WriteLine($"🌐 API ejecutándose en: http://localhost:5158");
-            Console.WriteLine($"📚 Documentación Swagger: http://localhost:5158/swagger");
-            Console.WriteLine($"📖 OpenAPI JSON: http://localhost:5158/swagger/v1/swagger.json");
-            Console.WriteLine();
-        }
-    });
-}
+        var address = addresses.First();
+        Console.WriteLine();
+        Console.WriteLine("🚀 EventLogistics API está ejecutándose!");
+        Console.WriteLine($"📋 Swagger UI: {address}");
+        Console.WriteLine($"🔗 API Base URL: {address}/api");
+        Console.WriteLine($"📊 Health Check: {address}/health");
+        Console.WriteLine();
+    }
+});
 
 app.Run();

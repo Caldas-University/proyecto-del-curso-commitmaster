@@ -15,9 +15,7 @@ namespace EventLogistics.Infrastructure.Repositories
         public ReportRepository(EventLogisticsDbContext context)
         {
             _context = context;
-        }
-
-        public async Task<IEnumerable<Resource>> GenerateReportAsync(int? eventId, string? resourceType, string? status)
+        }        public async Task<IEnumerable<Resource>> GenerateReportAsync(Guid? eventId, string? resourceType, string? status)
         {
             var query = _context.Resources.AsQueryable();
 
@@ -31,12 +29,11 @@ namespace EventLogistics.Infrastructure.Repositories
                 // Asumiendo que status se relaciona con disponibilidad
                 bool isAvailable = status.ToLower() == "disponible";
                 query = query.Where(r => r.Availability == isAvailable);
-            }
-
-            if (eventId.HasValue)
+            }            if (eventId.HasValue)
             {
-                // Filtrar por recursos asignados a un evento específico
-                query = query.Where(r => r.Assignments.Contains(new Guid(eventId.Value.ToString())));
+                // Filtrar por recursos asignados a un evento específico usando ResourceAssignments
+                query = query.Where(r => _context.ResourceAssignments
+                    .Any(a => a.ResourceId == r.Id && a.EventId == eventId.Value));
             }
 
             return await query.ToListAsync();

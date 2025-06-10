@@ -7,6 +7,6 @@ namespace EventLogistics.Application.DTOs
         public string Reason { get; set; } = string.Empty;
         public double CompatibilityScore { get; set; }
         public bool IsOptimal { get; set; }
-        public List<int> AvailableResourceIds { get; set; } = new();
+        public List<Guid> AvailableResourceIds { get; set; } = new();
     }
 }

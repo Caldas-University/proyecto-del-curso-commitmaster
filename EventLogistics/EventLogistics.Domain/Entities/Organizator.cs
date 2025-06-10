@@ -1,16 +1,28 @@
 namespace EventLogistics.Domain.Entities
 {
-    public class Organizator
+    public class Organizator : BaseEntity
     {
-        public int OrganizatorId { get; set; }
-        public required string Name { get; set; }
-        public required string Email { get; set; }
-        public required string Phone { get; set; }
-        public required string Role { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
+        
+        public virtual ICollection<Activity> Activities { get; set; } = new List<Activity>();
+        
         public Organizator()
         {
-            Activities = new List<Activity>(); // Inicialización
+            Name = string.Empty;
+            Email = string.Empty;
+            Phone = string.Empty;
+            Role = string.Empty;
         }
-        public required ICollection<Activity> Activities { get; set; }
+
+        public Organizator(string name, string email, string phone, string role)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Email = email ?? throw new ArgumentNullException(nameof(email));
+            Phone = phone ?? throw new ArgumentNullException(nameof(phone));
+            Role = role ?? throw new ArgumentNullException(nameof(role));
+        }
     }
 }

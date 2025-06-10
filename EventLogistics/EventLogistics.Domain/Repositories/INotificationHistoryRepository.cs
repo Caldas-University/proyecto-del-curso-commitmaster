@@ -7,11 +7,10 @@ namespace EventLogistics.Domain.Repositories
 {
     // NotificationHistory Repository Interface
     public interface INotificationHistoryRepository : IRepository<NotificationHistory>
-    {
-        Task<IEnumerable<NotificationHistory>> GetByNotificationIdAsync(int notificationId);
+    {        Task<IEnumerable<NotificationHistory>> GetByNotificationIdAsync(Guid notificationId);
         Task<IEnumerable<NotificationHistory>> GetByActionAsync(string action);
         Task<IEnumerable<NotificationHistory>> GetByDateRangeAsync(DateTime start, DateTime end);
-        Task<IEnumerable<NotificationHistory>> GetByAssignmentIdAsync(int assignmentId);
+        Task<IEnumerable<NotificationHistory>> GetByAssignmentIdAsync(Guid assignmentId);
         Task<IEnumerable<NotificationHistory>> GetByNotificationTypeAsync(string type);
     }
 }

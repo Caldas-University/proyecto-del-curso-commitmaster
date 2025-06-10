@@ -77,13 +77,12 @@ public class AttendanceServiceApp : IAttendanceServiceApp
         var qrContent = $"{participant.Id}|{eventId}|{DateTime.UtcNow:yyyyMMddHHmmss}";
 
         // 4. Obtener cronograma real (actividades en las que está inscrito el participante)
-        var participantActivities = await _participantActivityRepository.GetByParticipantAndEventAsync(participantId, eventId);
-        var schedule = participantActivities.Select(pa => new ScheduleItemDto
+        var participantActivities = await _participantActivityRepository.GetByParticipantAndEventAsync(participantId, eventId);        var schedule = participantActivities.Select(pa => new ScheduleItemDto
         {
             ActivityName = pa.Activity?.Name ?? "Sin nombre",
             StartTime = pa.Activity?.StartTime ?? DateTime.MinValue,
             EndTime = pa.Activity?.EndTime ?? DateTime.MinValue,
-            Lugar = pa.Activity?.Lugar ?? "Sin ubicación"
+            Lugar = pa.Activity?.Event?.Place ?? "Sin ubicación"
         }).ToList();
 
         return new CredentialDto

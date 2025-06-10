@@ -16,20 +16,17 @@ namespace EventLogistics.Application.Services
         public ResourceServiceApp(IResourceRepository resourceRepository)
         {
             _resourceRepository = resourceRepository;
-        }
-
-        public async Task<ResourceDto?> CheckAvailabilityAsync(Guid resourceId)
+        }        public async Task<ResourceDto?> CheckAvailabilityAsync(Guid resourceId)
         {
             var resource = await _resourceRepository.GetByIdAsync(resourceId);
             if (resource == null) return null;
 
             return new ResourceDto
-            {
-                Id = resource.Id,
+            {                Id = resource.Id,
                 Type = resource.Type,
                 Availability = resource.Availability,
                 Capacity = resource.Capacity,
-                Assignments = resource.Assignments
+                Assignments = resource.Assignments ?? new List<Guid>()
             };
         }
 
@@ -40,15 +37,13 @@ namespace EventLogistics.Application.Services
 
             bool isAvailable = status.ToLower() == "disponible";
             resource.UpdateAvailability(isAvailable);
-            await _resourceRepository.UpdateAsync(resource);
-
-            return new ResourceDto
+            await _resourceRepository.UpdateAsync(resource);            return new ResourceDto
             {
                 Id = resource.Id,
                 Type = resource.Type,
                 Availability = resource.Availability,
                 Capacity = resource.Capacity,
-                Assignments = resource.Assignments
+                Assignments = resource.Assignments.ToList()
             };
         }
 
@@ -72,9 +67,7 @@ namespace EventLogistics.Application.Services
             {
                 return false;
             }
-        }
-
-        public async Task<List<ResourceDto>> GetAvailableResourcesAsync()
+        }        public async Task<List<ResourceDto>> GetAvailableResourcesAsync()
         {
             var resources = await _resourceRepository.GetAvailableResourcesAsync();
             return resources.Select(r => new ResourceDto
@@ -83,7 +76,7 @@ namespace EventLogistics.Application.Services
                 Type = r.Type,
                 Availability = r.Availability,
                 Capacity = r.Capacity,
-                Assignments = r.Assignments
+                Assignments = r.Assignments.ToList()
             }).ToList();
         }
     }

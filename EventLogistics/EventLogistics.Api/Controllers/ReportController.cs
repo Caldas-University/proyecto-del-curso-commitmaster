@@ -13,12 +13,10 @@ namespace EventLogistics.Api.Controllers
         public ReportController(IReportServiceApp reportService)
         {
             _reportService = reportService;
-        }
-
-        // GET: api/report?eventId=1&resourceType=Audio&status=Asignado
+        }        // GET: api/report?eventId=1&resourceType=Audio&status=Asignado
         [HttpGet]
         public async Task<ActionResult<List<ResourceDto>>> GetReport(
-            [FromQuery] int? eventId,
+            [FromQuery] Guid? eventId,
             [FromQuery] string? resourceType,
             [FromQuery] string? status)
         {

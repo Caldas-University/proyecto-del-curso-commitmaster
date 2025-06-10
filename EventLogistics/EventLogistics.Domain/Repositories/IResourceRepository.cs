@@ -12,6 +12,6 @@ namespace EventLogistics.Domain.Repositories
         Task DeleteAsync(Guid id);
         Task<bool> AssignResourceAsync(Guid resourceId, Guid eventId);
         Task<bool> CheckAvailabilityAsync(string resourceType, int quantity, DateTime date);
-        Task<bool> ReserveResourceAsync(int resourceId, int quantity);
+        Task<bool> ReserveResourceAsync(Guid resourceId, int quantity);
     }
 }

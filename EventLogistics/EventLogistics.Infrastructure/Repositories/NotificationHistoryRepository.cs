@@ -12,11 +12,11 @@ namespace EventLogistics.Infrastructure.Repositories
     // Notification History Repository Implementation
     public class NotificationHistoryRepository : Repository<NotificationHistory>, INotificationHistoryRepository
     {
-        public NotificationHistoryRepository(ApplicationDbContext context) : base(context)
+        public NotificationHistoryRepository(EventLogisticsDbContext context) : base(context)
         {
         }
 
-        public async Task<IEnumerable<NotificationHistory>> GetByNotificationIdAsync(int notificationId)
+        public async Task<IEnumerable<NotificationHistory>> GetByNotificationIdAsync(Guid notificationId)
         {
             return await _dbSet
                 .Where(nh => nh.NotificationId == notificationId)
@@ -38,9 +38,7 @@ namespace EventLogistics.Infrastructure.Repositories
                 .Where(nh => nh.ActionTimestamp >= start && nh.ActionTimestamp <= end)
                 .OrderByDescending(nh => nh.ActionTimestamp)
                 .ToListAsync();
-        }
-
-        public async Task<IEnumerable<NotificationHistory>> GetByAssignmentIdAsync(int assignmentId)
+        }        public async Task<IEnumerable<NotificationHistory>> GetByAssignmentIdAsync(Guid assignmentId)
         {
             return await _dbSet
                 .Where(nh => nh.RelatedAssignmentId == assignmentId)

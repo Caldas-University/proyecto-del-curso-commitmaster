@@ -79,9 +79,7 @@ namespace EventLogistics.Application.Services
             // Actualizar estado de la notificación
             notification.Status = "Sent";
             await _notificationRepository.UpdateAsync(notification);
-        }
-
-        public async Task<bool> ConfirmNotification(int notificationId)
+        }        public async Task<bool> ConfirmNotification(Guid notificationId)
         {
             var notification = await _notificationRepository.GetByIdAsync(notificationId);
             if (notification == null)
@@ -246,13 +244,10 @@ namespace EventLogistics.Application.Services
 
             notification.Status = "Delivered";
             await _notificationRepository.UpdateAsync(notification);
-        }
-        public async Task<IEnumerable<NotificationHistory>> GetNotificationHistoryForAssignment(int assignmentId)
+        }        public async Task<IEnumerable<NotificationHistory>> GetNotificationHistoryForAssignment(Guid assignmentId)
         {
             return await _historyRepository.GetByAssignmentIdAsync(assignmentId);
-        }
-
-        public async Task<bool> ResendNotification(int notificationId)
+        }public async Task<bool> ResendNotification(Guid notificationId)
         {
             var notification = await _notificationRepository.GetByIdAsync(notificationId);
             if (notification == null) return false;

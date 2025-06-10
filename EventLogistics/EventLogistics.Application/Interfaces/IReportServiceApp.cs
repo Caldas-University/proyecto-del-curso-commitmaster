@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EventLogistics.Application.Interfaces
-{
-    public interface IReportServiceApp
+{    public interface IReportServiceApp
     {
-        Task<List<ResourceDto>> GenerateReportAsync(int? eventId, string? resourceType, string? status);
+        Task<List<ResourceDto>> GenerateReportAsync(Guid? eventId, string? resourceType, string? status);
     }
 }

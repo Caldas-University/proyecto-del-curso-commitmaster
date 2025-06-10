@@ -98,10 +98,8 @@ namespace EventLogistics.Api.Controllers
         {
             var rules = await _ruleRepository.GetActiveRulesAsync();
             return Ok(rules);
-        }
-
-        [HttpGet("rules/{id}")]
-        public async Task<ActionResult<ReassignmentRule>> GetRuleById(int id)
+        }        [HttpGet("rules/{id}")]
+        public async Task<ActionResult<ReassignmentRule>> GetRuleById(Guid id)
         {
             var rule = await _ruleRepository.GetByIdAsync(id);
             if (rule == null)
@@ -120,10 +118,8 @@ namespace EventLogistics.Api.Controllers
 
             var result = await _ruleRepository.AddAsync(rule);
             return CreatedAtAction(nameof(GetRuleById), new { id = result.Id }, result);
-        }
-
-        [HttpPut("rules/{id}")]
-        public async Task<IActionResult> UpdateRule(int id, ReassignmentRule rule)
+        }        [HttpPut("rules/{id}")]
+        public async Task<IActionResult> UpdateRule(Guid id, ReassignmentRule rule)
         {
             if (id != rule.Id)
             {
@@ -136,14 +132,12 @@ namespace EventLogistics.Api.Controllers
         }
 
         [HttpDelete("rules/{id}")]
-        public async Task<IActionResult> DeleteRule(int id)
+        public async Task<IActionResult> DeleteRule(Guid id)
         {
             await _ruleRepository.DeleteAsync(id);
             return NoContent();
-        }
-
-        [HttpPost("process-change")]
-        public async Task<IActionResult> ProcessResourceChange(int resourceId, bool newAvailability)
+        }        [HttpPost("process-change")]
+        public async Task<IActionResult> ProcessResourceChange(Guid resourceId, bool newAvailability)
         {
             var result = await _reassignmentService.ProcessResourceChange(resourceId, newAvailability);
             if (result)
@@ -154,15 +148,13 @@ namespace EventLogistics.Api.Controllers
         }
 
         [HttpGet("evaluate-impact/{eventId}/{resourceId}")]
-        public async Task<IActionResult> EvaluateImpactSpecific(int eventId, int resourceId)
+        public async Task<IActionResult> EvaluateImpactSpecific(Guid eventId, Guid resourceId)
         {
             var impact = _reassignmentService.EvaluateImpact(eventId, resourceId);
             return Ok(impact);
-        }
-
-        [HttpPut("modify/{id}")]
+        }        [HttpPut("modify/{id}")]
         public async Task<IActionResult> ModifyAssignment(
-            int id, 
+            Guid id, 
             [FromBody] ModifyAssignmentRequest request)
         {
             var result = await _reassignmentService.ModifyAssignment(
@@ -176,7 +168,7 @@ namespace EventLogistics.Api.Controllers
 
         [HttpPost("auto-reassign/{id}")]
         public async Task<IActionResult> ReassignAutomatically(
-            int id, 
+            Guid id, 
             [FromQuery] string reason)
         {
             var result = await _reassignmentService.ReassignAutomatically(id, reason);

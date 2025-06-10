@@ -7,18 +7,16 @@ namespace EventLogistics.Infrastructure.Repositories
 {
     public class AssignmentRepository : Repository<ResourceAssignment>, IAssignmentRepository
     {
-        public AssignmentRepository(ApplicationDbContext context) : base(context)
+        public AssignmentRepository(EventLogisticsDbContext context) : base(context)
         {
-        }
-
-        public async Task<IEnumerable<ResourceAssignment>> GetByResourceIdAsync(int resourceId)
+        }        public async Task<IEnumerable<ResourceAssignment>> GetByResourceIdAsync(Guid resourceId)
         {
             return await _dbSet
                 .Where(a => a.ResourceId == resourceId)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<ResourceAssignment>> GetByEventIdAsync(int eventId)
+        public async Task<IEnumerable<ResourceAssignment>> GetByEventIdAsync(Guid eventId)
         {
             return await _dbSet
                 .Where(a => a.EventId == eventId)

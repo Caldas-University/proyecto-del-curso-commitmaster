@@ -3,17 +3,16 @@ using EventLogistics.Application.DTOs;
 using static EventLogistics.Application.Services.ReassignmentService;
 
 namespace EventLogistics.Application.Interfaces
-{
-    public interface IReassignmentService
+{    public interface IReassignmentService
     {
-        Task<bool> ProcessResourceChange(int resourceId, bool newAvailability);
-        Task<Dictionary<string, object>> EvaluateImpact(int eventId, int resourceId);
-        Task<List<ResourceSuggestionDto>> GetResourceSuggestions(int resourceId, DateTime desiredTime);
-        Task<List<TimeSuggestionDto>> GetTimeSuggestions(int resourceId, DateTime desiredTime);
+        Task<bool> ProcessResourceChange(Guid resourceId, bool newAvailability);
+        Task<Dictionary<string, object>> EvaluateImpact(Guid eventId, Guid resourceId);
+        Task<List<ResourceSuggestionDto>> GetResourceSuggestions(Guid resourceId, DateTime desiredTime);
+        Task<List<TimeSuggestionDto>> GetTimeSuggestions(Guid resourceId, DateTime desiredTime);
         
         // Nuevos métodos
-        Task<ReassignmentResult> ModifyAssignment(int assignmentId, int newQuantity, DateTime? newStartTime);
-        Task<ReassignmentResult> ReassignAutomatically(int assignmentId, string reason);
+        Task<ReassignmentResult> ModifyAssignment(Guid assignmentId, int newQuantity, DateTime? newStartTime);
+        Task<ReassignmentResult> ReassignAutomatically(Guid assignmentId, string reason);
     }
 
     public class ReassignmentResult

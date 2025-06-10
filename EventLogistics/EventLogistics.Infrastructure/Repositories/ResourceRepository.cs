@@ -4,16 +4,13 @@ using EventLogistics.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventLogistics.Infrastructure.Repositories
-{
-    public class ResourceRepository : IResourceRepository
+{    public class ResourceRepository : IResourceRepository
     {
         private readonly EventLogisticsDbContext _context;
-        private readonly ApplicationDbContext _appContext;
 
-        public ResourceRepository(EventLogisticsDbContext context, ApplicationDbContext appContext)
+        public ResourceRepository(EventLogisticsDbContext context)
         {
             _context = context;
-            _appContext = appContext;
         }
 
         public async Task<Resource?> GetByIdAsync(Guid id)
@@ -59,7 +56,22 @@ namespace EventLogistics.Infrastructure.Repositories
             var resource = await GetByIdAsync(resourceId);
             if (resource != null && resource.Availability)
             {
-                resource.Assignments.Add(eventId);
+                // Crear un nuevo ResourceAssignment
+                var assignmentId = Guid.NewGuid();
+                var assignment = new ResourceAssignment
+                {
+                    Id = assignmentId,
+                    ResourceId = resourceId,
+                    EventId = eventId,
+                    StartTime = DateTime.UtcNow,
+                    EndTime = DateTime.UtcNow.AddHours(1),
+                    Status = "Assigned",
+                    AssignmentDate = DateTime.UtcNow,
+                    Quantity = 1
+                };
+                
+                _context.ResourceAssignments.Add(assignment);
+                resource.Assignments.Add(assignmentId);
                 await UpdateAsync(resource);
                 return true;
             }
@@ -68,29 +80,32 @@ namespace EventLogistics.Infrastructure.Repositories
 
         public async Task<bool> CheckAvailabilityAsync(string resourceType, int quantity, DateTime date)
         {
-            var resource = await _appContext.Resources
-                .FirstOrDefaultAsync(r => r.Type == resourceType && r.FechaInicio <= date && r.FechaFin >= date);
+            // Corregir: Resource no tiene FechaInicio ni FechaFin, usar solo Type y Availability
+            var resources = await _context.Resources
+                .Where(r => r.Type == resourceType && r.Availability)
+                .ToListAsync();
 
-            return resource != null && resource.Capacity >= quantity;
+            return resources.Any(r => r.Capacity >= quantity);
         }
 
-        public async Task<bool> ReserveResourceAsync(int resourceId, int quantity)
+        public async Task<bool> ReserveResourceAsync(Guid resourceId, int quantity)
         {
-            var resource = await _appContext.Resources.FindAsync(resourceId);
+            var resource = await _context.Resources.FindAsync(resourceId);
             if (resource == null || resource.Capacity < quantity)
                 return false;
 
             resource.Capacity -= quantity;
-            await _appContext.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> ValidateResourceAvailability(int resourceId, DateTime start, DateTime end)
+        public async Task<bool> ValidateResourceAvailability(Guid resourceId, DateTime start, DateTime end)
         {
-            return await _appContext.Resources
+            return await _context.Resources
                 .Where(r => r.Id == resourceId)
                 .AnyAsync(r => r.Availability && 
-                              !r.Assignments.Any(a => 
+                              !_context.ResourceAssignments.Any(a => 
+                                  a.ResourceId == resourceId &&
                                   a.Status != "Cancelled" &&
                                   a.StartTime < end && 
                                   a.EndTime > start));

@@ -12,19 +12,16 @@ namespace EventLogistics.Application.Services
         public ReportServiceApp(IReportRepository reportRepository)
         {
             _reportRepository = reportRepository;
-        }
-
-        public async Task<List<ResourceDto>> GenerateReportAsync(int? eventId, string? resourceType, string? status)
+        }        public async Task<List<ResourceDto>> GenerateReportAsync(Guid? eventId, string? resourceType, string? status)
         {
             var resources = await _reportRepository.GenerateReportAsync(eventId, resourceType, status);
-            
-            return resources.Select(r => new ResourceDto
+              return resources.Select(r => new ResourceDto
             {
                 Id = r.Id,
                 Type = r.Type,
                 Availability = r.Availability,
                 Capacity = r.Capacity,
-                Assignments = r.Assignments
+                Assignments = r.Assignments.ToList()
             }).ToList();
         }
     }

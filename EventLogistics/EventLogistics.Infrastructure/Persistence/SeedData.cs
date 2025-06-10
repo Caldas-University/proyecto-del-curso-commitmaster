@@ -15,23 +15,43 @@ public static class SeedData
         if (context.Events.Any() || context.Reasignaciones.Any())
         {
             return;   // La base de datos ya tiene datos
-        }
-
-        // Crea usuarios de ejemplo
-        var organizador = new User("Organizador", "organizador@ejemplo.com");
-        var asistente = new User("Asistente", "asistente@ejemplo.com");
-        context.Users.AddRange(organizador, asistente);
-
-        // Crea recursos de ejemplo
-        var sala = new Resource("Sala", 1, true);
-        var equipo = new Resource("Equipo", 3, true);
+        }        // Crea usuarios de ejemplo
+        var organizador = new User { Role = "Organizador", Contact = "organizador@ejemplo.com", Email = "organizador@ejemplo.com", Preferences = "{}", PhoneNumber = "123456789" };
+        var asistente = new User { Role = "Asistente", Contact = "asistente@ejemplo.com", Email = "asistente@ejemplo.com", Preferences = "{}", PhoneNumber = "987654321" };
+        context.Users.AddRange(organizador, asistente);        // Crea recursos de ejemplo
+        var sala = new Resource { Type = "Sala", Name = "Sala Principal", Capacity = 100, Availability = true, FechaInicio = DateTime.Now, FechaFin = DateTime.Now.AddDays(30), Assignments = new List<Guid>(), ReassignmentRules = new List<ReassignmentRule>() };
+        var equipo = new Resource { Type = "Equipo", Name = "Proyector", Capacity = 1, Availability = true, FechaInicio = DateTime.Now, FechaFin = DateTime.Now.AddDays(30), Assignments = new List<Guid>(), ReassignmentRules = new List<ReassignmentRule>() };
         context.Resources.AddRange(sala, equipo);        // Crea un evento de ejemplo
-        var evento = new Event("Evento de Prueba", "Sala Principal", DateTime.Now.AddDays(7), "Activo");
+        var evento = new Event
+        {
+            Name = "Conferencia de Tecnología",
+            Place = "Sala Principal",
+            Schedule = DateTime.Now.AddDays(7),
+            Status = "Activo",
+            Resources = new List<ResourceAssignment>(),
+            Activities = new List<Activity>()
+        };
         context.Events.Add(evento);
 
         // Crea actividades de ejemplo
-        var actividad1 = new Activity(evento.Id, "Sala A", DateTime.Now.AddDays(7)) { Name = "Charla 1", StartTime = DateTime.Now.AddDays(7).AddHours(9), EndTime = DateTime.Now.AddDays(7).AddHours(10) };
-        var actividad2 = new Activity(evento.Id, "Sala B", DateTime.Now.AddDays(7)) { Name = "Taller VIP", StartTime = DateTime.Now.AddDays(7).AddHours(11), EndTime = DateTime.Now.AddDays(7).AddHours(12) };
+        var actividad1 = new Activity
+        {
+            Name = "Charla de IA",
+            StartTime = DateTime.Now.AddDays(7).AddHours(9),
+            EndTime = DateTime.Now.AddDays(7).AddHours(10),
+            EventId = evento.Id,
+            OrganizatorId = Guid.NewGuid(),
+            ResourceAssignments = new List<ResourceAssignment>()
+        };
+        var actividad2 = new Activity
+        {
+            Name = "Taller de Desarrollo",
+            StartTime = DateTime.Now.AddDays(7).AddHours(11),
+            EndTime = DateTime.Now.AddDays(7).AddHours(12),
+            EventId = evento.Id,
+            OrganizatorId = Guid.NewGuid(),
+            ResourceAssignments = new List<ResourceAssignment>()
+        };
         context.Activities.AddRange(actividad1, actividad2);
 
         // Crea participantes de ejemplo con distintos tipos de acceso

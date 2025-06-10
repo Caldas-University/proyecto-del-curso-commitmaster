@@ -12,11 +12,9 @@ namespace EventLogistics.Infrastructure.Repositories
     // Notification Repository Implementation
     public class NotificationRepository : Repository<Notification>, INotificationRepository
     {
-        public NotificationRepository(ApplicationDbContext context) : base(context)
+        public NotificationRepository(EventLogisticsDbContext context) : base(context)
         {
-        }
-
-        public async Task<IEnumerable<Notification>> GetByRecipientAsync(int userId)
+        }        public async Task<IEnumerable<Notification>> GetByRecipientAsync(Guid userId)
         {
             return await _dbSet
                 .Where(n => n.RecipientId == userId)
@@ -25,7 +23,7 @@ namespace EventLogistics.Infrastructure.Repositories
         }
 
         // Implementar el método faltante GetByRecipientIdAsync
-        public async Task<IEnumerable<Notification>> GetByRecipientIdAsync(int recipientId)
+        public async Task<IEnumerable<Notification>> GetByRecipientIdAsync(Guid recipientId)
         {
             // Este método es similar a GetByRecipientAsync
             return await _dbSet

@@ -13,9 +13,8 @@ namespace EventLogistics.Domain.Entities
         public int Priority { get; set; } = 1;
         public bool IsActive { get; set; } = true;
         public double SimilarityThreshold { get; set; } = 0.5;
-        
-        // Optional resource type specification
-        public int? ResourceTypeId { get; set; }
+          // Optional resource type specification
+        public Guid? ResourceTypeId { get; set; }
         [ForeignKey("ResourceTypeId")]
         public virtual Resource ResourceType { get; set; }
         

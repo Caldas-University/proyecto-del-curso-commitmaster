@@ -26,9 +26,7 @@ namespace EventLogistics.Application.Services
             _resourceRepository = resourceRepository;
             _notificationService = notificationService;
             _configuration = configuration;
-        }
-
-        public async Task<bool> ProcessResourceChange(int resourceId, bool newAvailability)
+        }        public async Task<bool> ProcessResourceChange(Guid resourceId, bool newAvailability)
         {
             // 1. Obtener el recurso
             var resource = await _resourceRepository.GetByIdAsync(resourceId);
@@ -59,9 +57,7 @@ namespace EventLogistics.Application.Services
             await _resourceRepository.UpdateAsync(resource);
 
             return true;
-        }
-
-        private async Task<List<ResourceAssignment>> GetAssignmentsForResource(int resourceId)
+        }        private async Task<List<ResourceAssignment>> GetAssignmentsForResource(Guid resourceId)
         {
             // Implementación real: consultar base de datos para obtener todas las asignaciones para este recurso
             // Esta es una implementación simplificada para demo
@@ -77,13 +73,11 @@ namespace EventLogistics.Application.Services
                 // Cargar el recurso asociado
                 var resource = await _resourceRepository.GetByIdAsync(currentAssignment.ResourceId);
                 currentAssignment.Resource = resource;
-            }
-
-            // 1. Buscar reglas aplicables
+            }            // 1. Buscar reglas aplicables
             var rules = await _ruleRepository.GetActiveRulesAsync();
             rules = rules.Where(r => r.ResourceTypeId == null ||
                                     (currentAssignment.Resource != null &&
-                                     r.ResourceTypeId == currentAssignment.Resource.Id))
+                                     r.ResourceTypeId == currentAssignment.ResourceId))
                      .OrderBy(r => r.Priority)
                      .ToList();
 
@@ -208,10 +202,8 @@ namespace EventLogistics.Application.Services
 
                 await _notificationService.SendNotification(notification);
             }
-        }
-
-        // Método para evaluar el impacto de una reasignación
-        public Dictionary<string, object> EvaluateImpact(int eventId, int resourceId)
+        }        // Método para evaluar el impacto de una reasignación
+        public Dictionary<string, object> EvaluateImpact(Guid eventId, Guid resourceId)
         {
             var impact = new Dictionary<string, object>();
 
@@ -221,9 +213,7 @@ namespace EventLogistics.Application.Services
             impact["estimatedTimeToResolve"] = "10 minutos"; // Ejemplo
 
             return impact;
-        }
-
-        public async Task<List<ResourceSuggestionDto>> GetResourceSuggestions(int resourceId, DateTime desiredTime)
+        }public async Task<List<ResourceSuggestionDto>> GetResourceSuggestions(Guid resourceId, DateTime desiredTime)
         {
             var originalResource = await _resourceRepository.GetByIdAsync(resourceId);
             if (originalResource == null)
@@ -258,9 +248,7 @@ namespace EventLogistics.Application.Services
                 .ToList();
 
             return suggestions;
-        }
-
-        public async Task<List<TimeSuggestionDto>> GetTimeSuggestions(int resourceId, DateTime desiredTime)
+        }        public async Task<List<TimeSuggestionDto>> GetTimeSuggestions(Guid resourceId, DateTime desiredTime)
         {
             var resource = await _resourceRepository.GetByIdAsync(resourceId);
             if (resource == null)
@@ -272,15 +260,14 @@ namespace EventLogistics.Application.Services
 
             var availableSlots = FindAvailableSlots(resource, desiredTime, maxTimeDiff, lookaheadDays);
 
-            return availableSlots
-                .Select(slot => new TimeSuggestionDto
+            return availableSlots                .Select(slot => new TimeSuggestionDto
                 {
                     SuggestedStartTime = slot,
                     SuggestedEndTime = slot.AddHours(1), // Asumiendo 1 hora de duración por defecto
                     Reason = $"Horario disponible con {Math.Abs((slot - desiredTime).TotalMinutes)} minutos de diferencia",
                     CompatibilityScore = 1.0 - (Math.Abs((slot - desiredTime).TotalMinutes) / maxTimeDiff),
                     IsOptimal = slot == desiredTime,
-                    AvailableResourceIds = new List<int> { resourceId }
+                    AvailableResourceIds = new List<Guid> { resourceId }
                 })
                 .OrderBy(s => Math.Abs((s.SuggestedStartTime - desiredTime).TotalMinutes))
                 .ToList();
@@ -343,16 +330,14 @@ namespace EventLogistics.Application.Services
             // Comparar otras características...
 
             return similarity;
-        }
-
-        // Implementación corregida del método de la interfaz
-        Task<Dictionary<string, object>> IReassignmentService.EvaluateImpact(int eventId, int resourceId)
+        }        // Implementación corregida del método de la interfaz
+        Task<Dictionary<string, object>> IReassignmentService.EvaluateImpact(Guid eventId, Guid resourceId)
         {
             var result = EvaluateImpact(eventId, resourceId);
             return Task.FromResult(result);
         }
 
-        public async Task<ReassignmentResult> ModifyAssignment(int assignmentId, int newQuantity, DateTime? newStartTime)
+        public async Task<ReassignmentResult> ModifyAssignment(Guid assignmentId, int newQuantity, DateTime? newStartTime)
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId);
             if (assignment == null)
@@ -382,9 +367,7 @@ namespace EventLogistics.Application.Services
             });
         
             return ReassignmentResult.SuccessResult(assignment); // Cambiado a SuccessResult
-        }
-
-        public async Task<ReassignmentResult> ReassignAutomatically(int assignmentId, string reason)
+        }        public async Task<ReassignmentResult> ReassignAutomatically(Guid assignmentId, string reason)
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId);
             if (assignment == null)

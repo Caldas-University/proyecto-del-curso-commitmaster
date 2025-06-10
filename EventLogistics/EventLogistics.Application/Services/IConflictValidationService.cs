@@ -2,8 +2,8 @@ using EventLogistics.Domain.Entities;
 
 public interface IConflictValidationService
 {
-    Task<ConflictValidationResult> ValidateActivityConflicts(int eventId, DateTime startTime, DateTime endTime, int? excludeActivityId = null);
-    Task<ConflictValidationResult> ValidateResourceConflicts(int resourceId, DateTime startTime, DateTime endTime);
+    Task<ConflictValidationResult> ValidateActivityConflicts(Guid eventId, DateTime startTime, DateTime endTime, Guid? excludeActivityId = null);
+    Task<ConflictValidationResult> ValidateResourceConflicts(Guid resourceId, DateTime startTime, DateTime endTime);
 }
 
 public class ConflictValidationResult

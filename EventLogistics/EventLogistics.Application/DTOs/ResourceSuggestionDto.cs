@@ -2,7 +2,7 @@ namespace EventLogistics.Application.DTOs
 {
     public class ResourceSuggestionDto
     {
-        public int ResourceId { get; set; }
+        public Guid ResourceId { get; set; }
         public string ResourceType { get; set; } = string.Empty;
         public string ResourceName { get; set; } = string.Empty;
         public int AvailableQuantity { get; set; }

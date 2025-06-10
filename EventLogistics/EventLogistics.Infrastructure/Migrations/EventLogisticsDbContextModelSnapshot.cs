@@ -23,31 +23,49 @@ namespace EventLogistics.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid>("EventId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("Horario")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Lugar")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("OrganizatorId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Place")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("OrganizatorId");
 
                     b.ToTable("Activities");
                 });
@@ -85,6 +103,13 @@ namespace EventLogistics.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -93,14 +118,17 @@ namespace EventLogistics.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.PrimitiveCollection<string>("Resources")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("Schedule")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -173,10 +201,25 @@ namespace EventLogistics.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Channel")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("Confirmation")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NotificationType")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -190,9 +233,126 @@ namespace EventLogistics.Infrastructure.Migrations
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("RecipientId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("EventLogistics.Domain.Entities.NotificationHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ActionTimestamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Channel")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("NotificationId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NotificationType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("RelatedAssignmentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Result")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TemplateName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NotificationId");
+
+                    b.HasIndex("RelatedAssignmentId");
+
+                    b.ToTable("NotificationHistories");
+                });
+
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Organizator", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Organizators");
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.Participant", b =>
@@ -276,13 +436,68 @@ namespace EventLogistics.Infrastructure.Migrations
                     b.ToTable("Reasignaciones");
                 });
 
+            modelBuilder.Entity("EventLogistics.Domain.Entities.ReassignmentRule", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Condition")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("ResourceTypeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("SimilarityThreshold")
+                        .HasColumnType("REAL");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResourceTypeId");
+
+                    b.ToTable("ReassignmentRules");
+                });
+
             modelBuilder.Entity("EventLogistics.Domain.Entities.Resource", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.PrimitiveCollection<string>("Assignments")
+                    b.Property<string>("Assignments")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -292,13 +507,115 @@ namespace EventLogistics.Infrastructure.Migrations
                     b.Property<int>("Capacity")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("FechaFin")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("FechaInicio")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.PrimitiveCollection<string>("Tags")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("Resources");
+                });
+
+            modelBuilder.Entity("EventLogistics.Domain.Entities.ResourceAssignment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ActivityId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("AssignedToUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("AssignmentDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsModified")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("IsModified");
+
+                    b.Property<string>("ModificationReason")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ModificationReason");
+
+                    b.Property<Guid?>("OriginalAssignmentId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("OriginalAssignmentId");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("ResourceId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
+
+                    b.HasIndex("AssignedToUserId");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("ResourceId");
+
+                    b.ToTable("ResourceAssignments");
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.User", b =>
@@ -311,6 +628,21 @@ namespace EventLogistics.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Preferences")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -319,9 +651,35 @@ namespace EventLogistics.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Activity", b =>
+                {
+                    b.HasOne("EventLogistics.Domain.Entities.Event", "Event")
+                        .WithMany("Activities")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EventLogistics.Domain.Entities.Organizator", "Organizator")
+                        .WithMany("Activities")
+                        .HasForeignKey("OrganizatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Organizator");
                 });
 
             modelBuilder.Entity("EventLogistics.Domain.Entities.Incident", b =>
@@ -346,6 +704,36 @@ namespace EventLogistics.Infrastructure.Migrations
                     b.Navigation("Incident");
                 });
 
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Notification", b =>
+                {
+                    b.HasOne("EventLogistics.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("RecipientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EventLogistics.Domain.Entities.User", null)
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("EventLogistics.Domain.Entities.NotificationHistory", b =>
+                {
+                    b.HasOne("EventLogistics.Domain.Entities.Notification", "Notification")
+                        .WithMany()
+                        .HasForeignKey("NotificationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EventLogistics.Domain.Entities.ResourceAssignment", "RelatedAssignment")
+                        .WithMany()
+                        .HasForeignKey("RelatedAssignmentId");
+
+                    b.Navigation("Notification");
+
+                    b.Navigation("RelatedAssignment");
+                });
+
             modelBuilder.Entity("EventLogistics.Domain.Entities.ParticipantActivity", b =>
                 {
                     b.HasOne("EventLogistics.Domain.Entities.Activity", "Activity")
@@ -363,6 +751,75 @@ namespace EventLogistics.Infrastructure.Migrations
                     b.Navigation("Activity");
 
                     b.Navigation("Participant");
+                });
+
+            modelBuilder.Entity("EventLogistics.Domain.Entities.ReassignmentRule", b =>
+                {
+                    b.HasOne("EventLogistics.Domain.Entities.Resource", "ResourceType")
+                        .WithMany("ReassignmentRules")
+                        .HasForeignKey("ResourceTypeId");
+
+                    b.Navigation("ResourceType");
+                });
+
+            modelBuilder.Entity("EventLogistics.Domain.Entities.ResourceAssignment", b =>
+                {
+                    b.HasOne("EventLogistics.Domain.Entities.Activity", "Activity")
+                        .WithMany("ResourceAssignments")
+                        .HasForeignKey("ActivityId");
+
+                    b.HasOne("EventLogistics.Domain.Entities.User", "AssignedTo")
+                        .WithMany()
+                        .HasForeignKey("AssignedToUserId");
+
+                    b.HasOne("EventLogistics.Domain.Entities.Event", "Event")
+                        .WithMany("Resources")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EventLogistics.Domain.Entities.Resource", "Resource")
+                        .WithMany("ResourceAssignments")
+                        .HasForeignKey("ResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Activity");
+
+                    b.Navigation("AssignedTo");
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Resource");
+                });
+
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Activity", b =>
+                {
+                    b.Navigation("ResourceAssignments");
+                });
+
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Event", b =>
+                {
+                    b.Navigation("Activities");
+
+                    b.Navigation("Resources");
+                });
+
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Organizator", b =>
+                {
+                    b.Navigation("Activities");
+                });
+
+            modelBuilder.Entity("EventLogistics.Domain.Entities.Resource", b =>
+                {
+                    b.Navigation("ReassignmentRules");
+
+                    b.Navigation("ResourceAssignments");
+                });
+
+            modelBuilder.Entity("EventLogistics.Domain.Entities.User", b =>
+                {
+                    b.Navigation("Notifications");
                 });
 #pragma warning restore 612, 618
         }
