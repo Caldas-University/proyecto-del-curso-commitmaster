@@ -1,5 +1,74 @@
+# Proyectos antiguos ignorados
 FlightReservation.Api
 FlightReservation.Application
 FlightReservation.Domain
 FlightReservation.Infrastructure
 FlightReservation.sln
+
+## Compilación de .NET - PATRONES CORREGIDOS
+bin/
+obj/
+*/bin/
+*/obj/
+**/bin/
+**/obj/
+EventLogistics/*/bin/
+EventLogistics/*/obj/
+EventLogistics.Api/bin/
+EventLogistics.Api/obj/
+EventLogistics.Application/bin/
+EventLogistics.Application/obj/
+EventLogistics.Domain/bin/
+EventLogistics.Domain/obj/
+EventLogistics.Infrastructure/bin/
+EventLogistics.Infrastructure/obj/
+
+## Archivos específicos de compilación
+*.dll
+*.pdb
+*.exe
+*.cache
+*.deps.json
+*.runtimeconfig.json
+
+## Bases de datos SQLite
+*.db
+*.db-shm
+*.db-wal
+eventlogistics.db
+EventLogistics.db
+
+## Archivos generados automáticamente por .NET
+**/*.AssemblyInfo.cs
+**/*.AssemblyInfoInputs.cache
+**/*.csproj.AssemblyReference.cache
+**/*.GeneratedMSBuildEditorConfig.editorconfig
+**/*.GlobalUsings.g.cs
+**/*.assets.json
+**/*.csproj.nuget.dgspec.json
+**/*.csproj.nuget.g.props
+**/*.csproj.nuget.g.targets
+
+## Archivos de configuración y dependencias
+project.lock.json
+project.fragment.lock.json
+artifacts/
+*.nuget.props
+*.nuget.targets
+
+## Paquetes NuGet
+*.nupkg
+*.snupkg
+*.nuspec
+packages/
+*.psmdcp
+
+## Archivos de configuración de Rider y VS Code
+.idea/
+.vscode/
+.vs/
+*.code-workspace
+
+## Archivos de publicación y temporales
+*.publish.xml
+*.swp
