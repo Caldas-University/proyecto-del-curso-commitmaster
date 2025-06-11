@@ -8,7 +8,7 @@ public interface IParticipantServiceApp
     Task<ParticipantDto?> GetByDocumentAsync(string document);
     Task<ParticipantDto?> GetByEmailAsync(string email);
     Task<List<ParticipantDto>> GetAllAsync();
-    Task<ParticipantDto> CreateAsync(ParticipantDto participantDto);
+    Task<ParticipantDto> CreateAsync(CreateParticipantRequest participantRequest);
     Task<ParticipantDto> UpdateAsync(ParticipantDto participantDto);
     Task<bool> DeleteAsync(Guid id);
 }

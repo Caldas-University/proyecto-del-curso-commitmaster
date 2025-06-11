@@ -50,12 +50,10 @@ public class ParticipantController : ControllerBase
     {
         var participants = await _participantService.GetAllAsync();
         return Ok(participants);
-    }
-
-    [HttpPost]
-    public async Task<ActionResult<ParticipantDto>> Create([FromBody] ParticipantDto dto)
+    }    [HttpPost]
+    public async Task<ActionResult<ParticipantDto>> Create([FromBody] CreateParticipantRequest participantRequest)
     {
-        var createdParticipant = await _participantService.CreateAsync(dto);
+        var createdParticipant = await _participantService.CreateAsync(participantRequest);
         return CreatedAtAction(nameof(GetById), new { id = createdParticipant.Id }, createdParticipant);
     }
 }

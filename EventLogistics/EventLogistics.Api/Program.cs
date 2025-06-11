@@ -39,10 +39,13 @@ builder.Services.AddScoped<IReassignmentRuleRepository, ReassignmentRuleReposito
 builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IResourceAssignmentRepository, ResourceAssignmentRepository>();
+builder.Services.AddScoped<IOrganizatorRepository, OrganizatorRepository>();
 
 // Registrar servicios de aplicación
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
+builder.Services.AddScoped<IActivityService, ActivityService>();
+builder.Services.AddScoped<IOrganizatorService, OrganizatorService>();
 builder.Services.AddScoped<IReasignacionServiceApp, ReasignacionServiceApp>();
 builder.Services.AddScoped<INotificationServiceApp, NotificationServiceApp>();
 builder.Services.AddScoped<IResourceServiceApp, ResourceServiceApp>();

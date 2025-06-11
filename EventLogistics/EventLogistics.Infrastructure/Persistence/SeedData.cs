@@ -21,13 +21,22 @@ public static class SeedData
         var salaReuniones = new Location("Sala de Reuniones", "Edificio A - Piso 1", "Disponible");
         var laboratorio = new Location("Laboratorio de Sistemas", "Edificio C - Piso 3", "Mantenimiento");
         context.Locations.AddRange(salaConferencias, auditorio, salaReuniones, laboratorio);
-        context.SaveChanges(); // Guardar las ubicaciones primero para obtener sus IDs// Crea usuarios de ejemplo
+        context.SaveChanges(); // Guardar las ubicaciones primero para obtener sus IDs        // Crea usuarios de ejemplo
         var organizador = new User { Role = "Organizador", Contact = "organizador@ejemplo.com", Email = "organizador@ejemplo.com", Preferences = "{}", PhoneNumber = "123456789" };
         var asistente = new User { Role = "Asistente", Contact = "asistente@ejemplo.com", Email = "asistente@ejemplo.com", Preferences = "{}", PhoneNumber = "987654321" };
-        context.Users.AddRange(organizador, asistente);        // Crea recursos de ejemplo
+        context.Users.AddRange(organizador, asistente);
+        
+        // Crea organizadores de ejemplo
+        var organizator1 = new Organizator("Dr. María García", "maria.garcia@universidad.edu", "+57-300-123-4567", "Coordinador Académico");
+        var organizator2 = new Organizator("Ing. Carlos López", "carlos.lopez@empresa.com", "+57-310-987-6543", "Director de Tecnología");
+        context.Organizators.AddRange(organizator1, organizator2);
+        
+        // Crea recursos de ejemplo
         var sala = new Resource { Type = "Sala", Name = "Sala Principal", Capacity = 100, Availability = true, FechaInicio = DateTime.Now, FechaFin = DateTime.Now.AddDays(30), Assignments = new List<Guid>(), ReassignmentRules = new List<ReassignmentRule>() };
         var equipo = new Resource { Type = "Equipo", Name = "Proyector", Capacity = 1, Availability = true, FechaInicio = DateTime.Now, FechaFin = DateTime.Now.AddDays(30), Assignments = new List<Guid>(), ReassignmentRules = new List<ReassignmentRule>() };
-        context.Resources.AddRange(sala, equipo);        // Crea un evento de ejemplo
+        context.Resources.AddRange(sala, equipo);
+        
+        // Crea un evento de ejemplo
         var evento = new Event
         {
             Name = "Conferencia de Tecnología",
@@ -38,16 +47,14 @@ public static class SeedData
             Resources = new List<ResourceAssignment>(),
             Activities = new List<Activity>()
         };
-        context.Events.Add(evento);
-
-        // Crea actividades de ejemplo
+        context.Events.Add(evento);        // Crea actividades de ejemplo
         var actividad1 = new Activity
         {
             Name = "Charla de IA",
             StartTime = DateTime.Now.AddDays(7).AddHours(9),
             EndTime = DateTime.Now.AddDays(7).AddHours(10),
             EventId = evento.Id,
-            OrganizatorId = Guid.NewGuid(),
+            OrganizatorId = organizator1.Id, // ✅ Usar ID real del organizador
             ResourceAssignments = new List<ResourceAssignment>()
         };
         var actividad2 = new Activity
@@ -56,7 +63,7 @@ public static class SeedData
             StartTime = DateTime.Now.AddDays(7).AddHours(11),
             EndTime = DateTime.Now.AddDays(7).AddHours(12),
             EventId = evento.Id,
-            OrganizatorId = Guid.NewGuid(),
+            OrganizatorId = organizator2.Id, // ✅ Usar ID real del organizador
             ResourceAssignments = new List<ResourceAssignment>()
         };
         context.Activities.AddRange(actividad1, actividad2);

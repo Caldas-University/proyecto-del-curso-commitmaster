@@ -37,11 +37,15 @@ public class ParticipantServiceApp : IParticipantServiceApp
     {
         var participants = await _participantRepository.GetAllAsync();
         return participants.Select(ParticipantMapper.ToDto).ToList();
-    }
-
-    public async Task<ParticipantDto> CreateAsync(ParticipantDto participantDto)
+    }    public async Task<ParticipantDto> CreateAsync(CreateParticipantRequest participantRequest)
     {
-        var participant = ParticipantMapper.ToEntity(participantDto);
+        var participant = new Participant(
+            participantRequest.Name,
+            participantRequest.Document,
+            participantRequest.Email,
+            participantRequest.AccessType
+        );
+        
         await _participantRepository.AddAsync(participant);
         return ParticipantMapper.ToDto(participant);
     }

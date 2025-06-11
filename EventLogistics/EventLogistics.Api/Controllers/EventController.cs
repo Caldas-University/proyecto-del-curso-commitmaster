@@ -34,14 +34,12 @@ namespace EventLogistics.Api.Controllers
                 return NotFound();
             }
             return Ok(eventDto);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<EventDto>> Create(EventDto eventDto)
+        }        [HttpPost]
+        public async Task<ActionResult<EventDto>> Create(CreateEventRequest eventRequest)
         {
             try
             {
-                var result = await _eventService.CreateAsync(eventDto);
+                var result = await _eventService.CreateAsync(eventRequest);
                 return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
             }
             catch (Exception ex)
