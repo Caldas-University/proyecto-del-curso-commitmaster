@@ -24,6 +24,7 @@ builder.Services.AddDbContext<EventLogisticsDbContext>(options =>
 // Registrar repositorios unificados
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 builder.Services.AddScoped<IReasignacionRepository, ReasignacionRepository>();
 builder.Services.AddScoped<IResourceRepository, ResourceRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
@@ -41,6 +42,7 @@ builder.Services.AddScoped<IResourceAssignmentRepository, ResourceAssignmentRepo
 
 // Registrar servicios de aplicación
 builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<IReasignacionServiceApp, ReasignacionServiceApp>();
 builder.Services.AddScoped<INotificationServiceApp, NotificationServiceApp>();
 builder.Services.AddScoped<IResourceServiceApp, ResourceServiceApp>();

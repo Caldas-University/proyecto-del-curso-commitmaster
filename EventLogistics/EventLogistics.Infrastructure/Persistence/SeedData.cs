@@ -9,13 +9,19 @@ public static class SeedData
 {
     public static void Initialize(EventLogisticsDbContext context)
     {
-        context.Database.EnsureCreated();
-
-        // Verifica si ya existen datos
+        context.Database.EnsureCreated();        // Verifica si ya existen datos
         if (context.Events.Any() || context.Reasignaciones.Any())
         {
             return;   // La base de datos ya tiene datos
-        }        // Crea usuarios de ejemplo
+        }
+
+        // Crea ubicaciones de ejemplo
+        var salaConferencias = new Location("Sala de Conferencias", "Edificio A - Piso 2", "Disponible");
+        var auditorio = new Location("Auditorio Principal", "Edificio B - Planta Baja", "Disponible");
+        var salaReuniones = new Location("Sala de Reuniones", "Edificio A - Piso 1", "Disponible");
+        var laboratorio = new Location("Laboratorio de Sistemas", "Edificio C - Piso 3", "Mantenimiento");
+        context.Locations.AddRange(salaConferencias, auditorio, salaReuniones, laboratorio);
+        context.SaveChanges(); // Guardar las ubicaciones primero para obtener sus IDs// Crea usuarios de ejemplo
         var organizador = new User { Role = "Organizador", Contact = "organizador@ejemplo.com", Email = "organizador@ejemplo.com", Preferences = "{}", PhoneNumber = "123456789" };
         var asistente = new User { Role = "Asistente", Contact = "asistente@ejemplo.com", Email = "asistente@ejemplo.com", Preferences = "{}", PhoneNumber = "987654321" };
         context.Users.AddRange(organizador, asistente);        // Crea recursos de ejemplo
@@ -25,9 +31,10 @@ public static class SeedData
         var evento = new Event
         {
             Name = "Conferencia de Tecnología",
-            Place = "Sala Principal",
+            Place = "Sala de Conferencias",
             Schedule = DateTime.Now.AddDays(7),
             Status = "Activo",
+            LocationId = salaConferencias.Id,
             Resources = new List<ResourceAssignment>(),
             Activities = new List<Activity>()
         };

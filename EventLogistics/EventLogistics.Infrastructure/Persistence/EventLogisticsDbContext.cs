@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 namespace EventLogistics.Infrastructure.Persistence;
 
 public class EventLogisticsDbContext : DbContext
-{
-    public DbSet<Activity> Activities { get; set; } = null!;
+{    public DbSet<Activity> Activities { get; set; } = null!;
     public DbSet<Event> Events { get; set; } = null!;
+    public DbSet<Location> Locations { get; set; } = null!;
     public DbSet<Notification> Notifications { get; set; } = null!;
     public DbSet<Reasignacion> Reasignaciones { get; set; } = null!;
     public DbSet<Incident> Incidents { get; set; } = null!;
@@ -23,15 +23,20 @@ public class EventLogisticsDbContext : DbContext
 
     public EventLogisticsDbContext(DbContextOptions<EventLogisticsDbContext> options) : base(options)
     {
-    }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    }    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Activity - Organizator relationship (many-to-one)
         modelBuilder.Entity<Activity>()
             .HasOne(a => a.Organizator)
             .WithMany(o => o.Activities)
             .HasForeignKey(a => a.OrganizatorId);
+
+        // Event - Location relationship (many-to-one)
+        modelBuilder.Entity<Event>()
+            .HasOne(e => e.Location)
+            .WithMany(l => l.Events)
+            .HasForeignKey(e => e.LocationId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         // Resource - ReassignmentRule relationship (optional)
         modelBuilder.Entity<ReassignmentRule>()
