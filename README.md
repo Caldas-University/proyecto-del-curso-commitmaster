@@ -439,85 +439,52 @@ Invoke-RestMethod -Uri "http://localhost:5158/api/Resource" -Method POST -Body $
 
 ```mermaid
 graph TD
-    A[1. Location] --> D[4. Event]
-    B[2. Resource] --> D
-    C[3. Organizator] --> F[6. Activity]
+    A[🏢 1. Location] --> D[🎪 4. Event]
+    B[🔧 2. Resource<br/>opcional] --> D
+    C[👤 3. Organizator] --> F[📅 6. Activity]
     D --> F
-    E[5. Participant] --> G[9. Attendance]
+    E[👥 5. Participant] --> G[✅ 9. Attendance]
     D --> G
-    D --> H[8. Incident]
-    F --> I[7. User]
+    D --> H[🚨 8. Incident]
+    I[👤 7. User<br/>independiente]
+    
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style C fill:#e8f5e8
+    style D fill:#fff3e0
+    style E fill:#fce4ec
+    style F fill:#f1f8e9
+    style G fill:#e0f2f1
+    style H fill:#ffebee
+    style I fill:#f5f5f5
 ```
 
-#### **🔄 Flujo de Ejecución Recomendado:**
+#### **🔗 Dependencias del Sistema:**
+- **Location** → Requerido por Event
+- **Resource** → Opcional para Event  
+- **Organizator** → Requerido por Activity
+- **Event** → Requiere Location, usa Resource (opcional)
+- **Participant** → Independiente
+- **Activity** → Requiere Event + Organizator
+- **User** → Independiente
+- **Incident** → Requiere Event
+- **Attendance** → Requiere Participant + Event
 
-```powershell
-# 1️⃣ CREAR UBICACIÓN (Location)
-$locationResponse = Invoke-RestMethod -Uri "http://localhost:5158/api/Location" -Method POST -Body (@{
-    name = "Centro de Convenciones Principal"
-    address = "Av. Libertador 1234, Ciudad"
-    status = "Disponible"
-} | ConvertTo-Json) -ContentType "application/json"
+#### **⚡ Flujo Mínimo Recomendado:**
 
-$locationId = $locationResponse.id
-
-# 2️⃣ CREAR RECURSO (Resource) - Opcional
-$resourceResponse = Invoke-RestMethod -Uri "http://localhost:5158/api/Resource" -Method POST -Body (@{
-    name = "Proyector 4K Profesional"
-    type = "Audiovisual"
-    capacity = 1
-    availability = $true
-    fechaInicio = "2025-01-01T00:00:00Z"
-    fechaFin = "2025-12-31T23:59:59Z"
-    tags = "proyector,audiovisual,4k"
-} | ConvertTo-Json) -ContentType "application/json"
-
-$resourceId = $resourceResponse.id
-
-# 3️⃣ CREAR ORGANIZADOR (Organizator)
-$organizatorResponse = Invoke-RestMethod -Uri "http://localhost:5158/api/Organizator" -Method POST -Body (@{
-    name = "Dr. María García"
-    email = "maria.garcia@universidad.edu"
-    phone = "+57-300-123-4567"
-    role = "Coordinador Académico"
-} | ConvertTo-Json) -ContentType "application/json"
-
-$organizatorId = $organizatorResponse.id
-
-# 4️⃣ CREAR EVENTO (Event)
-$eventResponse = Invoke-RestMethod -Uri "http://localhost:5158/api/Event" -Method POST -Body (@{
-    name = "Conferencia de Tecnología 2025"
-    place = "Auditorio Principal"
-    schedule = "2025-07-15T09:00:00Z"
-    status = "Activo"
-    locationId = $locationId
-    resources = @($resourceId)
-} | ConvertTo-Json) -ContentType "application/json"
-
-$eventId = $eventResponse.id
-
-# 5️⃣ CREAR PARTICIPANTE (Participant)
-$participantResponse = Invoke-RestMethod -Uri "http://localhost:5158/api/Participant" -Method POST -Body (@{
-    name = "Juan Carlos Pérez"
-    document = "12345678"
-    email = "juan.perez@email.com"
-    accessType = "VIP"
-} | ConvertTo-Json) -ContentType "application/json"
-
-$participantId = $participantResponse.id
-
-# 6️⃣ CREAR ACTIVIDAD (Activity)
-$activityResponse = Invoke-RestMethod -Uri "http://localhost:5158/api/Activity" -Method POST -Body (@{
-    name = "Keynote: El Futuro de la IA"
-    place = "Sala Principal"
-    startTime = "2025-07-15T09:00:00Z"
-    endTime = "2025-07-15T10:30:00Z"
-    status = "Programada"
-    eventId = $eventId
-    organizatorId = $organizatorId
-} | ConvertTo-Json) -ContentType "application/json"
-
-Write-Host "✅ Flujo completo ejecutado exitosamente!"
+```mermaid
+flowchart LR
+    A[Location] --> B[Event] --> C[Activity]
+    D[Organizator] --> C
+    E[Resource<br/>opcional] --> B
+    F[Participant<br/>independiente]
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#f1f8e9
+    style D fill:#e8f5e8
+    style E fill:#f3e5f5
+    style F fill:#fce4ec
 ```
 
 ### 📊 **Comandos de Verificación**
