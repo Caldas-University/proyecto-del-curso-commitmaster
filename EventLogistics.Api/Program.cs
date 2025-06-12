@@ -52,7 +52,7 @@ builder.Services.AddScoped<IResourceServiceApp, ResourceServiceApp>();
 builder.Services.AddScoped<IReportServiceApp, ReportServiceApp>();
 builder.Services.AddScoped<IAttendanceServiceApp, AttendanceServiceApp>();
 builder.Services.AddScoped<IIncidentServiceApp, IncidentServiceApp>();
-builder.Services.AddScoped<IParticipantServiceApp, ParticipantServiceApp>();
+builder.Services.AddScoped<IParticipantService, ParticipantServiceApp>();
 
 // Registrar servicios adicionales
 builder.Services.AddScoped<NotificationService>();

@@ -1,59 +1,80 @@
 using EventLogistics.Application.DTOs;
-using EventLogistics.Application.Interfaces;
+using EventLogistics.Application.Interfaces; // Ensure this is the correct namespace for IParticipantServiceApp
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace EventLogistics.Api.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-public class ParticipantController : ControllerBase
+namespace EventLogistics.Api.Controllers
 {
-    private readonly IParticipantServiceApp _participantService;
-
-    public ParticipantController(IParticipantServiceApp participantService)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ParticipantController : ControllerBase
     {
-        _participantService = participantService;
-    }
+        private readonly IParticipantService _participantService;
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<ParticipantDto>> GetById(Guid id)
-    {
-        var participantDto = await _participantService.GetByIdAsync(id);
-        if (participantDto == null)
-            return NotFound();
+        public ParticipantController(IParticipantService participantService)
+        {
+            _participantService = participantService;
+        }
 
-        return Ok(participantDto);
-    }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ParticipantDto>> GetById(Guid id)
+        {
+            var dto = await _participantService.GetByIdAsync(id);
+            if (dto == null)
+                return NotFound();
+            return Ok(dto);
+        }
 
-    [HttpGet("by-document/{document}")]
-    public async Task<ActionResult<ParticipantDto>> GetByDocument(string document)
-    {
-        var participantDto = await _participantService.GetByDocumentAsync(document);
-        if (participantDto == null)
-            return NotFound();
+        [HttpGet("by-document/{document}")]
+        public async Task<ActionResult<ParticipantDto>> GetByDocument(string document)
+        {
+            var dto = await _participantService.GetByDocumentAsync(document);
+            if (dto == null)
+                return NotFound();
+            return Ok(dto);
+        }
 
-        return Ok(participantDto);
-    }
+        [HttpGet("by-email/{email}")]
+        public async Task<ActionResult<ParticipantDto>> GetByEmail(string email)
+        {
+            var dto = await _participantService.GetByEmailAsync(email);
+            if (dto == null)
+                return NotFound();
+            return Ok(dto);
+        }
 
-    [HttpGet("by-email/{email}")]
-    public async Task<ActionResult<ParticipantDto>> GetByEmail(string email)
-    {
-        var participantDto = await _participantService.GetByEmailAsync(email);
-        if (participantDto == null)
-            return NotFound();
+        [HttpGet]
+        public async Task<ActionResult<List<ParticipantDto>>> GetAll()
+        {
+            var dtos = await _participantService.GetAllAsync();
+            return Ok(dtos);
+        }
 
-        return Ok(participantDto);
-    }
+        [HttpPost]
+        public async Task<ActionResult<ParticipantDto>> Create([FromBody] ParticipantDto dto)
+        {
+            var created = await _participantService.CreateAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        }
 
-    [HttpGet]
-    public async Task<ActionResult<List<ParticipantDto>>> GetAll()
-    {
-        var participants = await _participantService.GetAllAsync();
-        return Ok(participants);
-    }    [HttpPost]
-    public async Task<ActionResult<ParticipantDto>> Create([FromBody] CreateParticipantRequest participantRequest)
-    {
-        var createdParticipant = await _participantService.CreateAsync(participantRequest);
-        return CreatedAtAction(nameof(GetById), new { id = createdParticipant.Id }, createdParticipant);
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ParticipantDto>> Update(Guid id, [FromBody] ParticipantDto dto)
+        {
+            var updated = await _participantService.UpdateAsync(id, dto);
+            if (updated == null)
+                return NotFound();
+            return Ok(updated);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var deleted = await _participantService.DeleteAsync(id);
+            if (!deleted)
+                return NotFound();
+            return NoContent();
+        }
     }
 }
