@@ -128,6 +128,131 @@ public class AttendanceController : ControllerBase
             return BadRequest(new { error = ex.Message });
         }
     }
+
+    /// <summary>
+    /// Listar todas las asistencias registradas.
+    /// </summary>
+    /// <returns>Lista de asistencias.</returns>
+    [HttpGet("list")]
+    public async Task<IActionResult> ListAll()
+    {
+        try
+        {
+            var list = await _attendanceService.ListAllAsync();
+            return Ok(list);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Obtener una asistencia por su ID.
+    /// </summary>
+    /// <param name="attendanceId">ID de la asistencia.</param>
+    /// <returns>Detalle de la asistencia.</returns>
+    [HttpGet("{attendanceId}")]
+    public async Task<IActionResult> GetById([FromRoute] Guid attendanceId)
+    {
+        try
+        {
+            var attendance = await _attendanceService.GetByIdAsync(attendanceId);
+            if (attendance == null)
+                return NotFound(new { error = "Asistencia no encontrada." });
+            return Ok(attendance);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Listar asistencias por evento.
+    /// </summary>
+    /// <param name="eventId">ID del evento.</param>
+    /// <returns>Lista de asistencias del evento.</returns>
+    [HttpGet("by-event")]
+    public async Task<IActionResult> ListByEvent([FromQuery] Guid eventId)
+    {
+        var list = await _attendanceService.ListByEventAsync(eventId);
+        return Ok(list);
+    }
+
+    /// <summary>
+    /// Listar asistencias por participante.
+    /// </summary>
+    /// <param name="participantId">ID del participante.</param>
+    /// <returns>Lista de asistencias del participante.</returns>
+    [HttpGet("by-participant")]
+    public async Task<IActionResult> ListByParticipant([FromQuery] Guid participantId)
+    {
+        var list = await _attendanceService.ListByParticipantAsync(participantId);
+        return Ok(list);
+    }
+
+    /// <summary>
+    /// Obtener el cronograma de actividades para un participante y evento.
+    /// </summary>
+    /// <param name="participantId">ID del participante.</param>
+    /// <param name="eventId">ID del evento.</param>
+    /// <returns>Detalle del cronograma de actividades.</returns>
+    [HttpGet("schedule")]
+    public async Task<IActionResult> GetSchedule([FromQuery] Guid participantId, [FromQuery] Guid eventId)
+    {
+        var schedule = await _attendanceService.GetScheduleAsync(participantId, eventId);
+        return Ok(schedule);
+    }
+
+    /// <summary>
+    /// Verificar inscripción de un participante a un evento.
+    /// </summary>
+    /// <param name="participantId">ID del participante.</param>
+    /// <param name="eventId">ID del evento.</param>
+    /// <returns>Estado de la inscripción.</returns>
+    [HttpGet("verify-inscription")]
+    public async Task<IActionResult> VerifyInscription([FromQuery] Guid participantId, [FromQuery] Guid eventId)
+    {
+        var isInscribed = await _attendanceService.VerifyInscriptionAsync(participantId, eventId);
+        return Ok(new { isInscribed });
+    }
+
+    /// <summary>
+    /// Regularizar la inscripción de un participante a un evento.
+    /// </summary>
+    /// <param name="request">Datos del participante y evento.</param>
+    /// <returns>Estado de la regularización.</returns>
+    [HttpPost("regularize-inscription")]
+    public async Task<IActionResult> RegularizeInscription([FromBody] RegularizeInscriptionRequest request)
+    {
+        await _attendanceService.RegularizeInscriptionAsync(request.ParticipantId, request.EventId);
+        return Ok();
+    }
+
+    /// <summary>
+    /// Obtener un resumen de la asistencia por evento.
+    /// </summary>
+    /// <param name="eventId">ID del evento.</param>
+    /// <returns>Resumen de la asistencia.</returns>
+    [HttpGet("summary")]
+    public async Task<IActionResult> GetAttendanceSummary([FromQuery] Guid eventId)
+    {
+        var summary = await _attendanceService.GetAttendanceSummaryAsync(eventId);
+        return Ok(summary);
+    }
+
+    /// <summary>
+    /// Listar participantes por evento.
+    /// </summary>
+    /// <param name="eventId">ID del evento.</param>
+    /// <returns>Lista de participantes del evento.</returns>
+    [HttpGet("participants-by-event")]
+    public async Task<IActionResult> ListParticipantsByEvent([FromQuery] Guid eventId)
+    {
+        var list = await _attendanceService.ListParticipantsByEventAsync(eventId);
+        return Ok(list);
+    }
 }
 
 /// <summary>
@@ -155,4 +280,20 @@ public class RegisterQrRequest
     /// Contenido del QR escaneado.
     /// </summary>
     public string QrContent { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// Modelo para regularizar inscripción.
+/// </summary>
+public class RegularizeInscriptionRequest
+{
+    /// <summary>
+    /// ID del participante.
+    /// </summary>
+    public Guid ParticipantId { get; set; }
+
+    /// <summary>
+    /// ID del evento.
+    /// </summary>
+    public Guid EventId { get; set; }
 }
