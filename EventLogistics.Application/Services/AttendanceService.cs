@@ -117,7 +117,7 @@ public class AttendanceServiceApp : IAttendanceServiceApp
             ActivityName = pa.Activity?.Name ?? "Sin nombre",
             StartTime = pa.Activity?.StartTime ?? DateTime.MinValue,
             EndTime = pa.Activity?.EndTime ?? DateTime.MinValue,
-            Lugar = pa.Activity?.Place ?? "Sin ubicación"
+            Place = pa.Activity?.Place ?? "Sin ubicación"
         }).ToList();
 
         var credencial = new CredentialDto
@@ -280,7 +280,7 @@ public class AttendanceServiceApp : IAttendanceServiceApp
                         table.Cell().Element(CellStyle).Background(isProxima ? Colors.Yellow.Lighten3 : Colors.White).Text(s.ActivityName);
                         table.Cell().Element(CellStyle).Background(isProxima ? Colors.Yellow.Lighten3 : Colors.White).Text(s.StartTime.ToString("HH:mm"));
                         table.Cell().Element(CellStyle).Background(isProxima ? Colors.Yellow.Lighten3 : Colors.White).Text(s.EndTime.ToString("HH:mm"));
-                        table.Cell().Element(CellStyle).Background(isProxima ? Colors.Yellow.Lighten3 : Colors.White).Text(s.Lugar);
+                        table.Cell().Element(CellStyle).Background(isProxima ? Colors.Yellow.Lighten3 : Colors.White).Text(s.Place);
                     }
                 });
 
@@ -323,5 +323,101 @@ public class AttendanceServiceApp : IAttendanceServiceApp
         var svgQrCode = new SvgQRCode(qrData);
         var svg = svgQrCode.GetGraphic(5);
         return System.Text.Encoding.UTF8.GetBytes(svg);
+    }
+
+    /// <summary>
+    /// Lista todas las asistencias registradas.
+    /// </summary>
+    /// <returns>Lista de asistencias.</returns>
+    public async Task<IEnumerable<AttendanceDto>> ListAllAsync()
+    {
+        var attendances = await _attendanceRepository.GetAllAsync();
+        return attendances.Select(AttendanceMapper.ToDto);
+    }
+
+    /// <summary>
+    /// Obtiene una asistencia por su ID.
+    /// </summary>
+    /// <param name="attendanceId">ID de la asistencia.</param>
+    /// <returns>DTO de asistencia o null si no existe.</returns>
+    public async Task<AttendanceDto?> GetByIdAsync(Guid attendanceId)
+    {
+        var attendance = await _attendanceRepository.GetByIdAsync(attendanceId);
+        return attendance != null ? AttendanceMapper.ToDto(attendance) : null;
+    }
+
+    // Listar asistencias por evento
+    public async Task<IEnumerable<AttendanceDto>> ListByEventAsync(Guid eventId)
+    {
+        var attendances = await _attendanceRepository.GetAllByEventAsync(eventId);
+        return attendances.Select(AttendanceMapper.ToDto);
+    }
+
+    // Listar asistencias por participante
+    public async Task<IEnumerable<AttendanceDto>> ListByParticipantAsync(Guid participantId)
+    {
+        var attendances = await _attendanceRepository.GetByParticipantAsync(participantId);
+        return attendances.Select(AttendanceMapper.ToDto);
+    }
+
+    // Obtener cronograma personalizado de un participante para un evento
+    public async Task<IEnumerable<ActivityDto>> GetScheduleAsync(Guid participantId, Guid eventId)
+    {
+        var participantActivities = await _participantActivityRepository.GetByParticipantAndEventAsync(participantId, eventId);
+        return participantActivities
+            .Where(pa => pa.Activity != null)
+            .Select(pa => new ActivityDto
+            {
+                Id = pa.Activity.Id,
+                Name = pa.Activity.Name,
+                Place = pa.Activity.Place,
+                StartTime = pa.Activity.StartTime,
+                EndTime = pa.Activity.EndTime,
+                EventId = pa.Activity.EventId
+            });
+    }
+
+    // Verificar inscripción de participante en evento
+    public async Task<bool> VerifyInscriptionAsync(Guid participantId, Guid eventId)
+    {
+        return await _participantActivityRepository
+            .AnyAsync(pa => pa.ParticipantId == participantId && pa.Activity != null && pa.Activity.EventId == eventId);
+    }
+
+    // Regularizar inscripción en tiempo real
+    public async Task RegularizeInscriptionAsync(Guid participantId, Guid eventId)
+    {
+        // Lógica para inscribir al participante en el evento (puedes ajustar según tu modelo)
+        // Ejemplo: inscribirlo en una actividad general del evento
+        var actividades = await _participantActivityRepository.GetActivitiesByEventAsync(eventId);
+        if (actividades.Any())
+        {
+            var actividad = actividades.First();
+            var nuevaInscripcion = new ParticipantActivity(participantId, actividad.Id, actividad);
+            await _participantActivityRepository.AddAsync(nuevaInscripcion);
+        }
+        // Si no hay actividades, puedes lanzar una excepción o manejarlo según tu lógica
+    }
+
+    // Obtener resumen de asistencia por evento
+    public async Task<AttendanceSummaryDto> GetAttendanceSummaryAsync(Guid eventId)
+    {
+        var totalRegistered = await _participantActivityRepository.CountParticipantsByEventAsync(eventId);
+        var totalAttended = await _attendanceRepository.GetAllByEventAsync(eventId);
+        var eventName = "Nombre del Evento"; // Ajusta si tienes IEventRepository
+
+        return new AttendanceSummaryDto
+        {
+            EventId = eventId,
+            EventName = eventName,
+            TotalRegistered = totalRegistered,
+            TotalAttended = totalAttended.Count,
+        };
+    }
+
+    public async Task<IEnumerable<ParticipantDto>> ListParticipantsByEventAsync(Guid eventId)
+    {
+        var participants = await _participantActivityRepository.GetParticipantsByEventAsync(eventId);
+        return participants.Select(ParticipantMapper.ToDto);
     }
 }

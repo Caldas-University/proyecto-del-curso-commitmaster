@@ -45,5 +45,20 @@ namespace EventLogistics.Domain.Repositories
         /// Obtiene una inscripción específica por participante y actividad.
         /// </summary>
         Task<ParticipantActivity?> GetByParticipantAndActivityAsync(Guid participantId, Guid activityId);
+
+        /// <summary>
+        /// Obtiene todas las actividades de un evento.
+        /// </summary>
+        Task<List<Activity>> GetActivitiesByEventAsync(Guid eventId);
+
+        /// <summary>
+        /// Cuenta la cantidad de participantes inscritos en un evento.
+        /// </summary>
+        Task<int> CountParticipantsByEventAsync(Guid eventId);
+
+        /// <summary>
+        /// Obtiene todos los participantes inscritos en un evento.
+        /// </summary>
+        Task<List<Participant>> GetParticipantsByEventAsync(Guid eventId);
     }
 }

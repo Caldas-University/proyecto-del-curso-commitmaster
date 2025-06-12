@@ -41,4 +41,14 @@ public interface IAttendanceRepository
     /// Obtiene todas las asistencias de un evento.
     /// </summary>
     Task<List<Attendance>> GetAllByEventAsync(Guid eventId);
+
+    /// <summary>
+    /// Obtiene todas las asistencias registradas.
+    /// </summary>
+    Task<List<Attendance>> GetAllAsync();
+
+    /// <summary>
+    /// Obtiene todas las asistencias de un participante (en todos los eventos).
+    /// </summary>
+    Task<List<Attendance>> GetByParticipantAsync(Guid participantId);
 }

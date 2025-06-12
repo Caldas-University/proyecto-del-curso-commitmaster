@@ -24,6 +24,14 @@ public class AttendanceRepository : IAttendanceRepository
     }
 
     /// <inheritdoc/>
+    public async Task<List<Attendance>> GetByParticipantAsync(Guid participantId)
+    {
+        return await _context.Attendances
+            .Where(a => a.ParticipantId == participantId)
+            .ToListAsync();
+    }
+
+    /// <inheritdoc/>
     public async Task<List<Attendance>> GetByParticipantAsync(Guid participantId, Guid eventId)
     {
         return await _context.Attendances
@@ -58,6 +66,12 @@ public class AttendanceRepository : IAttendanceRepository
         return await _context.Attendances
             .Where(a => a.EventId == eventId)
             .ToListAsync();
+    }
+
+    /// <inheritdoc/>
+    public async Task<List<Attendance>> GetAllAsync()
+    {
+        return await _context.Attendances.ToListAsync();
     }
 
     /// <inheritdoc/>

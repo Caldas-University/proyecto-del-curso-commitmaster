@@ -69,4 +69,30 @@ public class ParticipantActivityRepository : IParticipantActivityRepository
             .Where(a => a.EventId == eventId && !inscritas.Contains(a.Id))
             .ToListAsync();
     }
+
+    public async Task<List<Activity>> GetActivitiesByEventAsync(Guid eventId)
+    {
+        return await _context.Activities
+            .Where(a => a.EventId == eventId)
+            .ToListAsync();
+    }
+
+    public async Task<int> CountParticipantsByEventAsync(Guid eventId)
+    {
+        return await _context.ParticipantActivities
+            .Include(pa => pa.Activity)
+            .Where(pa => pa.Activity != null && pa.Activity.EventId == eventId)
+            .Select(pa => pa.ParticipantId)
+            .Distinct()
+            .CountAsync();
+    }
+
+    public async Task<List<Participant>> GetParticipantsByEventAsync(Guid eventId)
+    {
+        return await _context.ParticipantActivities
+            .Where(pa => pa.Activity.EventId == eventId)
+            .Select(pa => pa.Participant)
+            .Distinct()
+            .ToListAsync();
+    }
 }
