@@ -13,12 +13,28 @@ public class ParticipantActivity
 
     private ParticipantActivity() { }
 
-    public ParticipantActivity(Guid participantId, Guid activityId, Activity activity)
+    /// <summary>
+    /// Constructor para registrar una nueva inscripción a una actividad.
+    /// </summary>
+    public ParticipantActivity(Guid participantId, Guid activityId, Activity activity, string? qrCode = null)
     {
         Id = Guid.NewGuid();
         ParticipantId = participantId;
         ActivityId = activityId;
         Activity = activity;
+        
         RegistrationDate = DateTime.UtcNow;
+    }
+
+    /// <summary>
+    /// Constructor para reconstrucción desde persistencia o mapeo.
+    /// </summary>
+    public ParticipantActivity(Guid id, Guid participantId, Guid activityId, DateTime registrationDate, Activity activity)
+    {
+        Id = id;
+        ParticipantId = participantId;
+        ActivityId = activityId;
+        RegistrationDate = registrationDate;
+        Activity = activity;
     }
 }

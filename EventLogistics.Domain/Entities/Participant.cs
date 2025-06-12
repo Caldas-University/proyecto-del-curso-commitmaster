@@ -18,4 +18,24 @@ public class Participant
         Email = email;
         AccessType = accessType;
     }
+
+    /// <summary>
+    /// Constructor para reconstrucción desde persistencia o mapeo.
+    /// </summary>
+    public Participant(Guid id, string name, string document, string email, string accessType)
+    {
+        Id = id;
+        Name = name;
+        Document = document;
+        Email = email;
+        AccessType = accessType;
+    }
+
+    public void Update(string name, string document, string email, string accessType)
+    {
+        Name = name;
+        Document = document;
+        Email = email;
+        AccessType = accessType;
+    }
 }

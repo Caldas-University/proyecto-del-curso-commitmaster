@@ -4,8 +4,15 @@ namespace EventLogistics.Application.Interfaces;
 
 public interface IAttendanceServiceApp
 {
+    // Obtener el contenido QR para un participante y evento
+    Task<string> GetQrContentAsync(Guid participantId, Guid eventId);
+
+    // Registrar asistencia por QR (usado por el controlador)
     Task<AttendanceDto> RegisterAttendanceAsync(Guid participantId, Guid eventId, string method);
-    Task<AttendanceDto> RegisterAttendanceByDocumentAsync(string document, Guid eventId, string method);
-    Task<CredentialDto> GenerateCredentialAsync(Guid participantId, Guid eventId);
-    Task<List<AttendanceDto>> GetAttendanceByParticipantAsync(Guid participantId, Guid eventId);
+
+    // Registrar asistencia manual por documento
+    Task<AttendanceDto> RegisterAttendanceManualAsync(string document, Guid eventId);
+
+    // Generar escarapela y cronograma en PDF tras registrar asistencia
+    Task<byte[]> GenerateCredentialAndSchedulePdfAsync(Guid participantId, Guid eventId);
 }

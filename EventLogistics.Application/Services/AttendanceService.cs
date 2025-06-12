@@ -3,15 +3,29 @@ using EventLogistics.Application.Interfaces;
 using EventLogistics.Application.Mappers;
 using EventLogistics.Domain.Entities;
 using EventLogistics.Domain.Repositories;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
+using QRCoder;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace EventLogistics.Application.Services;
 
+/// <summary>
+/// Servicio de aplicación para el registro de asistencia y generación de credenciales.
+/// Permite registrar la asistencia de participantes (por QR o manual), generar la escarapela PDF
+/// con los datos del participante y su cronograma personalizado, y obtener el contenido QR.
+/// </summary>
 public class AttendanceServiceApp : IAttendanceServiceApp
 {
     private readonly IAttendanceRepository _attendanceRepository;
     private readonly IParticipantRepository _participantRepository;
     private readonly IParticipantActivityRepository _participantActivityRepository;
 
+    /// <summary>
+    /// Inicializa el servicio de asistencia.
+    /// </summary>
     public AttendanceServiceApp(
         IAttendanceRepository attendanceRepository,
         IParticipantRepository participantRepository,
@@ -20,91 +34,294 @@ public class AttendanceServiceApp : IAttendanceServiceApp
         _attendanceRepository = attendanceRepository;
         _participantRepository = participantRepository;
         _participantActivityRepository = participantActivityRepository;
-    }    public async Task<AttendanceDto> RegisterAttendanceAsync(Guid participantId, Guid eventId, string method)
+    }
+
+    /// <summary>
+    /// Registra la asistencia de un participante escaneando un código QR.
+    /// </summary>
+    /// <param name="qrContent">Contenido del QR (formato: participantId|eventId|timestamp).</param>
+    /// <returns>DTO de asistencia registrada.</returns>
+    /// <exception cref="InvalidOperationException">Si el QR es inválido o el participante no cumple los requisitos.</exception>
+    public async Task<AttendanceDto> RegisterAttendanceQrAsync(string qrContent)
     {
-        // 1. Validar que el participante exista
+        var parts = qrContent.Split('|');
+        if (parts.Length < 3 || !Guid.TryParse(parts[0], out var participantId) || !Guid.TryParse(parts[1], out var eventId))
+            throw new InvalidOperationException("QR inválido.");
+
+        return await RegisterAttendanceAsync(participantId, eventId, "QR");
+    }
+
+    /// <summary>
+    /// Registra la asistencia de un participante ingresando manualmente su documento.
+    /// </summary>
+    /// <param name="document">Documento de identidad del participante.</param>
+    /// <param name="eventId">ID del evento.</param>
+    /// <returns>DTO de asistencia registrada.</returns>
+    /// <exception cref="InvalidOperationException">Si el participante no existe o no cumple los requisitos.</exception>
+    public async Task<AttendanceDto> RegisterAttendanceManualAsync(string document, Guid eventId)
+    {
+        var participant = await _participantRepository.GetByDocumentAsync(document);
+        if (participant == null)
+            throw new InvalidOperationException("Participante no encontrado.");
+
+        return await RegisterAttendanceAsync(participant.Id, eventId, "Manual");
+    }
+
+    /// <summary>
+    /// Lógica central para registrar la asistencia de un participante.
+    /// </summary>
+    /// <param name="participantId">ID del participante.</param>
+    /// <param name="eventId">ID del evento.</param>
+    /// <param name="method">Método de registro ("QR" o "Manual").</param>
+    /// <returns>DTO de asistencia registrada.</returns>
+    /// <exception cref="InvalidOperationException">Si el participante no existe, no está inscrito o ya registró asistencia.</exception>
+    public async Task<AttendanceDto> RegisterAttendanceAsync(Guid participantId, Guid eventId, string method)
+    {
         var participant = await _participantRepository.GetByIdAsync(participantId);
         if (participant == null)
             throw new InvalidOperationException("El participante no existe.");
 
-        // 2. Validar que esté inscrito en al menos una actividad del evento
+        var inscrito = await _participantActivityRepository
+            .AnyAsync(pa => pa.ParticipantId == participantId && pa.Activity != null && pa.Activity.EventId == eventId);
+
+        if (!inscrito)
+            throw new InvalidOperationException("El participante no está inscrito en ninguna actividad de este evento. Regularizar acceso.");
+
+        if (await _attendanceRepository.ExistsAsync(participantId, eventId))
+            throw new InvalidOperationException("La asistencia ya fue registrada.");
+
+        var attendance = new Attendance(participantId, eventId, method);
+        await _attendanceRepository.AddAsync(attendance);
+
+        return AttendanceMapper.ToDto(attendance);
+    }
+
+    /// <summary>
+    /// Genera la escarapela PDF y el cronograma personalizado para un participante tras registrar asistencia.
+    /// </summary>
+    /// <param name="participantId">ID del participante.</param>
+    /// <param name="eventId">ID del evento.</param>
+    /// <returns>Archivo PDF en bytes.</returns>
+    /// <exception cref="InvalidOperationException">Si el participante no existe.</exception>
+    public async Task<byte[]> GenerateCredentialAndSchedulePdfAsync(Guid participantId, Guid eventId)
+    {
+        var participant = await _participantRepository.GetByIdAsync(participantId);
+        if (participant == null)
+            throw new InvalidOperationException("El participante no existe.");
+
+        var eventName = "Nombre del Evento"; // Ajusta si tienes IEventRepository
+
+        var participantActivities = await _participantActivityRepository.GetByParticipantAndEventAsync(participantId, eventId);
+        var schedule = participantActivities.Select(pa => new ScheduleItemDto
+        {
+            ActivityName = pa.Activity?.Name ?? "Sin nombre",
+            StartTime = pa.Activity?.StartTime ?? DateTime.MinValue,
+            EndTime = pa.Activity?.EndTime ?? DateTime.MinValue,
+            Lugar = pa.Activity?.Place ?? "Sin ubicación"
+        }).ToList();
+
+        var credencial = new CredentialDto
+        {
+            ParticipantName = participant.Name,
+            AccessType = participant.AccessType,
+            EventName = eventName,
+            QRCode = $"{participant.Id}|{eventId}|{DateTime.UtcNow:yyyyMMddHHmmss}",
+            Schedule = schedule
+        };
+
+        return GenerarEscarapelaConCronograma(credencial);
+    }
+
+    /// <summary>
+    /// Obtiene el contenido QR para un participante y evento (útil para enviar o mostrar el QR antes del evento).
+    /// </summary>
+    /// <param name="participantId">ID del participante.</param>
+    /// <param name="eventId">ID del evento.</param>
+    /// <returns>Contenido del QR como string.</returns>
+    /// <exception cref="InvalidOperationException">Si el participante no existe o no está inscrito.</exception>
+    public async Task<string> GetQrContentAsync(Guid participantId, Guid eventId)
+    {
+        var participant = await _participantRepository.GetByIdAsync(participantId);
+        if (participant == null)
+            throw new InvalidOperationException("El participante no existe.");
+
         var inscrito = await _participantActivityRepository
             .AnyAsync(pa => pa.ParticipantId == participantId && pa.Activity != null && pa.Activity.EventId == eventId);
 
         if (!inscrito)
             throw new InvalidOperationException("El participante no está inscrito en ninguna actividad de este evento.");
 
-        // 3. Validar que no haya asistencia duplicada
-        if (await _attendanceRepository.ExistsAsync(participantId, eventId))
-            throw new InvalidOperationException("La asistencia ya fue registrada.");
-
-        // Genera el contenido del QR
         var qrContent = $"{participantId}|{eventId}|{DateTime.UtcNow:yyyyMMddHHmmss}";
-        var qrCode = GenerateQrBase64(qrContent); // Este método debe devolver el string base64 del QR
+        return qrContent;
+    }
 
-        // 4. Registrar asistencia con QR
-        var attendance = new Attendance(participantId, eventId, method)
+    /// <summary>
+    /// Genera el PDF de la escarapela y cronograma personalizado.
+    /// </summary>
+    /// <param name="credencial">Datos del participante y cronograma.</param>
+    /// <returns>Archivo PDF en bytes.</returns>
+    private byte[] GenerarEscarapelaConCronograma(CredentialDto credencial)
+    {
+        using var stream = new MemoryStream();
+
+        var qrImageBytes = GenerateQrImage(credencial.QRCode);
+
+        // Color según tipo de acceso
+        var accessColor = credencial.AccessType switch
         {
-            QRCode = qrCode
+            "VIP" => Colors.Yellow.Lighten2,
+            "Ponente" => Colors.Green.Lighten3,
+            "Asistente" => Colors.Blue.Lighten4,
+            _ => Colors.Grey.Lighten3
         };
-        await _attendanceRepository.AddAsync(attendance);
 
-        return AttendanceMapper.ToDto(attendance);
-    }
+        var fechaEvento = DateTime.Now.ToString("dd/MM/yyyy"); // Ajusta si tienes la fecha real
 
-    public async Task<AttendanceDto> RegisterAttendanceByDocumentAsync(string document, Guid eventId, string method)
-    {
-        // Buscar participante por documento
-        var participant = await _participantRepository.GetByDocumentAsync(document);
-        if (participant == null)
-            throw new InvalidOperationException("Participante no encontrado.");
-        
-        // Delegar al método principal
-        return await RegisterAttendanceAsync(participant.Id, eventId, method);
-    }
+        var actividadProxima = credencial.Schedule
+            .OrderBy(s => s.StartTime)
+            .FirstOrDefault(s => s.StartTime > DateTime.Now);
 
-    public async Task<CredentialDto> GenerateCredentialAsync(Guid participantId, Guid eventId)
-    {
-        // 1. Obtener participante real
-        var participant = await _participantRepository.GetByIdAsync(participantId);
-        if (participant == null)
-            throw new InvalidOperationException("El participante no existe.");
-
-        // 2. Obtener nombre del evento real (ajusta si tienes IEventRepository)
-        var eventName = "Nombre del Evento"; // Reemplaza por el nombre real si tienes el repositorio
-
-        // 3. Generar QR real con el formato correcto
-        var qrContent = $"{participant.Id}|{eventId}|{DateTime.UtcNow:yyyyMMddHHmmss}";
-
-        // 4. Obtener cronograma real (actividades en las que está inscrito el participante)
-        var participantActivities = await _participantActivityRepository.GetByParticipantAndEventAsync(participantId, eventId);        var schedule = participantActivities.Select(pa => new ScheduleItemDto
+        var documento = Document.Create(container =>
         {
-            ActivityName = pa.Activity?.Name ?? "Sin nombre",
-            StartTime = pa.Activity?.StartTime ?? DateTime.MinValue,
-            EndTime = pa.Activity?.EndTime ?? DateTime.MinValue,
-            Lugar = pa.Activity?.Event?.Place ?? "Sin ubicación"
-        }).ToList();
+            // Página 1: Credencial
+            container.Page(page =>
+            {
+                page.Margin(20);
+                page.Size(PageSizes.A6.Landscape());
+                page.PageColor(accessColor); // Color por tipo de acceso
+                page.DefaultTextStyle(x => x.FontSize(13).FontFamily("Arial"));
 
-        return new CredentialDto
-        {
-            ParticipantName = participant.Name,
-            AccessType = participant.AccessType,
-            EventName = eventName,
-            QRCode = qrContent, // <-- Devuelve el string plano
-            Schedule = schedule
-        };
+                page.Header().Row(row =>
+                {
+                    row.RelativeItem().AlignMiddle().Text("CREDENCIAL DE PARTICIPANTE")
+                        .SemiBold().FontSize(18).FontColor(Colors.Blue.Darken2).AlignLeft();
+                    row.ConstantItem(40).Height(40).AlignRight().AlignTop()
+                        .Image(qrImageBytes).FitArea();
+                });
+
+                page.Content().Row(row =>
+                {
+                    row.RelativeItem().Column(c =>
+                    {
+                        c.Item().Text("Nombre:").SemiBold().FontColor(Colors.Grey.Darken2).FontSize(13);
+                        c.Item().Text(credencial.ParticipantName).Bold().FontSize(16).FontColor(Colors.Black);
+
+                        c.Item().Text("Documento:").SemiBold().FontColor(Colors.Grey.Darken2).FontSize(12);
+                        c.Item().Text(credencial.EventName ?? "N/A").FontColor(Colors.Black);
+
+                        c.Item().Text("ID:").SemiBold().FontColor(Colors.Grey.Darken2).FontSize(12);
+                        c.Item().Text(credencial.ParticipantName ?? "N/A").FontColor(Colors.Black);
+
+                        c.Item().Text("Tipo de acceso:").SemiBold().FontColor(Colors.Grey.Darken2).FontSize(12);
+                        c.Item().Text(credencial.AccessType).Bold().FontColor(Colors.Blue.Medium);
+
+                        c.Item().Text("Evento:").SemiBold().FontColor(Colors.Grey.Darken2).FontSize(12);
+                        c.Item().Text(credencial.EventName).Bold().FontColor(Colors.Black);
+
+                        c.Item().Text("Fecha:").SemiBold().FontColor(Colors.Grey.Darken2).FontSize(12);
+                        c.Item().Text(fechaEvento).FontColor(Colors.Black);
+
+                        c.Item().PaddingTop(8).Text("Presente esta credencial en cada acceso.").Italic().FontColor(Colors.Grey.Darken2).FontSize(10);
+                    });
+
+                    row.ConstantItem(90)
+                        .AlignCenter()
+                        .AlignMiddle()
+                        .Border(1)
+                        .BorderColor(Colors.Grey.Lighten2)
+                        .Padding(6)
+                        .Column(qrCol =>
+                        {
+                            qrCol.Item().Text("QR").FontSize(10).FontColor(Colors.Blue.Medium).AlignCenter();
+                            qrCol.Item().Image(qrImageBytes, ImageScaling.FitArea);
+                        });
+                });
+
+                page.Footer().AlignCenter().Text("Conserve esta credencial durante todo el evento.")
+                    .FontSize(9).FontColor(Colors.Grey.Darken2);
+            });
+
+            // Página 2: Cronograma
+            container.Page(page =>
+            {
+                page.Margin(20);
+                page.Size(PageSizes.A6.Landscape());
+                page.PageColor(Colors.White);
+                page.DefaultTextStyle(x => x.FontSize(13).FontFamily("Arial"));
+
+                page.Header().Column(col =>
+                {
+                    col.Item().AlignCenter().Height(40).Width(40).Image(qrImageBytes);
+                    col.Item().AlignCenter().PaddingTop(8).Text("Cronograma de actividades")
+                        .FontSize(15).SemiBold().FontColor(Colors.Blue.Darken2);
+                });
+
+                page.Content().Table(table =>
+                {
+                    table.ColumnsDefinition(columns =>
+                    {
+                        columns.RelativeColumn(2); // Actividad
+                        columns.ConstantColumn(55); // Inicio
+                        columns.ConstantColumn(55); // Fin
+                        columns.RelativeColumn(2); // Lugar
+                    });
+
+                    table.Header(header =>
+                    {
+                        header.Cell().Element(CellStyle).Background(Colors.Blue.Medium).Text("Actividad").SemiBold().FontColor(Colors.White);
+                        header.Cell().Element(CellStyle).Background(Colors.Blue.Medium).Text("Inicio").SemiBold().FontColor(Colors.White);
+                        header.Cell().Element(CellStyle).Background(Colors.Blue.Medium).Text("Fin").SemiBold().FontColor(Colors.White);
+                        header.Cell().Element(CellStyle).Background(Colors.Blue.Medium).Text("Lugar").SemiBold().FontColor(Colors.White);
+                    });
+
+                    foreach (var s in credencial.Schedule)
+                    {
+                        var isProxima = actividadProxima != null && s.ActivityName == actividadProxima.ActivityName && s.StartTime == actividadProxima.StartTime;
+                        table.Cell().Element(CellStyle).Background(isProxima ? Colors.Yellow.Lighten3 : Colors.White).Text(s.ActivityName);
+                        table.Cell().Element(CellStyle).Background(isProxima ? Colors.Yellow.Lighten3 : Colors.White).Text(s.StartTime.ToString("HH:mm"));
+                        table.Cell().Element(CellStyle).Background(isProxima ? Colors.Yellow.Lighten3 : Colors.White).Text(s.EndTime.ToString("HH:mm"));
+                        table.Cell().Element(CellStyle).Background(isProxima ? Colors.Yellow.Lighten3 : Colors.White).Text(s.Lugar);
+                    }
+                });
+
+                page.Footer().AlignCenter().Text("¡Disfrute el evento!").FontSize(10).FontColor(Colors.Grey.Darken2);
+            });
+        });
+
+        documento.GeneratePdf(stream);
+        return stream.ToArray();
+
+        IContainer CellStyle(IContainer container) =>
+            container.PaddingVertical(2).PaddingHorizontal(4);
     }
 
-    public async Task<List<AttendanceDto>> GetAttendanceByParticipantAsync(Guid participantId, Guid eventId)
-    {
-        var attendances = await _attendanceRepository.GetByParticipantAsync(participantId, eventId);
-        return attendances.Select(AttendanceMapper.ToDto).ToList();
-    }
-
-    // Método privado para generar el QR en base64
+    /// <summary>
+    /// (Opcional) Genera un string base64 simulado para el QR.
+    /// </summary>
+    /// <param name="content">Contenido a codificar.</param>
+    /// <returns>String en base64.</returns>
     private string GenerateQrBase64(string content)
     {
-        // Simulación de QR: convierte el contenido a base64 (no es un QR real)
         return Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(content));
+    }
+
+    private byte[] GenerateQrImage(string content)
+    {
+        using var qrGenerator = new QRCodeGenerator();
+        using var qrData = qrGenerator.CreateQrCode(content, QRCodeGenerator.ECCLevel.Q);
+        using var qrCode = new QRCoder.QRCode(qrData);
+        using var bitmap = qrCode.GetGraphic(20);
+        using var ms = new MemoryStream();
+        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+        return ms.ToArray();
+    }
+
+    private byte[] GenerateQrSvg(string content)
+    {
+        using var qrGenerator = new QRCodeGenerator();
+        using var qrData = qrGenerator.CreateQrCode(content, QRCodeGenerator.ECCLevel.Q);
+        var svgQrCode = new SvgQRCode(qrData);
+        var svg = svgQrCode.GetGraphic(5);
+        return System.Text.Encoding.UTF8.GetBytes(svg);
     }
 }
